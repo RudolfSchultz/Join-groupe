@@ -3,11 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Join</title>
+    <title>Login</title>
 </head>
 <body>
-    
-    <h1>JOIN ME</h1>
+    <h1>Login</h1>
+    <form action="/login" method="post">
+        <label for="username">Benutzername:</label>
+        <input type="text" id="username" name="username" required><br><br>
+        <label for="password">Passwort:</label>
+        <input type="password" id="password" name="password" required><br><br>
+        <button type="submit">Einloggen</button>
+    </form>
 
 </body>
 </html>
