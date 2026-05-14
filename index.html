@@ -21,7 +21,7 @@
     <div class="signup-header">
         <div class="signup-section">
             <span class="signup-span">Not a Join user?</span>
-            <button class="signup-button" onclick="">Sign up</button>
+            <button class="signup-button" onclick="location.href='./html/sign_up.html'">Sign up</button>
         </div>
     </div>
 
@@ -31,7 +31,7 @@
                 <div class="header-login">Log in</div>
                 <div class="border-login"></div>
             </div>
-            <form id="loginForm" onsubmit="">
+            <form id="loginForm" onsubmit="return false;">
                 <div class="login-fields">
                     <div class="login-container">
                         <input type="email" id="email" autocomplete="off" class="input" placeholder="Email">
@@ -43,16 +43,16 @@
                         <img class="email-icon" src="./assets/icons/lock.svg">
                     </div>
                     <div class="login-buttons">
-                        <button type="submit" class="button-login">Log In</button>
-                        <button type="button" class="button-guest" id="loginButton">Guest Log In</button>
+                        <button type="submit" class="button-login" onclick="logIn()">Log In</button>
+                        <button type="button" class="button-guest" id="guestButton" onclick="guestLogin()">Guest Log In</button>
                     </div>
             </form>
         </div>
-    </div>
 
-    <div class="policy">
-        <span onclick="" class="privacy-policy">Privacy Policy</span>
-        <span onclick="" class="legal-notice">Legal notice</span>
+        <div class="policy">
+            <a href="./html/privacy_policy.html" class="privacy-policy">Privacy Policy</a>
+            <a href="./html/legal_notice.html" class="legal-notice">Legal notice</a>
+        </div>
     </div>
 </body>
 
