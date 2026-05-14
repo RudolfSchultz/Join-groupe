@@ -1,11 +1,141 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="../assets/icons/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="../assets/icons/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/icons/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="../assets/icons/favicon/site.webmanifest" />
+    <link rel="stylesheet" href="../assets/css/fonts.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../assets/css/shared.css">
+    <link rel="stylesheet" href="../assets/css/summary.css">
     <title>Summary</title>
 </head>
-<body>
-    
+<body class="app-page">
+
+    <aside class="sidebar">
+        <a href="../index.html" class="sidebar-logo-link">
+            <img class="sidebar-logo" src="../assets/img/logo_white.svg" alt="Join">
+        </a>
+        <nav class="sidebar-nav">
+            <a href="summary.html" class="nav-item nav-item--active">
+                <img src="../assets/icons/summary.svg" alt="" class="nav-icon">
+                <span>Summary</span>
+            </a>
+            <a href="add_task.html" class="nav-item">
+                <img src="../assets/icons/add_task.svg" alt="" class="nav-icon">
+                <span>Add Task</span>
+            </a>
+            <a href="board.html" class="nav-item">
+                <img src="../assets/icons/board.svg" alt="" class="nav-icon">
+                <span>Board</span>
+            </a>
+            <a href="contacts.html" class="nav-item">
+                <img src="../assets/icons/contacts.svg" alt="" class="nav-icon">
+                <span>Contacts</span>
+            </a>
+        </nav>
+        <footer class="sidebar-footer">
+            <a href="privacy_policy.html" class="sidebar-footer-link">Privacy Policy</a>
+            <a href="legal_notice.html" class="sidebar-footer-link">Legal Notice</a>
+        </footer>
+    </aside>
+
+    <div class="main-wrapper">
+
+        <header class="main-header">
+            <span class="header-title">Kanban Project Management Tool</span>
+            <div class="header-actions">
+                <a href="help.html" class="help-link">
+                    <img src="../assets/icons/help.svg" alt="Help" class="help-icon">
+                </a>
+                <div class="user-avatar">SM</div>
+            </div>
+        </header>
+
+        <main class="summary-main">
+
+            <div class="summary-left">
+                <div class="summary-heading">
+                    <h1 class="summary-title">Join 360</h1>
+                    <div class="summary-heading-divider"></div>
+                    <p class="summary-subtitle">Key Metrics at a Glance</p>
+                </div>
+
+                <div class="summary-cards">
+
+                    <div class="cards-row">
+                        <div class="stat-card">
+                            <div class="stat-icon-circle">
+                                <img src="../assets/icons/edit.svg" alt="" class="stat-icon">
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-number">2</span>
+                                <span class="stat-label">Tasks In Backlog</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon-circle">
+                                <img src="../assets/icons/done.svg" alt="" class="stat-icon">
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-number">1</span>
+                                <span class="stat-label">Done</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="urgency-card">
+                        <div class="urgency-left">
+                            <div class="urgency-icon-circle">
+                                <svg width="34" height="25" viewBox="0 0 34.186 25.1163" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M32.312 25.116C31.911 25.117 31.521 24.987 31.198 24.746L17.093 14.217L2.987 24.746C2.789 24.895 2.564 25.002 2.325 25.062C2.086 25.122 1.838 25.134 1.595 25.097C1.351 25.060 1.117 24.975 0.906 24.846C0.695 24.718 0.511 24.549 0.365 24.348C0.218 24.148 0.113 23.920 0.053 23.679C-0.006 23.437 -0.018 23.185 0.018 22.939C0.092 22.441 0.358 21.994 0.758 21.695L15.978 10.321C16.301 10.080 16.691 9.949 17.093 9.949C17.494 9.949 17.885 10.080 18.207 10.321L33.427 21.695C33.745 21.932 33.980 22.264 34.100 22.645C34.220 23.025 34.218 23.435 34.095 23.814C33.971 24.193 33.732 24.524 33.412 24.757C33.092 24.991 32.707 25.117 32.312 25.116Z" fill="white"/>
+                                    <path d="M32.312 15.164C31.911 15.165 31.521 15.035 31.198 14.795L17.093 4.265L2.987 14.795C2.587 15.095 2.086 15.221 1.595 15.145C1.103 15.070 0.660 14.801 0.365 14.396C0.069 13.992 -0.055 13.485 0.018 12.987C0.092 12.489 0.358 12.042 0.758 11.743L15.978 0.370C16.301 0.128 16.691 -0.002 17.093 -0.002C17.494 -0.002 17.885 0.128 18.207 0.370L33.427 11.743C33.745 11.980 33.980 12.312 34.100 12.693C34.220 13.073 34.218 13.483 34.095 13.862C33.971 14.241 33.732 14.572 33.412 14.805C33.092 15.039 32.707 15.165 32.312 15.164Z" fill="white"/>
+                                </svg>
+                            </div>
+                            <div class="urgency-info">
+                                <span class="urgency-number">1</span>
+                                <span class="urgency-count-label">Tasks Urgent</span>
+                            </div>
+                        </div>
+                        <div class="urgency-divider-vertical"></div>
+                        <div class="urgency-right">
+                            <span class="urgency-date">September 16, 2024</span>
+                            <span class="urgency-date-label">Upcoming Deadline</span>
+                        </div>
+                    </div>
+
+                    <div class="cards-row-sm">
+                        <div class="stat-card-sm">
+                            <span class="stat-number">5</span>
+                            <span class="stat-label">Tasks in Board</span>
+                        </div>
+                        <div class="stat-card-sm">
+                            <span class="stat-number">2</span>
+                            <span class="stat-label">Tasks In Progress</span>
+                        </div>
+                        <div class="stat-card-sm">
+                            <span class="stat-number">2</span>
+                            <span class="stat-label">Awaiting Feedback</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="summary-right">
+                <div class="greeting">
+                    <span class="greeting-time">Good morning,</span>
+                    <span class="greeting-name">Sofia Müller</span>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="../script.js"></script>
 </body>
 </html>
