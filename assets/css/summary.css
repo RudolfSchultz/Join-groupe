@@ -21,28 +21,28 @@
 .summary-heading {
   display: flex;
   align-items: center;
-  gap: 32px;
-  margin-bottom: 64px;
+  gap: 30px;
+  margin-bottom: 56px;
 }
 
 .summary-title {
   font-size: 61px;
   font-weight: 700;
   color: #000000;
-  line-height: 1;
+  line-height: 1.2;
 }
 
 .summary-heading-divider {
-  width: 2px;
+  width: 3px;
   height: 59px;
-  background: #A8A8A8;
+  background: #29ABE2;
   flex-shrink: 0;
 }
 
 .summary-subtitle {
   font-size: 27px;
   font-weight: 400;
-  color: #000000;
+  color: #2A3647;
 }
 
 /* ──────────────── Cards container ──────────────── */
@@ -50,7 +50,6 @@
   display: flex;
   flex-direction: column;
   gap: 28px;
-  padding-bottom: 24px;
 }
 
 .cards-row {
@@ -69,11 +68,11 @@
   height: 168px;
   background: #ffffff;
   border-radius: 30px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.12);
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 24px 32px;
+  gap: 18px;
+  padding: 38px 19px;
   cursor: pointer;
   transition: box-shadow 0.2s, transform 0.2s;
   text-decoration: none;
@@ -92,8 +91,8 @@
 }
 
 .stat-icon-circle {
-  width: 72px;
-  height: 72px;
+  width: 69px;
+  height: 69px;
   border-radius: 50%;
   background: var(--primaryColor);
   display: flex;
@@ -103,8 +102,8 @@
 }
 
 .stat-icon {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   filter: brightness(0) invert(1);
 }
 
@@ -117,14 +116,14 @@
 .stat-number {
   font-size: 64px;
   font-weight: 600;
-  line-height: 1;
+  line-height: 1.2;
   color: #000000;
 }
 
 .stat-label {
   font-size: 20px;
   font-weight: 400;
-  color: #000000;
+  color: #2A3647;
 }
 
 /* ──────────────── Urgency card (560×168) ──────────────── */
@@ -227,12 +226,13 @@
   height: 168px;
   background: #ffffff;
   border-radius: 30px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.12);
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  padding: 25px 0px;
+  gap: 13px;
   cursor: pointer;
   transition: box-shadow 0.2s, transform 0.2s;
   text-decoration: none;
@@ -257,9 +257,9 @@
 }
 
 .stat-card-sm .stat-label {
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 400;
-  color: #000000;
+  color: #2A3647;
   text-align: center;
   padding: 0 8px;
 }
@@ -268,19 +268,19 @@
 .greeting {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 3px;
 }
 
 .greeting-time {
   font-size: 47px;
-  font-weight: 400;
-  color: #000000;
-  line-height: 1.1;
+  font-weight: 500;
+  color: #2A3647;
+  line-height: 1.2;
 }
 
 .greeting-name {
-  font-size: 47px;
+  font-size: 64px;
   font-weight: 700;
   color: var(--secondaryColor);
-  line-height: 1.1;
+  line-height: 1.2;
 }
