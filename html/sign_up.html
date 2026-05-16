@@ -21,30 +21,26 @@
         </a>
         <div class="signup-section">
             <span class="signup-span">Already a Join user?</span>
-            <a href="../index.html" class="signup-button">Log in</a>
+            <button class="signup-button" onclick="location.href='../index.html'">Log In</button>
         </div>
     </div>
 
-    <div class="signup-section-div">
-        <div class="signup-form-card">
+    <div class="login-section-div">
+        <div class="login-section">
             <div class="header-section">
                 <div class="header-login">Sign up</div>
                 <div class="border-login"></div>
             </div>
-
-            <form id="signupForm" onsubmit="return false;">
+            <form id="loginForm" onsubmit="return false;">
                 <div class="login-fields">
-
                     <div class="login-container">
                         <input type="text" id="signup-name" autocomplete="off" class="input" placeholder="Name">
                         <img class="email-icon" src="../assets/icons/person.svg" alt="">
                     </div>
-
                     <div class="login-container">
                         <input type="email" id="signup-email" autocomplete="off" class="input" placeholder="Email">
                         <img class="email-icon" src="../assets/icons/mail.svg" alt="">
                     </div>
-
                     <div class="login-container">
                         <input type="password" id="signup-password" autocomplete="off" class="input"
                             placeholder="Password">
@@ -65,16 +61,14 @@
                         </label>
                     </div>
 
-                    <div class="message-box" id="signup-message"></div>
-
                     <div class="login-buttons">
-                        <button type="button" class="button-login" onclick="">Sign up</button>
+                        <button type="submit" class="button-login" onclick="">Sign up</button>
                     </div>
-
-                </div>
+                    <div class="message-box"></div>
             </form>
         </div>
     </div>
+
     <div class="footer">
         <div class="policy">
             <span onclick="location.href='../html/privacy_policy.html'" class="privacy-policy">Privacy Policy</span>

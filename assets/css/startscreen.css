@@ -10,6 +10,14 @@
     position: absolute;
 }
 
+.signup-logo {
+    position: absolute;
+    top: 80px;
+    left: 77px;
+    width: 100px;
+    height: 122px;
+}
+
 
 .signup-section {
     width: fit-content;
@@ -123,8 +131,10 @@
 }
 
 .login-section {
-    width: 650px;
-    height: 493px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     padding: 48px 115px 48px 115px;
     border-radius: 30px;
     gap: 32px;
@@ -155,11 +165,12 @@
     height: 3px;
     background: #29ABE2;
 }
+
 .login-fields {
-    width: 422px;
-    height: 152px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
     margin-top: 32px;
-    gap: 32px;
 }
 
 .login-container {
@@ -204,6 +215,34 @@ input:focus {
     margin-left: 5px;
 }
 
+.signup-policy-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 16px;
+    color: black;
+    margin-top: 8px;
+}
+
+.signup-checkbox {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primaryColor);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.policy-link {
+    color: var(--secondaryColor);
+    font-weight: 400;
+    text-decoration: none;
+}
+
+
+.policy-link:hover {
+    text-decoration: underline;
+}
+
 .policy {
     height: 80px;
     display: flex;
@@ -223,7 +262,7 @@ input:focus {
 .legal-notice:hover,
 .privacy-policy:hover {
     color: #29ABE2;
-    font-weight: 700;
+    font-weight: 400;
 }
 
 .login-buttons {
@@ -241,7 +280,6 @@ input:focus {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    width: 113px;
     height: 48px;
     padding: 15px 24px 15px 24px;
     border-radius: 8px;
