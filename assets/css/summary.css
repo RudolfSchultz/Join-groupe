@@ -284,3 +284,105 @@
   color: var(--secondaryColor);
   line-height: 1.2;
 }
+
+/* ── Tablet ── */
+@media (max-width: 768px) {
+  .summary-main {
+    padding: 48px 32px 48px 48px;
+    gap: 32px;
+  }
+
+  .summary-title { font-size: 42px; }
+  .summary-subtitle { font-size: 18px; }
+  .summary-heading { margin-bottom: 32px; gap: 16px; }
+
+  .stat-card { width: auto; flex: 1; min-width: 0; }
+  .urgency-card { width: auto; }
+  .stat-card-sm { flex: 1; min-width: 0; }
+
+  .stat-number { font-size: 48px; }
+  .stat-card-sm .stat-number { font-size: 48px; }
+  .urgency-number { font-size: 48px; }
+
+  .greeting-time { font-size: 32px; }
+  .greeting-name { font-size: 48px; }
+}
+
+/* ── Mobile ── */
+@media (max-width: 480px) {
+  .summary-main {
+    flex-direction: column-reverse;
+    padding: 24px 16px 24px;
+    min-height: auto;
+    gap: 32px;
+  }
+
+  .summary-left { width: 100%; }
+
+  .summary-right {
+    justify-content: flex-start;
+    padding: 0;
+  }
+
+  .summary-heading {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  .summary-heading-divider {
+    width: 64px;
+    height: 3px;
+  }
+
+  .summary-title { font-size: 32px; }
+  .summary-subtitle { font-size: 15px; }
+
+  .summary-cards { gap: 16px; }
+
+  .cards-row { gap: 12px; }
+  .stat-card {
+    width: auto;
+    flex: 1;
+    min-width: 0;
+    height: auto;
+    padding: 20px 12px;
+    gap: 12px;
+    border-radius: 20px;
+  }
+
+  .stat-icon-circle { width: 52px; height: 52px; }
+  .stat-icon { width: 24px; height: 24px; }
+  .stat-number { font-size: 40px; }
+  .stat-label { font-size: 14px; }
+
+  .urgency-card {
+    width: 100%;
+    height: auto;
+    padding: 20px 24px;
+    gap: 24px;
+    border-radius: 20px;
+  }
+
+  .urgency-number { font-size: 40px; }
+  .urgency-divider-vertical { height: 56px; }
+  .urgency-date { font-size: 16px; }
+  .urgency-date-label { font-size: 13px; }
+
+  .cards-row-sm { gap: 10px; }
+  .stat-card-sm {
+    flex: 1;
+    min-width: 0;
+    width: auto;
+    height: auto;
+    padding: 16px 8px;
+    gap: 8px;
+    border-radius: 20px;
+  }
+  .stat-card-sm .stat-number { font-size: 36px; }
+  .stat-card-sm .stat-label { font-size: 13px; }
+
+  .greeting-time { font-size: 22px; }
+  .greeting-name { font-size: 32px; }
+}

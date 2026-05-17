@@ -115,3 +115,43 @@
   font-weight: 700;
   color: #000000;
 }
+
+/* ── Tablet ── */
+@media (max-width: 768px) {
+  .help-main {
+    padding: 40px 32px 40px 32px;
+  }
+
+  .page-title { font-size: 42px; }
+  .help-section-title { font-size: 22px; }
+}
+
+/* ── Mobile ── */
+@media (max-width: 480px) {
+  .help-main {
+    padding: 32px 16px 24px;
+  }
+
+  .help-header-row {
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .page-title { font-size: 32px; }
+  .help-section-title { font-size: 18px; }
+  .help-intro { font-size: 14px; }
+
+  .help-steps { gap: 16px; }
+  .help-steps li { gap: 12px; }
+  .help-steps li::before {
+    min-width: 36px;
+    height: 36px;
+    font-size: 15px;
+  }
+  .help-steps li h3 { font-size: 15px; }
+  .help-steps li p { font-size: 14px; }
+
+  .help-enjoy { font-size: 16px; }
+}
