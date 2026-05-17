@@ -1,6 +1,86 @@
 const dialogElement = document.querySelector("dialog");
 const dialog = document.getElementById("add-contact-dialog");
+const contactListContainer = document.getElementById("contacts-list-import");
+let loadedContacts = [];
 
+async function init() {
+    await loadAndPrepareContacts(); 
+    renderContacts();
+}
+
+function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
+async function loadAndPrepareContacts() {
+    try {
+        const response = await fetch('/db.json');
+        const data = await response.json();
+        
+        addContactsToLoaded(data.contacts);
+    } catch (error) {
+        console.error("Fehler beim Laden:", error);
+    }
+}
+
+function addContactsToLoaded(contactsFromDB) {
+    Object.keys(contactsFromDB).forEach(id => {
+        const alreadyExists = loadedContacts.some(c => c.id === id);
+        
+        if (!alreadyExists) {
+            loadedContacts.push({
+                id: id,
+                name: contactsFromDB[id].name,
+                email: contactsFromDB[id].email,
+                phone: contactsFromDB[id].phone,
+                color: getRandomColor(),
+                avatar: getInitials(contactsFromDB[id].name)
+            });
+        }
+    });
+}
+
+function getInitials(name) {
+    if (!name) return 'no Name';
+    
+    const nameParts = name.split(' '); 
+    
+    const firstNameChar = nameParts[0].charAt(0).toUpperCase();
+    const lastNameChar = nameParts[1].charAt(0).toUpperCase();
+    
+    return firstNameChar + lastNameChar;
+}
+
+function groupContactsByLetter() {
+    let groups = {};
+    let sorted = [...loadedContacts].sort((a, b) => a.name.localeCompare(b.name));
+
+    sorted.forEach(contact => {
+        let firstLetter = contact.name.charAt(0).toUpperCase();
+        if (!groups[firstLetter]) groups[firstLetter] = [];
+        groups[firstLetter].push(contact);
+    });
+    return groups;
+}
+
+function renderLetterGroup([letter, contactsInGroup]) {
+    let itemsHtml = contactsInGroup.map(renderContactlist).join('');
+    return renderLetterGroupTemplate(letter, itemsHtml);
+}
+
+function renderContacts() {
+    if (!contactListContainer) return;
+
+    let groupedData = groupContactsByLetter();
+    let html = Object.entries(groupedData).map(renderLetterGroup).join('');
+    
+    contactListContainer.innerHTML = html;
+}
 
 function openDialog() {
     dialog.showModal();

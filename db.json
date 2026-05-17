@@ -1,0 +1,104 @@
+{
+  "contacts": {
+    "1": {
+      "name": "Anton Mayer",
+      "email": "antonm@gmail.com",
+      "phone": "+49 1111111111"
+    },
+    "2": {
+      "name": "Anja Schulz",
+      "email": "schulz@hotmail.com",
+      "phone": "+49 172 3456789"
+    },
+    "3": {
+      "name": "Benedikt Ziegler",
+      "email": "benedikt@gmail.com",
+      "phone": "+49 151 9876543"
+    },
+    "4": {
+      "name": "David Eisenberg",
+      "email": "david@gmail.com",
+      "phone": "+49 160 1122334"
+    },
+    "5": {
+      "name": "Eva Fischer",
+      "email": "eva@gmail.com",
+      "phone": "+49 173 4455667"
+    },
+    "6": {
+      "name": "Emmanuel Mauer",
+      "email": "emmanuel@gmail.com",
+      "phone": "+49 152 7788990"
+    },
+    "7": {
+      "name": "Felix Neumann",
+      "email": "felix.n@web.de",
+      "phone": "+49 174 5566778"
+    },
+    "8": {
+      "name": "Hannah Wagner",
+      "email": "wagner.hannah@gmx.de",
+      "phone": "+49 157 8899001"
+    },
+    "9": {
+      "name": "Ina Becker",
+      "email": "ina.becker@gmail.com",
+      "phone": "+49 162 3344556"
+    },
+    "10": {
+      "name": "Jonas Hoffmann",
+      "email": "jonas.hoff@outlook.com",
+      "phone": "+49 171 2233445"
+    },
+    "11": {
+      "name": "Katrin Krause",
+      "email": "katrin.k@yahoo.com",
+      "phone": "+49 151 6677889"
+    },
+    "12": {
+      "name": "Lukas Weber",
+      "email": "lukas.weber@gmail.com",
+      "phone": "+49 176 9900112"
+    },
+    "13": {
+      "name": "Marie Schreiber",
+      "email": "marie.s@web.de",
+      "phone": "+49 152 4455661"
+    },
+    "14": {
+      "name": "Nico Lange",
+      "email": "nico.lange@gmx.de",
+      "phone": "+49 160 7788992"
+    },
+    "15": {
+      "name": "Olivia Peters",
+      "email": "olivia.p@gmail.com",
+      "phone": "+49 173 1122335"
+    },
+    "16": {
+      "name": "Philipp Fuchs",
+      "email": "fuchs.phil@outlook.com",
+      "phone": "+49 157 5566773"
+    },
+    "17": {
+      "name": "Sarah Krüger",
+      "email": "sarah.k@gmail.com",
+      "phone": "+49 172 8899004"
+    },
+    "18": {
+      "name": "Tim Schwarz",
+      "email": "tim.schwarz@web.de",
+      "phone": "+49 162 2233446"
+    },
+    "19": {
+      "name": "Vanessa Richter",
+      "email": "v.richter@gmx.de",
+      "phone": "+49 174 6677881"
+    },
+    "20": {
+      "name": "Yannick Vogt",
+      "email": "yannick.v@gmail.com",
+      "phone": "+49 151 1122336"
+    }
+  }
+}
