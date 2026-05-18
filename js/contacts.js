@@ -1,6 +1,7 @@
 const dialogElement = document.querySelector("dialog");
 const dialog = document.getElementById("add-contact-dialog");
 const contactListContainer = document.getElementById("contacts-list-import");
+const contactDetailsContainer = document.getElementById("contact-details-view");
 let loadedContacts = [];
 
 async function init() {
@@ -37,7 +38,7 @@ function addContactsToLoaded(contactsFromDB) {
                 id: id,
                 name: contactsFromDB[id].name,
                 email: contactsFromDB[id].email,
-                phone: contactsFromDB[id].phone,
+                phone: contactsFromDB[id].phone || 'no phone number provided',
                 color: getRandomColor(),
                 avatar: getInitials(contactsFromDB[id].name)
             });
@@ -88,4 +89,9 @@ function openDialog() {
 
 function closeDialog() {
     dialog.close();
+}
+
+function showContactDetails(contactId) {
+    const contact = loadedContacts.find(c => c.id === contactId);
+        contactDetailsContainer.innerHTML = renderContactDetails(contact);
 }

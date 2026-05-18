@@ -158,9 +158,10 @@
 .contacts-split-right {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     margin-top: 20px;
     flex: 2;
+    margin-left: 40px;
 }
 
 .brand-header {
@@ -452,8 +453,13 @@
         max-width: 220px;
     }
 
-    .brand-title { font-size: 24px; }
-    .profile-name { font-size: 28px; }
+    .brand-title {
+        font-size: 24px;
+    }
+
+    .profile-name {
+        font-size: 28px;
+    }
 }
 
 /* ── Mobile ── */
@@ -483,9 +489,17 @@
         margin-bottom: 12px;
     }
 
-    .brand-title { font-size: 22px; }
-    .brand-divider { height: 20px; }
-    .brand-subtitle { font-size: 13px; }
+    .brand-title {
+        font-size: 22px;
+    }
+
+    .brand-divider {
+        height: 20px;
+    }
+
+    .brand-subtitle {
+        font-size: 13px;
+    }
 
     .profile-avatar {
         width: 64px;
@@ -493,7 +507,9 @@
         font-size: 22px;
     }
 
-    .profile-name { font-size: 22px; }
+    .profile-name {
+        font-size: 22px;
+    }
 
     .profile-header {
         gap: 16px;
