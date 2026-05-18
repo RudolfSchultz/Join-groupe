@@ -92,6 +92,48 @@ function closeDialog() {
 }
 
 function showContactDetails(contactId) {
+
+    const currentActive = document.querySelector('.contact-item.active');
+    if (currentActive) currentActive.classList.remove('active');
+
+    const clickedElement = document.getElementById(contactId);
+    if (clickedElement) clickedElement.classList.add('active');
+
+
     const contact = loadedContacts.find(c => c.id === contactId);
         contactDetailsContainer.innerHTML = renderContactDetails(contact);
+}
+
+function editContact(id) {
+    if (!dialog) return;
+    
+    const contact = loadedContacts.find(c => c.id === id);
+    if (contact) {
+        fillEditForm(contact);
+        openDialog();
+    }
+}
+
+function fillEditForm(contact) {
+    const avatarBox = dialog.querySelector('.profile-placeholder');
+    if (avatarBox) {
+        avatarBox.innerHTML = `<div class="avatar big" style="background-color: ${contact.color};">${contact.avatar}</div>`;
+    }
+    dialog.querySelector('input[type="text"]').value = contact.name;
+    dialog.querySelector('input[type="email"]').value = contact.email;
+    dialog.querySelector('input[type="tel"]').value = contact.phone || '';
+}
+
+function openAddContactModal() {
+    if (!dialog) return;
+
+    const form = dialog.querySelector('form');
+    if (form) form.reset();
+
+    const avatarBox = dialog.querySelector('.profile-placeholder');
+    if (avatarBox) {
+        avatarBox.style.backgroundColor = '';
+        avatarBox.innerHTML = '<i class="fa-solid fa-user"></i>'; 
+    }
+    openDialog();
 }

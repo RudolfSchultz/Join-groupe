@@ -1,5 +1,5 @@
 function renderContactlist(contact) {
-    return `<div class="contact-item" onclick="showContactDetails('${contact.id}')">
+    return `<div class="contact-item" id="${contact.id}" onclick="showContactDetails('${contact.id}')">
         <div class="avatar" style="background-color: ${contact.color};">${contact.avatar}</div>
         <div class="contact-info">
             <span class="name">${contact.name}</span>
@@ -23,10 +23,12 @@ function renderContactDetails(contact) {
                         <div class="profile-meta">
                             <h2 class="profile-name">${contact.name}</h2>
                             <div class="profile-actions">
-                                <button type="button" class="profile-btn"><img src="../assets/icons/edit_contacts.svg"
-                                        alt="edit"> Edit</button>
-                                <button type="button" class="profile-btn"><img src="../assets/icons/delete.svg"
-                                        alt="delete"> Delete</button>
+                                <button type="button" class="profile-btn" onclick="editContact('${contact.id}')">
+                                <img src="../assets/icons/edit_contacts.svg"alt="edit"> Edit
+                                </button>
+                                <button type="button" class="profile-btn">
+                                <img src="../assets/icons/delete.svg"alt="delete"> Delete
+                                </button>
                             </div>
                         </div>
                     </div>
