@@ -61,7 +61,7 @@
   font-family: 'Inter', sans-serif;
   color: #000000;
   outline: none;
-  transition: border-color 0.15s;
+  transition: border-color 0.1s;
 }
 
 .form-input:focus {
@@ -125,7 +125,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   font-family: 'Inter', sans-serif;
   color: #000000;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+  transition: background 0.1s, color 0.1s, box-shadow 0.1s;
 }
 
 .prio-btn:hover:not(.prio-active) {
@@ -185,7 +185,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: flex;
   align-items: center;
   gap: 8px;
-  transition: background 0.15s, color 0.15s;
+  transition: background 0.1s, color 0.1s;
 }
 
 .btn-clear:hover {
@@ -206,7 +206,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: flex;
   align-items: center;
   gap: 8px;
-  transition: background 0.15s;
+  transition: background 0.1s;
 }
 
 .btn-create:hover {

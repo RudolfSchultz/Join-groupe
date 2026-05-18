@@ -74,7 +74,7 @@
   gap: 18px;
   padding: 38px 19px;
   cursor: pointer;
-  transition: box-shadow 0.2s, transform 0.2s;
+  transition: box-shadow 0.1s, transform 0.1s;
   text-decoration: none;
 }
 
@@ -138,7 +138,7 @@
   padding: 28px 48px;
   gap: 61px;
   cursor: pointer;
-  transition: box-shadow 0.2s, transform 0.2s;
+  transition: box-shadow 0.1s, transform 0.1s;
   text-decoration: none;
 }
 
@@ -234,7 +234,7 @@
   padding: 25px 0px;
   gap: 13px;
   cursor: pointer;
-  transition: box-shadow 0.2s, transform 0.2s;
+  transition: box-shadow 0.1s, transform 0.1s;
   text-decoration: none;
 }
 
