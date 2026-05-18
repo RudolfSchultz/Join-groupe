@@ -57,6 +57,10 @@
     font-size: 16px;
 }
 
+.fab-icon {
+    display: none;
+}
+
 .letter-group-title {
     font-size: 14px;
     color: #666666;
@@ -487,53 +491,88 @@
     .contacts-main {
         flex-direction: column;
         height: auto;
-        padding: 0 16px 24px;
+        padding: 0;
         overflow-y: auto;
+        background: #ffffff;
     }
 
     .contacts-split-left {
         max-width: none;
         flex: none;
         width: 100%;
+        overflow-y: scroll;
+        background: #ffffff;
+        box-shadow: 4px 0px 6px rgba(0, 0, 0, 0.08);
     }
 
     .contacts-split-right {
-        flex: none;
-        width: 100%;
-        align-items: flex-start;
-        margin-top: 0;
+        display: none;
     }
 
-    .brand-header {
-        margin-top: 16px;
-        margin-bottom: 12px;
+    .contacts-list {
+        padding: 24px;
     }
 
-    .brand-title {
-        font-size: 22px;
+    .letter-group-title {
+        padding: 17px 36px;
+        height: 58px;
+        font-size: 20px;
+        color: #000000;
+        margin: 0;
     }
 
-    .brand-divider {
-        height: 20px;
+    .contact-item {
+        padding: 15px 24px;
+        height: 78px;
+        gap: 35px;
+        border-radius: 10px;
+        background: #ffffff;
     }
 
-    .brand-subtitle {
-        font-size: 13px;
+    .avatar {
+        width: 42px;
+        height: 42px;
+        border-radius: 45px;
+        border: 2px solid #ffffff;
+        line-height: 42px;
+        font-size: 14px;
     }
 
-    .profile-avatar {
+    .contact-info .name {
+        font-size: 20px;
+        color: #000000;
+    }
+
+    .contact-info .email {
+        font-size: 16px;
+        color: #007CEE;
+    }
+
+    .btn-add-contact {
+        position: fixed;
+        right: 16px;
+        bottom: 94px;
+        z-index: 150;
+    }
+
+    .btn-add-contact button {
         width: 64px;
         height: 64px;
-        font-size: 22px;
+        background: transparent;
+        border: none;
+        padding: 0;
+        font-size: 0;
+        color: transparent;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
-    .profile-name {
-        font-size: 22px;
-    }
-
-    .profile-header {
-        gap: 16px;
-        margin-bottom: 24px;
+    .btn-add-contact .fab-icon {
+        display: block;
+        width: 56px;
+        height: 56px;
     }
 
     #add-contact-dialog {
@@ -560,10 +599,5 @@
     .modal-right {
         width: 100%;
         padding: 24px;
-    }
-
-    .btn-add-contact button {
-        font-size: 14px;
-        padding: 10px;
     }
 }
