@@ -88,6 +88,10 @@
 }
 
 /* ── Add Task Button ── */
+.btn-add-task-icon {
+  flex-shrink: 0;
+}
+
 .btn-add-task {
   display: flex;
   align-items: center;
@@ -107,6 +111,10 @@
 }
 
 .btn-add-task:hover {
+  background: var(--secondaryColor);
+}
+
+.btn-add-task:active {
   background: var(--activeColor);
 }
 
@@ -197,43 +205,95 @@
 /* ── Mobile ── */
 @media (max-width: 480px) {
   .board-main {
-    padding: 24px 16px 24px;
+    padding: 48px 16px 24px;
     height: auto;
     overflow: visible;
   }
 
   .board-header {
+    position: relative;
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
     margin-bottom: 20px;
   }
 
-  .page-title { font-size: 32px; }
+  .page-title {
+    font-size: 47px;
+  }
 
   .board-controls {
     width: 100%;
-    flex-direction: column;
-    gap: 12px;
+    flex-direction: row;
+    gap: 0;
   }
 
   .search-wrapper {
     width: 100%;
+    flex: 1;
   }
 
   .btn-add-task {
-    width: 100%;
+    position: absolute;
+    right: 0;
+    top: 8px;
+    width: 40px;
+    height: 40px;
+    padding: 3px;
+    border-radius: 10px;
+    font-size: 0;
+    gap: 0;
     justify-content: center;
-    font-size: 16px;
   }
 
   .board-columns {
     grid-template-columns: 1fr;
     overflow: visible;
-    gap: 16px;
+    gap: 26px;
+  }
+
+  .board-col-header span {
+    font-size: 27px;
+    color: #2A3647;
+  }
+
+  .board-col-header {
+    height: 32px;
+  }
+
+  .col-add-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+  }
+
+  .col-add-btn:active {
+    border-color: var(--secondaryColor);
+  }
+
+  .col-add-btn:active svg path {
+    stroke: var(--secondaryColor);
   }
 
   .board-cards {
-    min-height: 64px;
+    min-height: 48px;
+  }
+
+  .board-empty {
+    height: 48px;
+    background: #E7E7E7;
+    border: 1px dashed #A8A8A8;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.16);
+    border-radius: 10px;
+    padding: 0;
+    font-size: 16px;
+    color: #A8A8A8;
+  }
+
+  #feedback-col {
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    flex-wrap: nowrap;
   }
 }
