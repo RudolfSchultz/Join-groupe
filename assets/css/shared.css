@@ -83,7 +83,7 @@ body.app-page {
 .sidebar-footer {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 8px;
 }
 
