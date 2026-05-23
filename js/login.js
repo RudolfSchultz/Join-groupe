@@ -2,7 +2,7 @@
    LOGIN.JS – Alle Funktionen für Login, Registrierung und Passwort-Reset
    ==========================================================================
    
-   Diese Datei steuert die index.html Seite (Login-Seite).
+   Diese Datei steuert die index.html Seite (login-page).
    Sie enthält Funktionen für:
    1. Zwischen den Formularen wechseln (Login ↔ Registrierung)
    2. Einloggen
@@ -311,7 +311,7 @@ async function passwortZuruecksetzen() {
    ========================================================================== */
 
 /**
- * Initialisiert die Login-Seite beim Laden.
+ * Initialisiert die login-page beim Laden.
  * Lädt vorhandene Benutzer aus dem Speicher.
  */
 async function loginSeiteInitialisieren() {

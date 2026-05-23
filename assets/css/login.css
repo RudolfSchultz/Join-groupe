@@ -1,4 +1,4 @@
-@keyframes hintergrundMobilAnimation {
+@keyframes backgroundMobileAnimation {
     0%, 65% {
         background-color: var(--primaryColor);
     }
@@ -7,27 +7,19 @@
     }
 }
 
-/* Auf dem Handy: dunkler Start-Bildschirm, der zu Grau wechselt */
-.login-seite {
+.login-page {
     font-family: 'Inter', sans-serif;
     min-height: 100vh;
-    animation: hintergrundMobilAnimation 2s forwards ease-in-out;
+    animation: backgroundMobileAnimation 2s forwards ease-in-out;
 }
 
-/* Auf Tablet und Desktop: direkt grauer Hintergrund (kein geteilter Hintergrund!) */
 @media (min-width: 769px) {
-    .login-seite {
+    .login-page {
         background-color: var(--background);
         animation: none;
     }
 }
 
-
-/* ==========================================================================
-   LOGO-ANIMATION – Logo fährt von der Mitte nach oben links
-   ========================================================================== */
-
-/* Logo startet in der Mitte des Bildschirms (passend zum 0%-Keyframe der Animation) */
 .login-logo-animated {
     position: fixed;
     z-index: 100;
@@ -37,22 +29,17 @@
     animation: logoAnimation 1.5s forwards ease-in-out;
 }
 
-/* Logos auf einheitliche Höhe setzen */
 .login-logo-animated img {
     height: 80px;
     width: auto;
     display: block;
 }
 
-/* Mobile: Logo synchron mit dem Hintergrund wechseln
-   - Auf dunklem Hintergrund: dunkles Logo wird durch Filter weiß gemacht
-   - Nach der Animation: Filter weg → Logo erscheint dunkel auf grauem Hintergrund */
-@keyframes logoFarbwechsel {
+@keyframes logoColorChange {
     0%, 65% { filter: brightness(0) invert(1); } /* weiß auf dunklem Hintergrund */
     100%     { filter: none; }                    /* dunkel auf grauem Hintergrund */
 }
 
-/* Auf dem Handy: weißes Logo sichtbar, dunkles Logo versteckt */
 .login-logo-animated .logo-dark {
     display: none;
 }
@@ -60,27 +47,19 @@
     display: block;
 }
 
-/* Auf Tablet und Desktop: dunkles Logo zeigen, weißes verstecken */
 @media (min-width: 769px) {
     .login-logo-animated .logo-dark { display: block; }
     .login-logo-animated .logo-white  { display: none; }
 }
 
-/* Mobile: Statt weißem Logo-SVG → dunkles Logo per Filter weiß machen */
 @media (max-width: 768px) {
     .login-logo-animated .logo-white  { display: none; }
     .login-logo-animated .logo-dark {
         display: block;
-        animation: logoFarbwechsel 2s forwards ease-in-out;
+        animation: logoColorChange 2s forwards ease-in-out;
     }
 }
 
-
-/* ==========================================================================
-   VOLLBILD WRAPPER – Container für den gesamten Seiteninhalt
-   ========================================================================== */
-
-/* Füllt den ganzen Bildschirm und verteilt TopBar, Karte und Footer */
 .login-fullscreen {
     display: flex;
     flex-direction: column;
@@ -88,13 +67,8 @@
     justify-content: space-between;
     height: 100vh;
     opacity: 0;
-    animation: inhaltEinblenden 0.8s forwards 1.3s;
+    animation: showContent 0.8s forwards 1.3s;
 }
-
-
-/* ==========================================================================
-   TOPBAR – Oben rechts mit "Noch kein Konto? Registrieren"
-   ========================================================================== */
 
 .login-topbar {
     width: 100%;
@@ -114,11 +88,6 @@
     font-size: 20px;
     color: var(--primaryColor);
 }
-
-
-/* ==========================================================================
-   login-card – Die weiße Karte in der Mitte
-   ========================================================================== */
 
 .login-content {
     display: flex;
@@ -143,7 +112,6 @@
     line-height: 1.2;
 }
 
-/* Blauer Trennstrich unter der Überschrift */
 .login-divider {
     display: block;
     width: 154px;
@@ -152,11 +120,6 @@
     border-radius: 2px;
     margin: 4px auto 32px auto;
 }
-
-
-/* ==========================================================================
-   ZURÜCK-PFEIL
-   ========================================================================== */
 
 .login-headline-section {
     position: relative;
@@ -179,11 +142,6 @@
 .login-back-arrow:hover {
     transform: translateY(-50%) translateX(-4px);
 }
-
-
-/* ==========================================================================
-   FORMULARE – Eingabefelder, Optionen, Buttons
-   ========================================================================== */
 
 .login-form {
     display: flex;
@@ -214,7 +172,7 @@
     gap: 32px;
 }
 
-.login-datenschutz-zeile {
+.login-privacy-row {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -222,16 +180,16 @@
     justify-content: center;
 }
 
-.login-datenschutz-zeile a {
+.login-privacy-row a {
     color: var(--secondaryColor);
     text-decoration: none;
 }
 
-.login-datenschutz-zeile a:hover {
+.login-privacy-row a:hover {
     text-decoration: underline;
 }
 
-.login-text-klein {
+.login-text-small {
     font-size: 20px;
     color: var(--light-gray-4);
     text-align: center;
@@ -239,11 +197,6 @@
     max-width: 322px;
     line-height: 1.5;
 }
-
-
-/* ==========================================================================
-   FOOTER – Datenschutz & Impressum Links
-   ========================================================================== */
 
 .login-footer {
     width: 100%;
@@ -271,11 +224,6 @@
     color: var(--primaryColor);
 }
 
-
-/* ==========================================================================
-   RESPONSIVE – Tablet (max. 1024px)
-   ========================================================================== */
-
 @media (max-width: 1024px) {
     .login-card {
         padding: 48px 80px;
@@ -284,11 +232,6 @@
         padding-right: 60px;
     }
 }
-
-
-/* ==========================================================================
-   RESPONSIVE – Mobil (max. 880px)
-   ========================================================================== */
 
 @media (max-width: 880px) {
     .login-fullscreen {
@@ -332,7 +275,6 @@
         font-size: 37px;
     }
 
-    /* Pfeil innerhalb der Karte (kein negatives left), Überschrift zentriert */
     .login-back-arrow {
         left: 16px;
         top: 8px;
@@ -360,11 +302,6 @@
 
 }
 
-
-/* ==========================================================================
-   RESPONSIVE – Kleines Mobil (max. 480px)
-   ========================================================================== */
-
 @media (max-width: 480px) {
     .login-fullscreen {
         margin: 0 16px;
@@ -376,11 +313,6 @@
         width: 100%;
     }
 }
-
-
-/* ==========================================================================
-   RESPONSIVE – Sehr kleines Mobil (max. 320px)
-   ========================================================================== */
 
 @media (max-width: 320px) {
     .login-card h2 {
