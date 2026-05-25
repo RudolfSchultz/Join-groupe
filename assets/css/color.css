@@ -3,6 +3,7 @@
     --primaryColor: #2A3647;       /* Hauptfarbe für Hintergrund Sidebar und Buttons */
     --secondaryColor: #29ABE2;         /* Akzentfarbe für Hover-Effekte und Links */
     --primary-darkblue: #091931;      /* Dunkelste Farbe für aktive Menüpunkte */
+    --activeColor: #091931;            /* Aktive Nav-Items und Hover-Zustände */
 
     /* --- Hintergrundfarbe --- */
     --background: #F6F7F8;            /* Hellgrauer Seitenhintergrund */
