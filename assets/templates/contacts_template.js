@@ -48,19 +48,15 @@ function renderContactDetails(contact) {
                     </div>`;
 }
 
-function renderDialogContact(option = 'edit', contact = {}) {
-    const isEdit = option === 'edit';
-    const titleText = isEdit ? 'Edit contact' : 'Add contact';
-    const actionButton = isEdit ? renderDialogContactEditButton(contact) : renderDialogCreateContactButton();
-
+function renderDialogContact(title, submitAction, buttonHtml) {
     return `<div class="modal-content" onclick="event.stopPropagation()">
             <div class="modal-left">
                 <div class="modal-logo"><img src="../assets/img/logo_white.svg" alt="join icon"></div>
-                <h2>${titleText}</h2>
+                <h2>${title}</h2>
                 <p class="modal-tagline">Tasks are better with a team!</p>
             </div>
 
-            <form method="dialog" class="modal-right">
+            <form method="dialog" class="modal-right" onsubmit="${submitAction}">
                 <button type="button" class="close-dialog" onclick="closeDialog()">×</button>
 
                 <div class="profile-placeholder">
@@ -68,22 +64,22 @@ function renderDialogContact(option = 'edit', contact = {}) {
                 </div>
 
                 <div class="input-group">
-                    <input type="text" placeholder="Name" required>
+                    <input type="text" name="name" placeholder="Name" required>
                     <i class="fa-solid fa-user"></i>
                 </div>
 
                 <div class="input-group">
-                    <input type="email" placeholder="Email" required>
+                    <input type="email" name="email" placeholder="Email" required>
                     <i class="fa-solid fa-envelope"></i>
                 </div>
 
                 <div class="input-group">
-                    <input type="tel" placeholder="Phone">
+                    <input type="tel" name="phone" placeholder="Phone">
                     <i class="fa-solid fa-phone"></i>
                 </div>
 
                 <div class="modal-footer">
-                    ${actionButton}
+                    ${buttonHtml}
                 </div>
             </form>
         </div> `;
@@ -93,10 +89,10 @@ function renderDialogContact(option = 'edit', contact = {}) {
 function renderDialogContactEditButton(contact) {
     return `<button type="button" class="btn-cancel" onclick="deleteContact('${contact.id}')"> Delete <i
                 class="fa-solid fa-xmark"></i></button>
-            <button type="submit" class="btn-submit"> Save <i class="fa-solid fa-check"></i></button>`;
+            <button type="submit" class="btn-submit" onclick="saveContact('${contact.id}')"> Save <i class="fa-solid fa-check"></i></button>`;
 }
 
-function renderDialogCreateContactButton() {
+function renderDialogCreateContactButton(contact) {
     return `<button type="button" class="btn-cancel" onclick="closeDialog()"> Cancel <i
                 class="fa-solid fa-xmark"></i></button>
             <button type="submit" class="btn-submit"> Create contact <i class="fa-solid fa-check"></i></button>`;

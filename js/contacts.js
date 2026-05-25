@@ -2,10 +2,11 @@ const dialogElement = document.querySelector("dialog");
 const dialog = document.getElementById("add-contact-dialog");
 const contactListContainer = document.getElementById("contacts-list-import");
 const contactDetailsContainer = document.getElementById("contact-details-view");
-const URL = '/db.json';
+const URL = 'https://remotestorage-c0469-default-rtdb.europe-west1.firebasedatabase.app/contacts.json';
 let loadedContacts = [];
 
 async function init() {
+    loadedContacts = []; 
     await loadAndPrepareContacts();
     renderContacts();
 }
@@ -23,25 +24,31 @@ async function loadAndPrepareContacts() {
     try {
         const response = await fetch(URL);
         const data = await response.json();
+        if (!data) return;
 
-        addContactsToLoaded(data.contacts);
-    } catch (error) {
-        console.error("Fehler beim Laden:", error);
-    }
+        const contactsArray = Array.isArray(data) ? data : Object.values(data);
+
+        const cleanContacts = contactsArray.filter(c => c !== null && c !== undefined);
+
+        loadedContacts = [];
+
+        addContactsToLoaded(cleanContacts);
+    } catch (error) { console.error("Fehler beim Laden:", error); }
 }
 
 function addContactsToLoaded(contactsFromDB) {
-    Object.keys(contactsFromDB).forEach(id => {
-        const alreadyExists = loadedContacts.some(c => c.id === id);
+    contactsFromDB.forEach(contact => {
+        const contactId = String(contact.id);
+        const alreadyExists = loadedContacts.some(c => String(c.id) === contactId);
 
         if (!alreadyExists) {
             loadedContacts.push({
-                id: id,
-                name: contactsFromDB[id].name,
-                email: contactsFromDB[id].email,
-                phone: contactsFromDB[id].phone || 'no phone number provided',
-                color: getRandomColor(),
-                avatar: getInitials(contactsFromDB[id].name)
+                id: contactId,
+                name: contact.name,
+                email: contact.email,
+                phone: contact.phone || 'no phone number provided',
+                color: contact.color || getRandomColor(), 
+                avatar: contact.avatar || getInitials(contact.name)
             });
         }
     });
@@ -110,7 +117,7 @@ function editContact(id) {
 
     const contact = loadedContacts.find(c => c.id === id);
     if (contact) {
-        dialog.innerHTML = renderDialogContact('edit', contact);
+        dialog.innerHTML = renderEditContactTemplate(contact);
         fillEditForm(contact);
         openDialog();
     }
@@ -129,7 +136,7 @@ function fillEditForm(contact) {
 function openAddContactModal() {
     if (!dialog) return;
 
-    dialog.innerHTML = renderDialogContact('add');
+    dialog.innerHTML = renderAddContactTemplate();
 
     const avatarBox = dialog.querySelector('.profile-placeholder');
     if (avatarBox) {
@@ -137,4 +144,61 @@ function openAddContactModal() {
         avatarBox.innerHTML = '<i class="fa-solid fa-user"></i>';
     }
     openDialog();
+}
+
+function renderAddContactTemplate() {
+    const buttons = renderDialogCreateContactButton();
+    return renderDialogContact('Add contact', 'createNewContact(event)', buttons);
+}
+
+function renderEditContactTemplate(contact) {
+    const buttons = renderDialogContactEditButton(contact);
+    return renderDialogContact('Edit contact', `updateContact(event, '${contact.id}')`, buttons);
+}
+
+function createNewContact(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    console.log(event)
+    const newContact = {
+        name: formData.get('name'),
+        email: formData.get('email'),
+        phone: formData.get('phone') || 'no phone number provided'
+    };
+    saveContactToDB(newContact);
+}
+
+async function saveContactToDB(newContact) {
+    const maxId = loadedContacts.reduce((max, c) => Math.max(max, Number(c.id) || 0), 0);
+    const nextIndex = maxId + 1;
+
+    newContact.id = nextIndex;
+    newContact.avatar = getInitials(newContact.name); 
+    newContact.color = getRandomColor();
+
+    try {
+        await fetch(`${URL.replace('.json', '')}/${nextIndex}.json`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newContact)
+        });
+        dialog.close();
+        await loadAndPrepareContacts(); 
+        renderContacts();
+    } catch (e) { console.error(e); }
+}
+
+async function deleteContact(id) {
+    if (!id) return;
+    try {
+        await fetch(`${URL.replace('.json', '')}/${id}.json`, {
+            method: 'DELETE'
+        });
+
+        // Schließt das Modal NUR, wenn es im Browser auch wirklich gerade offen ist
+        if (dialog && dialog.open) dialog.close();
+        if (contactDetailsContainer) contactDetailsContainer.innerHTML = '';
+        
+        await init(); 
+    } catch (error) { console.error("Fehler beim Löschen:", error); }
 }
