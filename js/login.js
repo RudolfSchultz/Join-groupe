@@ -84,52 +84,38 @@ async function login() {
     window.location.href = './html/summary.html';
 }
 
+function updatePasswordHint(hint, pw, pwConfirm) {
+    if (!hint) return;
+    const mismatch = pwConfirm.length > 0 && pw !== pwConfirm;
+    hint.textContent = mismatch ? 'Passwords don\'t match' : '';
+    hint.style.display = mismatch ? 'block' : 'none';
+}
+
 function validateRegistrationForm() {
     const name = document.getElementById('reg_name').value.trim();
     const email = document.getElementById('reg_email').value.trim();
     const pw = document.getElementById('reg_passwort').value;
     const pwConfirm = document.getElementById('reg_password_confirm').value;
     const privacy = document.getElementById('reg_datenschutz').checked;
-    const submitBtn = document.getElementById('reg_submit_btn');
-    const hint = document.getElementById('pw_match_hint');
-
-    if (hint) {
-        if (pwConfirm.length > 0 && pw !== pwConfirm) {
-            hint.textContent = 'Passwords don\'t match';
-            hint.style.display = 'block';
-        } else {
-            hint.style.display = 'none';
-        }
-    }
-
-    const isValid = name.length > 0 && email.length > 0 && pw.length > 0 && pw === pwConfirm && privacy;
-    submitBtn.disabled = !isValid;
+    updatePasswordHint(document.getElementById('pw_match_hint'), pw, pwConfirm);
+    const isValid = name && email && pw && pw === pwConfirm && privacy;
+    document.getElementById('reg_submit_btn').disabled = !isValid;
 }
 
-async function register() {
-    const name = document.getElementById('reg_name').value.trim();
-    const email = document.getElementById('reg_email').value.trim();
-    const password = document.getElementById('reg_passwort').value;
-
+async function getNextUserId(email) {
     const users = await loadUsers();
-    if (users.some(u => u.email === email)) {
-        showNotification('This email address is already registered.', true);
-        return;
-    }
+    if (users.some(u => u.email === email)) return null;
+    return users.reduce((max, u) => Math.max(max, Number(u.id) || 0), 0) + 1;
+}
 
-    const maxId = users.reduce((max, u) => Math.max(max, Number(u.id) || 0), 0);
-    const newId = maxId + 1;
-
-    const newUser = { id: newId, name, email, password };
-    const newContact = {
-        id: newId,
-        name,
-        email,
-        phone: 'no phone number provided',
-        color: getRandomColor(),
-        avatar: getInitials(name)
+function buildNewUserAndContact(id, name, email, password) {
+    return {
+        newUser: { id, name, email, password },
+        newContact: { id, name, email, phone: 'no phone number provided', color: getRandomColor(), avatar: getInitials(name) }
     };
+}
 
+async function saveRegistration(newId, newUser, newContact) {
     try {
         await saveUserToFirebase(newId, newUser);
         await saveContactToFirebase(newId, newContact);
@@ -139,4 +125,14 @@ async function register() {
         console.error('Registration error:', e);
         showNotification('Registration failed.', true);
     }
+}
+
+async function register() {
+    const name = document.getElementById('reg_name').value.trim();
+    const email = document.getElementById('reg_email').value.trim();
+    const password = document.getElementById('reg_passwort').value;
+    const newId = await getNextUserId(email);
+    if (!newId) { showNotification('This email address is already registered.', true); return; }
+    const { newUser, newContact } = buildNewUserAndContact(newId, name, email, password);
+    await saveRegistration(newId, newUser, newContact);
 }
