@@ -184,10 +184,27 @@ select.input-field {
 }
 
 input[type='checkbox'] {
-    width: 18px;
-    height: 18px;
+    width: 24px;
+    height: 24px;
     cursor: pointer;
-    accent-color: var(--primaryColor);
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url('./assets/icons/checkbox-default.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+input[type='checkbox']:hover {
+    background-image: url('./assets/icons/checkbox-hover-disable.svg');
+}
+
+input[type='checkbox']:checked {
+    background-image: url('./assets/icons/checkbox-checked.svg');
+}
+
+input[type='checkbox']:checked:hover {
+    background-image: url('./assets/icons/checkbox-hover-checked.svg');
 }
 
 input[type='date'] {
