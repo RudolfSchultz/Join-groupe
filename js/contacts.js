@@ -2,7 +2,7 @@ const dialogElement = document.querySelector("dialog");
 const dialog = document.getElementById("add-contact-dialog");
 const contactListContainer = document.getElementById("contacts-list-import");
 const contactDetailsContainer = document.getElementById("contact-details-view");
-const URL = 'https://remotestorage-c0469-default-rtdb.europe-west1.firebasedatabase.app/contacts.json';
+const CONTACTS_URL = 'https://remotestorage-c0469-default-rtdb.europe-west1.firebasedatabase.app/contacts.json';
 let loadedContacts = [];
 
 async function init() {
@@ -22,7 +22,7 @@ function getRandomColor() {
 
 async function loadAndPrepareContacts() {
     try {
-        const response = await fetch(URL);
+        const response = await fetch(CONTACTS_URL);
         const data = await response.json();
         if (!data) return;
 
@@ -177,7 +177,7 @@ async function saveContactToDB(newContact) {
     newContact.color = getRandomColor();
 
     try {
-        await fetch(`${URL.replace('.json', '')}/${nextIndex}.json`, {
+        await fetch(`${CONTACTS_URL.replace('.json', '')}/${nextIndex}.json`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(newContact)
@@ -208,7 +208,7 @@ async function updateContact(event, id) {
     };
 
     try {
-        await fetch(`${URL.replace('.json', '')}/${id}.json`, {
+        await fetch(`${CONTACTS_URL.replace('.json', '')}/${id}.json`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(updatedContact)
@@ -224,7 +224,7 @@ async function updateContact(event, id) {
 async function deleteContact(id) {
     if (!id) return;
     try {
-        await fetch(`${URL.replace('.json', '')}/${id}.json`, {
+        await fetch(`${CONTACTS_URL.replace('.json', '')}/${id}.json`, {
             method: 'DELETE'
         });
 
