@@ -1,4 +1,6 @@
 .add-task-main {
+  flex: 1;
+  min-height: 0;
   padding: 64px 40px 64px 96px;
   overflow-y: auto;
 }
