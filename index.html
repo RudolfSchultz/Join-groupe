@@ -79,11 +79,12 @@
                         <img src="./assets/icons/lock.svg" class="input-field-icon" alt="">
                     </div>
                     <div class="input-container">
-                        <input type="password" id="reg_passwort_wiederholen" class="input-field"
+                        <input type="password" id="reg_password_confirm" class="input-field"
                             placeholder="Confirm Password" autocomplete="new-password"
                             oninput="validateRegistrationForm()" required>
                         <img src="./assets/icons/lock.svg" class="input-field-icon" alt="">
                     </div>
+                    <span id="pw_match_hint" style="display:none; color:#ff4d4d; font-size:13px; margin-top:-8px;">Passwords don't match</span>
                     <div class="login-privacy-row">
                         <input type="checkbox" id="reg_datenschutz" onchange="validateRegistrationForm()">
                         <label for="reg_datenschutz">

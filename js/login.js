@@ -1,50 +1,17 @@
-/* ==========================================================================
-   LOGIN.JS – Alle Funktionen für Login, Registrierung und Passwort-Reset
-   ==========================================================================
-   
-   Diese Datei steuert die index.html Seite (login-page).
-   Sie enthält Funktionen für:
-   1. Zwischen den Formularen wechseln (Login ↔ Registrierung)
-   2. Einloggen
-   3. Als Gast einloggen
-   4. Registrieren
-   5. Passwort vergessen
-   6. Passwort zurücksetzen
-   ========================================================================== */
+const FIREBASE_BASE = 'https://remotestorage-c0469-default-rtdb.europe-west1.firebasedatabase.app';
+const USERS_URL = `${FIREBASE_BASE}/users.json`;
 
-/* ==========================================================================
-   FORMULAR-WECHSEL – Zwischen den verschiedenen Formularen umschalten
-   ========================================================================== */
+// ── Navigation ────────────────────────────────────────────────────────────────
 
-/**
- * Wechselt zwischen zwei Formularen (z.B. von Login zu Registrierung).
- * 
- * @param {string} currentForm   - ID des aktuellen Formulars (wird versteckt)
- * @param {string} targetForm        - ID des Ziel-Formulars (wird angezeigt)
- * 
- * Beispiel: switchForm('login_section', 'registration_section')
- */
 function switchForm(currentForm, targetForm) {
-    // Aktuelles Formular verstecken
     document.getElementById(currentForm).classList.add('d-none');
-
-    // Ziel-Formular anzeigen
     document.getElementById(targetForm).classList.remove('d-none');
-
-    // "Noch kein Konto?" Button anpassen
     updateSignupButton(targetForm);
 }
 
-/**
- * Zeigt oder versteckt den "Noch kein Konto? Registrieren" Button.
- * Er soll nur sichtbar sein wenn das login-form aktiv ist.
- * 
- * @param {string} activeForm - ID des gerade aktiven Formulars
- */
 function updateSignupButton(activeForm) {
     const signupBtn = document.getElementById('signup_btn');
     if (!signupBtn) return;
-
     if (activeForm === 'login_section') {
         signupBtn.classList.remove('d-none');
     } else {
@@ -52,268 +19,136 @@ function updateSignupButton(activeForm) {
     }
 }
 
-/* ==========================================================================
-   EINLOGGEN
-   ========================================================================== */
+// ── Notification ──────────────────────────────────────────────────────────────
 
-/**
- * Prüft die Logindaten und meldet den Benutzer an.
- * 
- * Holt E-Mail und Passwort aus den Eingabefeldern,
- * sucht den Benutzer in der Liste und loggt ihn ein.
- */
+function showNotification(message, isError = false) {
+    const notif = document.getElementById('notification');
+    if (!notif) return;
+    notif.textContent = message;
+    notif.style.backgroundColor = isError ? '#2a3647' : '#2a3647';
+    notif.classList.remove('d-none');
+    setTimeout(() => notif.classList.add('d-none'), 3000);
+}
+
+// ── Firebase helpers ──────────────────────────────────────────────────────────
+
+async function loadUsers() {
+    try {
+        const response = await fetch(USERS_URL);
+        const data = await response.json();
+        if (!data) return [];
+        return Array.isArray(data) ? data.filter(Boolean) : Object.values(data).filter(Boolean);
+    } catch (e) {
+        console.error('Fehler beim Laden der User:', e);
+        return [];
+    }
+}
+
+async function saveUserToFirebase(id, user) {
+    await fetch(`${FIREBASE_BASE}/users/${id}.json`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(user)
+    });
+}
+
+async function saveContactToFirebase(id, contact) {
+    await fetch(`${FIREBASE_BASE}/contacts/${id}.json`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(contact)
+    });
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) color += letters[Math.floor(Math.random() * 16)];
+    return color;
+}
+
+function getInitials(name) {
+    const parts = name.trim().split(' ');
+    const first = parts[0]?.charAt(0).toUpperCase() || '';
+    const second = parts[1]?.charAt(0).toUpperCase() || '';
+    return first + second;
+}
+
+// ── Login ─────────────────────────────────────────────────────────────────────
+
 async function login() {
-    // Eingabewerte holen
-    const email    = document.getElementById('login_email').value.trim();
-    const passwort = document.getElementById('login_passwort').value;
-    const merken   = document.getElementById('login_merken')?.checked || false;
+    const email = document.getElementById('login_email').value.trim();
+    const password = document.getElementById('login_passwort').value;
 
-    // Prüfen ob die Felder ausgefüllt sind
-    if (!email || !passwort) {
-        benachrichtigungAnzeigen('../assets/img/fail.png', 'Bitte E-Mail und Passwort eingeben!');
+    const users = await loadUsers();
+    const user = users.find(u => u.email === email && u.password === password);
+
+    if (!user) {
+        showNotification('Invalid email address or password.', true);
         return;
     }
 
-    // Alle Benutzer laden und passenden finden
-    await alleBenutzerLaden();
-    eingeloggterBenutzer = alleBenutzer.find(
-        b => b.email === email && b.passwort === passwort
-    );
-
-    if (eingeloggterBenutzer) {
-        // Erfolgreich: Benutzer einloggen
-        benutzerEinloggen(eingeloggterBenutzer, merken);
-    } else {
-        // Fehler: Nachricht anzeigen
-        benachrichtigungAnzeigen('../assets/img/fail.png', 'E-Mail oder Passwort falsch!');
-    }
+    sessionStorage.setItem('currentUser', JSON.stringify({ id: user.id, name: user.name, email: user.email }));
+    window.location.href = './html/summary.html';
 }
 
-/* ==========================================================================
-   GAST-LOGIN
-   ========================================================================== */
+// ── Registrierung ─────────────────────────────────────────────────────────────
 
-/**
- * Meldet einen Gastbenutzer an ohne Registrierung.
- * 
- * Wenn noch kein Gast-Account existiert, wird einer erstellt.
- * Der Gast-Account hat feste Zugangsdaten: gast@gast.de / gast
- */
-async function gastEinloggen() {
-    // Alle Benutzer laden
-    await alleBenutzerLaden();
+function validateRegistrationForm() {
+    const name = document.getElementById('reg_name').value.trim();
+    const email = document.getElementById('reg_email').value.trim();
+    const pw = document.getElementById('reg_passwort').value;
+    const pwConfirm = document.getElementById('reg_password_confirm').value;
+    const privacy = document.getElementById('reg_datenschutz').checked;
+    const submitBtn = document.getElementById('reg_submit_btn');
+    const hint = document.getElementById('pw_match_hint');
 
-    // Prüfen ob schon ein Gast-Account existiert
-    let gastBenutzer = alleBenutzer.find(
-        b => b.email === 'gast@gast.de' && b.passwort === 'gast'
-    );
-
-    // Wenn noch kein Gast-Account: einen erstellen
-    if (!gastBenutzer) {
-        const svg = avatarErstellen('Gast Benutzer');
-        gastBenutzer = {
-            id: Date.now(),
-            name: 'Gast',
-            email: 'gast@gast.de',
-            passwort: 'gast',
-            svg: svg.outerHTML,     // SVG als Text speichern
-            aufgaben: [],
-            kontakte: []
-        };
-        alleBenutzer.push(gastBenutzer);
-        await dateiSpeichern('benutzer', alleBenutzer);
+    if (hint) {
+        if (pwConfirm.length > 0 && pw !== pwConfirm) {
+            hint.textContent = 'Passwords don\'t match';
+            hint.style.display = 'block';
+        } else {
+            hint.style.display = 'none';
+        }
     }
 
-    // Als Gast einloggen (nur für diese Sitzung, nicht dauerhaft merken)
-    benutzerEinloggen(gastBenutzer, false);
+    const isValid = name.length > 0 && email.length > 0 && pw.length > 0 && pw === pwConfirm && privacy;
+    submitBtn.disabled = !isValid;
 }
 
-/* ==========================================================================
-   REGISTRIERUNG
-   ========================================================================== */
-
-/**
- * Registriert einen neuen Benutzer.
- * 
- * Sammelt die Formulardaten, prüft ob die Passwörter übereinstimmen
- * und legt den neuen Benutzer an.
- */
 async function register() {
-    // Formulardaten holen
-    const name              = document.getElementById('reg_name').value.trim();
-    const email             = document.getElementById('reg_email').value.trim();
-    const passwort          = document.getElementById('reg_passwort').value;
-    const passwortWiederh   = document.getElementById('reg_passwort_wiederholen').value;
-    const datenschutzAkz    = document.getElementById('reg_datenschutz').checked;
+    const name = document.getElementById('reg_name').value.trim();
+    const email = document.getElementById('reg_email').value.trim();
+    const password = document.getElementById('reg_passwort').value;
 
-    // Grundlegende Validierung (Prüfung der Eingaben)
-    if (!name || !email || !passwort) {
-        benachrichtigungAnzeigen('', 'Bitte alle Felder ausfüllen!');
+    const users = await loadUsers();
+    if (users.some(u => u.email === email)) {
+        showNotification('This email address is already registered.', true);
         return;
     }
 
-    if (!datenschutzAkz) {
-        benachrichtigungAnzeigen('', 'Bitte Datenschutzbestimmungen akzeptieren!');
-        return;
-    }
+    const maxId = users.reduce((max, u) => Math.max(max, Number(u.id) || 0), 0);
+    const newId = maxId + 1;
 
-    // Passwörter vergleichen
-    if (passwort !== passwortWiederh) {
-        benachrichtigungAnzeigen('', 'Die Passwörter stimmen nicht überein!');
-        return;
-    }
-
-    // Alle Benutzer laden
-    await alleBenutzerLaden();
-
-    // Prüfen ob E-Mail bereits existiert
-    const emailExistiert = alleBenutzer.find(b => b.email === email);
-    if (emailExistiert) {
-        benachrichtigungAnzeigen('', 'Diese E-Mail ist bereits registriert!');
-        return;
-    }
-
-    // Avatar für neuen Benutzer erstellen
-    const svg = avatarErstellen(name);
-
-    // Neuen Benutzer als Objekt anlegen
-    const neuerBenutzer = {
-        id: Date.now(),                 // Eindeutige ID = aktuelle Zeit in Millisekunden
-        name: name,
-        email: email,
-        passwort: passwort,
-        svg: svg.outerHTML,             // Avatar als Text-String
-        aufgaben: [],                   // Leere Aufgabenliste
-        kontakte: []                    // Kontaktliste (wird gleich befüllt)
+    const newUser = { id: newId, name, email, password };
+    const newContact = {
+        id: newId,
+        name,
+        email,
+        phone: 'no phone number provided',
+        color: getRandomColor(),
+        avatar: getInitials(name)
     };
 
-    // Alle bestehenden Benutzer (außer Gast) als Kontakte für den neuen Benutzer eintragen
-    const echteBenutzer = alleBenutzer.filter(b => b.email !== 'gast@gast.de');
-    echteBenutzer.forEach((benutzer, i) => {
-        neuerBenutzer.kontakte.push({
-            id:        neuerBenutzer.id + i + 1,
-            name:      benutzer.name,
-            email:     benutzer.email,
-            telefon:   '',
-            monogramm: benutzer.svg
-        });
-    });
-
-    // Den neuen Benutzer als Kontakt bei allen bestehenden Benutzern (außer Gast) eintragen
-    echteBenutzer.forEach((benutzer, i) => {
-        benutzer.kontakte.push({
-            id:        neuerBenutzer.id + echteBenutzer.length + i + 1,
-            name:      name,
-            email:     email,
-            telefon:   '',
-            monogramm: svg.outerHTML
-        });
-    });
-
-    // In die Benutzerliste hinzufügen
-    alleBenutzer.push(neuerBenutzer);
-
-    // Speichern
-    await dateiSpeichern('benutzer', alleBenutzer);
-
-    // Erfolgsnachricht und zurück zum Login
-    benachrichtigungAnzeigen('', 'Erfolgreich registriert!');
-    switchForm('registration_section', 'login_section');
-}
-
-/**
- * Überprüft das Registrierungsformular und aktiviert/deaktiviert den Registrieren-Button.
- * 
- * Wird bei jeder Eingabe im Formular aufgerufen (oninput).
- */
-function validateRegistrationForm() {
-    const name           = document.getElementById('reg_name')?.value.trim();
-    const email          = document.getElementById('reg_email')?.value.trim();
-    const passwort       = document.getElementById('reg_passwort')?.value;
-    const passwortWiedh  = document.getElementById('reg_passwort_wiederholen')?.value;
-    const datenschutz    = document.getElementById('reg_datenschutz')?.checked;
-    const btn            = document.getElementById('reg_submit_btn');
-
-    if (!btn) return;
-
-    // Button aktivieren wenn alle Felder korrekt ausgefüllt sind
-    const allesGueltig = name && email && passwort && passwortWiedh
-        && passwort === passwortWiedh && datenschutz;
-
-    btn.disabled = !allesGueltig;
-}
-
-/* ==========================================================================
-   PASSWORT VERGESSEN
-   ========================================================================== */
-
-/**
- * Simuliert das Senden einer E-Mail mit Reset-Anleitung.
- * 
- * HINWEIS: Mit Firebase Auth kann man hier echte E-Mails senden!
- * Funktion: firebase.auth().sendPasswordResetEmail(email)
- */
-async function passwortResetEmailSenden() {
-    const email = document.getElementById('reset_email').value.trim();
-
-    if (!email) {
-        benachrichtigungAnzeigen('../assets/img/fail.png', 'Bitte E-Mail eingeben!');
-        return;
+    try {
+        await saveUserToFirebase(newId, newUser);
+        await saveContactToFirebase(newId, newContact);
+        showNotification('Registration successful!');
+        setTimeout(() => switchForm('registration_section', 'login_section'), 2000);
+    } catch (e) {
+        console.error('Registration error:', e);
+        showNotification('Registration failed.', true);
     }
-
-    // Prüfen ob E-Mail registriert ist
-    await alleBenutzerLaden();
-    const benutzerGefunden = alleBenutzer.find(b => b.email === email);
-
-    if (!benutzerGefunden) {
-        benachrichtigungAnzeigen('../assets/img/fail.png', 'E-Mail nicht gefunden!');
-        return;
-    }
-
-    // E-Mail wird simuliert – zum Reset-Formular wechseln
-    // In echtem Projekt: Firebase-E-Mail senden
-    switchForm('passwort_vergessen_bereich', 'passwort_reset_bereich');
-    benachrichtigungAnzeigen('../assets/img/check.svg', 'Bitte neues Passwort eingeben!');
-}
-
-/**
- * Setzt das Passwort auf ein neues Passwort zurück.
- */
-async function passwortZuruecksetzen() {
-    const email             = document.getElementById('reset_email').value.trim();
-    const neuesPasswort     = document.getElementById('neues_passwort').value;
-    const passwortWiederh   = document.getElementById('neues_passwort_wiederholen').value;
-
-    // Passwörter vergleichen
-    if (neuesPasswort !== passwortWiederh) {
-        benachrichtigungAnzeigen('../assets/img/fail.png', 'Die Passwörter stimmen nicht überein!');
-        return;
-    }
-
-    if (!neuesPasswort || neuesPasswort.length < 6) {
-        benachrichtigungAnzeigen('../assets/img/fail.png', 'Passwort muss mindestens 6 Zeichen haben!');
-        return;
-    }
-
-    // Benutzer finden und Passwort aktualisieren
-    await alleBenutzerLaden();
-    const benutzer = alleBenutzer.find(b => b.email === email);
-
-    if (benutzer) {
-        await passwortAktualisieren(benutzer, neuesPasswort);
-        benachrichtigungAnzeigen('../assets/img/check.svg', 'Passwort erfolgreich geändert!');
-        switchForm('passwort_reset_bereich', 'login_section');
-    }
-}
-
-/* ==========================================================================
-   SEITEN-INITIALISIERUNG
-   ========================================================================== */
-
-/**
- * Initialisiert die login-page beim Laden.
- * Lädt vorhandene Benutzer aus dem Speicher.
- */
-async function loginSeiteInitialisieren() {
-    await alleBenutzerLaden();
 }
