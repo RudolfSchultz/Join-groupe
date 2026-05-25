@@ -1,8 +1,6 @@
 const FIREBASE_BASE = 'https://remotestorage-c0469-default-rtdb.europe-west1.firebasedatabase.app';
 const USERS_URL = `${FIREBASE_BASE}/users.json`;
 
-// ── Navigation ────────────────────────────────────────────────────────────────
-
 function switchForm(currentForm, targetForm) {
     document.getElementById(currentForm).classList.add('d-none');
     document.getElementById(targetForm).classList.remove('d-none');
@@ -19,8 +17,6 @@ function updateSignupButton(activeForm) {
     }
 }
 
-// ── Notification ──────────────────────────────────────────────────────────────
-
 function showNotification(message, isError = false) {
     const notif = document.getElementById('notification');
     if (!notif) return;
@@ -29,8 +25,6 @@ function showNotification(message, isError = false) {
     notif.classList.remove('d-none');
     setTimeout(() => notif.classList.add('d-none'), 3000);
 }
-
-// ── Firebase helpers ──────────────────────────────────────────────────────────
 
 async function loadUsers() {
     try {
@@ -60,8 +54,6 @@ async function saveContactToFirebase(id, contact) {
     });
 }
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
-
 function getRandomColor() {
     const letters = '0123456789ABCDEF';
     let color = '#';
@@ -75,8 +67,6 @@ function getInitials(name) {
     const second = parts[1]?.charAt(0).toUpperCase() || '';
     return first + second;
 }
-
-// ── Login ─────────────────────────────────────────────────────────────────────
 
 async function login() {
     const email = document.getElementById('login_email').value.trim();
@@ -93,8 +83,6 @@ async function login() {
     sessionStorage.setItem('currentUser', JSON.stringify({ id: user.id, name: user.name, email: user.email }));
     window.location.href = './html/summary.html';
 }
-
-// ── Registrierung ─────────────────────────────────────────────────────────────
 
 function validateRegistrationForm() {
     const name = document.getElementById('reg_name').value.trim();
