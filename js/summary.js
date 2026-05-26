@@ -138,20 +138,6 @@ function getDaytimeGreeting() {
     return 'Good evening';
 }
 
-
-/**
- * Builds up to two uppercase initials from a full name.
- * @param {string} name - Full name.
- * @returns {string} Initials, falling back to 'G'.
- */
-function getInitials(name) {
-    const parts = (name || '').trim().split(' ');
-    const first = parts[0]?.charAt(0).toUpperCase() || '';
-    const second = parts[1]?.charAt(0).toUpperCase() || '';
-    return (first + second) || 'G';
-}
-
-
 /**
  * Sets the text content of an element if it exists.
  * @param {string} id - Element id.
