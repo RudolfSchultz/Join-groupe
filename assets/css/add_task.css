@@ -162,6 +162,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   box-shadow: none;
 }
 
+.prio-medium svg rect {
+  fill: #FFA800;
+}
+
 .prio-medium.prio-active svg rect {
   fill: #ffffff;
 }
