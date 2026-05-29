@@ -401,14 +401,18 @@
 
   .summary-cards { gap: 16px; }
 
-  .cards-row { justify-content: space-between; }
+  /* Wide row: 2 x 186px in 396px - space-between gives 24px gap */
+  .cards-row {
+    justify-content: space-between;
+    gap: 0;
+  }
 
   .stat-card {
     width: 186px;
     height: 110px;
     flex: none;
     border-radius: 20px;
-    padding: 0 19px;
+    padding: 16px 19px;
     gap: 10px;
     flex-direction: row;
     align-items: center;
@@ -417,8 +421,20 @@
   .stat-icon-circle { width: 40px; height: 40px; }
   .stat-icon { width: 20px; height: 20px; }
   .stat-info { gap: 2px; }
-  .stat-number { font-size: 47px; line-height: 1; }
-  .stat-label { font-size: 16px; }
+
+  .stat-number {
+    font-family: 'Inter', sans-serif;
+    font-size: 47px;
+    font-weight: 600;
+    line-height: 120%;
+  }
+
+  .stat-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 120%;
+  }
 
   .urgency-card {
     width: 100%;
@@ -433,14 +449,47 @@
 
   .urgency-icon-circle { width: 40px; height: 40px; }
   .urgency-info { gap: 2px; }
-  .urgency-number { font-size: 47px; }
-  .urgency-count-label { font-size: 16px; }
-  .urgency-divider-vertical { height: 68px; }
-  .urgency-right { gap: 8px; }
-  .urgency-date { font-size: 16px; font-weight: 700; }
-  .urgency-date-label { font-size: 16px; }
 
-  .cards-row-sm { justify-content: space-between; }
+  .urgency-number {
+    font-family: 'Inter', sans-serif;
+    font-size: 47px;
+    font-weight: 600;
+    line-height: 120%;
+  }
+
+  .urgency-count-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+  }
+
+  .urgency-divider-vertical {
+    width: 2px;
+    height: 68px;
+    background: #D1D1D1;
+  }
+
+  .urgency-right { gap: 8px; }
+
+  .urgency-date {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 120%;
+  }
+
+  .urgency-date-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 120%;
+  }
+
+  /* Small row: 3 x 116px in 396px - space-between gives 24px gap */
+  .cards-row-sm {
+    justify-content: space-between;
+    gap: 0;
+  }
 
   .stat-card-sm {
     width: 116px;
@@ -451,8 +500,24 @@
     border-radius: 20px;
   }
 
-  .stat-card-sm .stat-number { font-size: 47px; }
-  .stat-card-sm .stat-label { font-size: 16px; }
+  .stat-card-sm .stat-number {
+    font-family: 'Inter', sans-serif;
+    font-size: 47px;
+    font-weight: 600;
+    line-height: 120%;
+  }
+
+  .stat-card-sm .stat-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 120%;
+  }
+
+  /* Middle small card: smaller label to fit the longer text */
+  .cards-row-sm .stat-card-sm:nth-child(2) .stat-label {
+    font-size: 14px;
+  }
 
   .greeting-time {
     font-size: 36px;
