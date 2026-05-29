@@ -54,20 +54,6 @@ async function saveContactToFirebase(id, contact) {
     });
 }
 
-function getRandomColor() {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
-    for (let i = 0; i < 6; i++) color += letters[Math.floor(Math.random() * 16)];
-    return color;
-}
-
-function getInitials(name) {
-    const parts = name.trim().split(' ');
-    const first = parts[0]?.charAt(0).toUpperCase() || '';
-    const second = parts[1]?.charAt(0).toUpperCase() || '';
-    return first + second;
-}
-
 async function login() {
     const email = document.getElementById('login_email').value.trim();
     const password = document.getElementById('login_passwort').value;
@@ -135,4 +121,10 @@ async function register() {
     if (!newId) { showNotification('This email address is already registered.', true); return; }
     const { newUser, newContact } = buildNewUserAndContact(newId, name, email, password);
     await saveRegistration(newId, newUser, newContact);
+}
+
+function userLogout() {
+    sessionStorage.removeItem('currentUser');
+    const pathLocation = window.location.pathname.includes('/html/');
+    window.location.href = pathLocation ? "../index.html" : "./index.html";
 }
