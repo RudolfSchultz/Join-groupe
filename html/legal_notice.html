@@ -10,70 +10,55 @@
     <link rel="manifest" href="../assets/icons/favicon/site.webmanifest" />
     <link rel="stylesheet" href="../assets/css/fonts.css">
     <link rel="stylesheet" href="../style.css">
-    <link rel="stylesheet" href="../assets/css/shared.css">
+    <link rel="stylesheet" href="../assets/css/nav_template.css">
+    <link rel="stylesheet" href="../assets/css/nav_responsive.css">
     <link rel="stylesheet" href="../assets/css/legal.css">
     <title>Legal Notice</title>
 </head>
-<body class="app-page legal-page">
+<body onload="initMain()">
+    <div data-import="../html/nav_template.html"></div>
 
-    <aside class="sidebar">
-        <a href="../index.html" class="sidebar-logo-link">
-            <img class="sidebar-logo" src="../assets/img/logo_white.svg" alt="Join">
+    <div id="extern_panel" class="extern-panel d-none">
+        <a href="../index.html" class="external-logo-link">
+            <img src="../assets/img/logo_white.svg" alt="Join Logo" class="external-logo">
         </a>
-        <nav class="sidebar-nav">
-            <a href="summary.html" class="nav-item">
-                <img src="../assets/icons/summary.svg" alt="" class="nav-icon">
-                <span>Summary</span>
-            </a>
-            <a href="add_task.html" class="nav-item">
-                <img src="../assets/icons/add_task.svg" alt="" class="nav-icon">
-                <span>Add Task</span>
-            </a>
-            <a href="board.html" class="nav-item">
-                <img src="../assets/icons/board.svg" alt="" class="nav-icon">
-                <span>Board</span>
-            </a>
-            <a href="contacts.html" class="nav-item">
-                <img src="../assets/icons/contacts.svg" alt="" class="nav-icon">
-                <span>Contacts</span>
-            </a>
-            <a href="legal_notice.html" class="nav-item nav-item--active nav-item--legal-link">
-                <span>Legal Notice</span>
-            </a>
-        </nav>
-        <footer class="sidebar-footer">
-            <a href="privacy_policy.html" class="sidebar-footer-link">Privacy Policy</a>
-            <a href="legal_notice.html" class="sidebar-footer-link">Legal Notice</a>
-        </footer>
-    </aside>
+        <a href="../index.html" class="extern-login-link">
+            Log In
+            <img src="../assets/icons/arrow-left-line.svg" alt="" class="external-login-arrow">
+        </a>
+        <div class="external-footer">
+            <a href="privacy_policy.html" class="aktiv">Privacy Policy</a>
+            <a href="legal_notice.html">Legal Notice</a>
+        </div>
+    </div>
 
-    <div class="main-wrapper">
+    <div id="external_mobile_header" class="external-mobile-header d-none">
+        <img src="../assets/img/logo_big.svg" alt="Join Logo">
+    </div>
 
-        <header class="main-header">
-            <a href="#" class="mobile-logo-link">
-                <img src="../assets/img/logo_big.svg" alt="Join" class="mobile-header-logo">
-            </a>
-            <span class="header-title">Kanban Project Management Tool</span>
-            <div class="header-actions">
-                <a href="help.html" class="help-link">
-                    <img src="../assets/icons/help.svg" alt="Help" class="help-icon">
-                </a>
-                <div class="user-avatar" id="user-avatar"></div>
-            </div>
-        </header>
+    <div id="external_mobile_bar" class="external-mobile-bar d-none">
+        <a href="../index.html" class="external-mobile-login-link">
+            <img src="../assets/icons/arrow-left-line.svg" alt="" class="external-login-arrow">
+            Log In
+        </a>
+        <div class="external-mobile-links">
+            <a href="privacy_policy.html" class="aktiv">Privacy Policy</a>
+            <a href="legal_notice.html">Legal Notice</a>
+        </div>
+    </div>
 
-        <main class="legal-main">
+     <main>
+
+        <div class="legal-content">
             <div class="legal-header-row">
-                <h1 class="page-title">Legal Notice</h1>
-                <a href="javascript:history.back()" class="back-link">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M20 11H7.83L13.42 5.41L12 4L4 12L12 20L13.41 18.59L7.83 13H20V11Z" fill="#29ABE2"/>
-                    </svg>
-                </a>
-            </div>
-
-            <div class="legal-content">
-                <section class="legal-section">
+            <h1 class="page-title">Legal Notice</h1>
+            <a href="javascript:history.back()" class="back-link">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M20 11H7.83L13.42 5.41L12 4L4 12L12 20L13.41 18.59L7.83 13H20V11Z" fill="#29ABE2" />
+                </svg>
+            </a>
+        </div>
+            <section class="legal-section">
                     <h2>Imprint</h2>
                     <p>wird noch ausgefüllt</p>
                 </section>
@@ -113,9 +98,8 @@
                     infringement of the law becomes known. If we become aware of any such violations, we will
                     remove the content in question immediately.</p>
                 </section>
-            </div>
-        </main>
-    </div>
+        </div>
+    </main>
 
     <script src="../script.js"></script>
 </body>
