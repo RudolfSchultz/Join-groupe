@@ -28,6 +28,10 @@
     .sidebar {
         display: none;
     }
+
+     .mobil-navigation {
+        display: flex;
+    }
 }
 
 @media (max-width: 480px) {
