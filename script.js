@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function initMain() {
     setHeaderAvatar();
+    loadNavigation();
 }
 
 function getInitials(name) {
@@ -43,4 +44,22 @@ function toggleAvatarMenu() {
 function logout() {
     sessionStorage.removeItem('currentUser');
     window.location.href = '../index.html';
+}
+
+async function loadNavigation() {
+    const includeElements = document.querySelectorAll('[data-import]');
+    for (let element of includeElements) {
+        const filePath = element.getAttribute("data-import");
+        try {
+            const answer = await fetch(filePath);
+            if (answer.ok) {
+                element.innerHTML = await answer.text();
+                setHeaderAvatar();
+            } else {
+                element.innerHTML = '<p>Navigation could not be loaded</p>';
+            }
+        } catch (error) {
+            console.error("Error loading navigation:", error);
+        }
+    }
 }

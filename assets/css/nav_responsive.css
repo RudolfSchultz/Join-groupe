@@ -1,0 +1,74 @@
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 200px;
+    }
+
+    .header {
+        padding-left: 250px; /* 200px Sidebar + 50px Abstand */
+    }
+}
+
+@media (max-width: 768px) {
+
+    /* --- Header --- */
+    .header {
+        padding-left: 20px; /* Sidebar ausgeblendet, normales Padding */
+    }
+
+    .header-titel {
+        display: none;  /* Titel verstecken auf Mobile */
+    }
+
+    /* Mobiles Logo im Header (die korrekte CSS-Klasse) */
+    .header-logo-mobil {
+        display: block;
+    }
+
+    /* --- Sidebar verstecken --- */
+    .sidebar {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+
+    h1 { font-size: 36px; }
+    h2 { font-size: 28px; }
+    h3 { font-size: 22px; }
+
+    .header {
+        padding: 0 20 0 0;
+    }
+}
+
+/* ==========================================================================
+   SEHR KLEIN (< 320px) – Minimum-Unterstützung
+   ========================================================================== */
+@media (max-width: 320px) {
+
+    body {
+        min-width: 320px;  /* Keine horizontale Scrollbar unterhalb 320px */
+    }
+
+    h1 { font-size: 28px; }
+    h2 { font-size: 22px; }
+
+    .header {
+        padding: 0 12px;
+        height: 64px;
+    }
+
+    .mobil-navigation {
+        height: 60px;
+    }
+
+    .mobil-nav-link {
+        font-size: 10px;
+        padding: 4px 6px;
+    }
+
+    .mobil-nav-link img {
+        width: 20px;
+        height: 20px;
+    }
+}
