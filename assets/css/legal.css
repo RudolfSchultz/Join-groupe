@@ -69,6 +69,39 @@
   margin-bottom: 20px;
 }
 
+.legal-accent {
+  color: var(--secondaryColor);
+  font-weight: 400;
+}
+
+.headline {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.desc {
+  display: block;
+  margin-top: 0px;
+  margin-bottom: 20px;
+  margin-left: 50px;
+  max-width: 97ch;
+}
+
+.number {
+  font-size: 2rem;    /* sehr groß */
+  font-weight: bold;    /* fett */
+  margin-right: 16px;   /* Abstand zur Überschrift */
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.legal-enjoy {
+  padding: 50px 0 50px 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #000000;
+}
+
 @media (max-width: 1024px) {
   .legal-content {
     margin-left: 200px;
