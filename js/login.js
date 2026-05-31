@@ -1,3 +1,8 @@
+function guestLogin() {
+    const guestUser = { id: 'guest', name: 'Gast', email: '', isGuest: true };
+    sessionStorage.setItem('currentUser', JSON.stringify(guestUser));
+    window.location.href = './html/summary.html';
+}
 const FIREBASE_BASE = 'https://remotestorage-c0469-default-rtdb.europe-west1.firebasedatabase.app';
 const USERS_URL = `${FIREBASE_BASE}/users.json`;
 

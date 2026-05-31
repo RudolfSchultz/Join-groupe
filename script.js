@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', function () {
     initMain();
     document.addEventListener('click', function (e) {
@@ -67,6 +66,36 @@ function setActiveNavLink() {
   if (i !== undefined) document.querySelectorAll('.mobil-nav-link')[i]?.classList.add('aktiv');
 }
 
+function updateNavigationForUser(user) {
+    if (!user) {
+        const navGroup = document.querySelector('.navigation-links-group');
+        if (navGroup) navGroup.innerHTML = `<a href="../index.html" class="nav-link" id="nav_login"><img src="../assets/icons/login.svg" alt="" class="nav-icon"><span>Log In</span></a>`;
+        const mobilNav = document.querySelector('.mobil-navigation');
+        if (mobilNav) {
+            const page = window.location.pathname.split('/').pop();
+            const isPrivacy = page === 'privacy_policy.html';
+            const isLegal = page === 'legal_notice.html';
+            mobilNav.innerHTML = `
+                <a href="../index.html" class="mobil-nav-link">
+                    <img src="../assets/icons/login.svg" alt="" class="mobil-nav-icon">
+                    <span>Log In</span>
+                </a>
+                <a href="privacy_policy.html" class="mobil-nav-link${isPrivacy ? ' aktiv' : ''}">Privacy Policy</a>
+                <a href="legal_notice.html" class="mobil-nav-link${isLegal ? ' aktiv' : ''}">Legal Notice</a>
+            `;
+        }
+    }
+}
+
+function updateHeaderForUser(user) {
+    if (!user) {
+        const helpIcon = document.querySelector('.help-icon-link');
+        if (helpIcon) helpIcon.style.display = 'none';
+        const avatarWrapper = document.getElementById('user-avatar-wrapper');
+        if (avatarWrapper) avatarWrapper.style.display = 'none';
+    }
+}
+
 async function loadNavigation() {
     const includeElements = document.querySelectorAll('[data-import]');
     for (let element of includeElements) {
@@ -83,5 +112,9 @@ async function loadNavigation() {
             console.error("Error loading navigation:", error);
         }
     }
+    let user = null;
+    try { user = JSON.parse(sessionStorage.getItem('currentUser')); } catch (e) {}
+    updateNavigationForUser(user);
+    updateHeaderForUser(user);
     setActiveNavLink();
 }
