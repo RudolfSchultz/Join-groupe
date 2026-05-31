@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', function () {
     initMain();
     document.addEventListener('click', function (e) {
@@ -8,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function initMain() {
+
     setHeaderAvatar();
     loadNavigation();
 }
@@ -17,6 +19,7 @@ function getInitials(name) {
     const nameParts = name.trim().split(' ');
     const firstNameChar = nameParts[0]?.charAt(0).toUpperCase() || '';
     const lastNameChar = nameParts[1]?.charAt(0).toUpperCase() || '';
+
     return (firstNameChar + lastNameChar) || 'G';
 }
 
@@ -46,6 +49,24 @@ function logout() {
     window.location.href = '../index.html';
 }
 
+function setActiveNavLink() {
+  const page = window.location.pathname.split('/').pop();
+  document.querySelectorAll('.nav-link, .nav-bottom-link').forEach(link => {
+    if (link.getAttribute('href')?.endsWith(page)) link.classList.add('nav-item--active');
+  });
+  const mobilMap = {
+    'summary.html': 0,
+    'add_task.html': 1,
+    'board.html': 2,
+    'contacts.html': 3,
+    'privacy_policy.html': 0,
+    'legal_notice.html': 1,
+    'help.html': 2,
+  };
+  const i = mobilMap[page];
+  if (i !== undefined) document.querySelectorAll('.mobil-nav-link')[i]?.classList.add('aktiv');
+}
+
 async function loadNavigation() {
     const includeElements = document.querySelectorAll('[data-import]');
     for (let element of includeElements) {
@@ -62,4 +83,5 @@ async function loadNavigation() {
             console.error("Error loading navigation:", error);
         }
     }
+    setActiveNavLink();
 }
