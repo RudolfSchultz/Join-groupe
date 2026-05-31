@@ -266,6 +266,12 @@
     .input-field {
         width: 100%;
     }
+
+    .login-logo-animated .logo-dark {
+        margin-top: -20px;
+        margin-left: -50px;
+        height: 80px;
+    }
 }
 
 @media (max-width: 425px) {
@@ -348,8 +354,9 @@
     }
 
     .login-logo-animated .logo-dark {
-        margin-left: -40px;
-        height: 100px;
+        margin-top: -20px;
+        margin-left: -50px;
+        height: 60px;
     }
 }
 
@@ -388,8 +395,9 @@
     }
 
     .login-logo-animated .logo-dark {
-        margin-left: -40px;
-        height: 80px;
+        margin-top: -20px;
+        margin-left: -50px;
+        height: 50px;
     }
 
     .login-topbar span {
