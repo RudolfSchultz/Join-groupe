@@ -3,8 +3,9 @@
 .contacts-main {
     display: flex;
     flex-direction: row;
-    padding: 0 20px;
+    padding: 206px 40px 0px 100px;
     height: calc(100vh - 96px);
+    overflow: hidden;
 }
 
 /* Linke Spalte der Kontaktseite */

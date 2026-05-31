@@ -89,10 +89,10 @@ function renderDialogContact(title, submitAction, buttonHtml) {
 function renderDialogContactEditButton(contact) {
     return `<button type="button" class="btn-cancel" onclick="deleteContact('${contact.id}')"> Delete <i
                 class="fa-solid fa-xmark"></i></button>
-            <button type="submit" class="btn-submit" onclick="saveContact('${contact.id}')"> Save <i class="fa-solid fa-check"></i></button>`;
+            <button type="submit" class="btn-submit"> Save <i class="fa-solid fa-check"></i></button>`;
 }
 
-function renderDialogCreateContactButton(contact) {
+function renderDialogCreateContactButton() {
     return `<button type="button" class="btn-cancel" onclick="closeDialog()"> Cancel <i
                 class="fa-solid fa-xmark"></i></button>
             <button type="submit" class="btn-submit"> Create contact <i class="fa-solid fa-check"></i></button>`;

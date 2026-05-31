@@ -8,7 +8,6 @@ let loadedContacts = [];
 async function init() {
     initMain();
     loadedContacts = [];
-    checkUserStatus();
     await loadAndPrepareContacts();
     renderContacts();
 
@@ -16,33 +15,26 @@ async function init() {
 
 async function loadAndPrepareContacts() {
     try {
-        const response = await fetch(CONTACTS_URL);
+        const isGuest = checkIsGuest();
+        const response = await fetch(isGuest ? '../db.json' : CONTACTS_URL);
+        if (!response.ok) return;
         const data = await response.json();
-        if (!data) return;
-
-        const contactsArray = Array.isArray(data) ? data : Object.values(data);
-
-        const cleanContacts = contactsArray.filter(c => c !== null && c !== undefined);
-
+        const raw = isGuest ? data.contacts : data;
+        const arr = Object.keys(raw || {}).map(key => ({ ...raw[key], id: key }));
         loadedContacts = [];
-
-        addContactsToLoaded(cleanContacts);
+        addContactsToLoaded(arr.filter(c => c && c.name));
     } catch (error) { console.error("Fehler beim Laden:", error); }
 }
 
 function addContactsToLoaded(contactsFromDB) {
-    contactsFromDB.forEach(contact => {
-        const contactId = String(contact.id);
-        const alreadyExists = loadedContacts.some(c => String(c.id) === contactId);
-
-        if (!alreadyExists) {
+    contactsFromDB.forEach(c => {
+        const cId = String(c.id);
+        if (!loadedContacts.some(lc => String(lc.id) === cId)) {
             loadedContacts.push({
-                id: contactId,
-                name: contact.name,
-                email: contact.email,
-                phone: contact.phone || 'no phone number provided',
-                color: contact.color || getRandomColor(),
-                avatar: contact.avatar || getInitials(contact.name)
+                id: cId, name: c.name, email: c.email,
+                phone: c.phone || 'no phone number provided',
+                color: c.color || getRandomColor(),
+                avatar: c.avatar || getInitials(c.name)
             });
         }
     });
@@ -83,22 +75,20 @@ function closeDialog() {
 }
 
 function showContactDetails(contactId) {
-
     const currentActive = document.querySelector('.contact-item.active');
     if (currentActive) currentActive.classList.remove('active');
-
+    
     const clickedElement = document.getElementById(contactId);
     if (clickedElement) clickedElement.classList.add('active');
 
-
-    const contact = loadedContacts.find(c => c.id === contactId);
-    contactDetailsContainer.innerHTML = renderContactDetails(contact);
+    const contact = loadedContacts.find(c => String(c.id) === String(contactId));
+    if (contact) contactDetailsContainer.innerHTML = renderContactDetails(contact);
 }
 
 function editContact(id) {
     if (!dialog) return;
-
-    const contact = loadedContacts.find(c => c.id === id);
+    
+    const contact = loadedContacts.find(c => String(c.id) === String(id));
     if (contact) {
         dialog.innerHTML = renderEditContactTemplate(contact);
         fillEditForm(contact);
@@ -142,7 +132,6 @@ function renderEditContactTemplate(contact) {
 function createNewContact(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
-    console.log(event)
     const newContact = {
         name: formData.get('name'),
         email: formData.get('email'),
@@ -152,77 +141,91 @@ function createNewContact(event) {
 }
 
 async function saveContactToDB(newContact) {
-    const maxId = loadedContacts.reduce((max, c) => Math.max(max, Number(c.id) || 0), 0);
-    const nextIndex = maxId + 1;
-
-    newContact.id = nextIndex;
+    const isGuest = checkIsGuest();
+    newContact.id = loadedContacts.reduce((max, c) => Math.max(max, Number(c.id) || 0), 0) + 1;
     newContact.avatar = getInitials(newContact.name);
     newContact.color = getRandomColor();
 
+    if (isGuest) {
+        saveGuestContact(newContact);
+    } else {
+        await saveUserContact(newContact);
+    }
+}
+
+function saveGuestContact(newContact) {
+    loadedContacts.push(newContact);
+    dialog.close();
+    renderContacts();
+}
+
+async function saveUserContact(newContact) {
     try {
-        await fetch(`${CONTACTS_URL.replace('.json', '')}/${nextIndex}.json`, {
+        await fetch(`${CONTACTS_URL.replace('.json', '')}/${newContact.id}.json`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(newContact)
         });
-        dialog.close();
         await loadAndPrepareContacts();
+        dialog.close();
         renderContacts();
-    } catch (e) { console.error(e); }
+    } catch (e) { console.error("Fehler beim Cloud-Speichern:", e); }
 }
 
 async function updateContact(event, id) {
     event.preventDefault();
-    const form = event.target;
-    const name = form.querySelector('input[type="text"]').value.trim();
-    const email = form.querySelector('input[type="email"]').value.trim();
-    const phone = form.querySelector('input[type="tel"]').value.trim();
-
-    const contact = loadedContacts.find(c => c.id === id);
+    const contact = loadedContacts.find(c => String(c.id) === String(id));
     if (!contact) return;
-
-    const updatedContact = {
-        id: contact.id,
-        name,
-        email,
-        phone: phone || 'no phone number provided',
-        color: contact.color,
-        avatar: getInitials(name)
+    const data = new FormData(event.target);
+    const updated = {
+        id: contact.id, color: contact.color,
+        name: data.get('name').trim(), email: data.get('email').trim(),
+        phone: data.get('phone').trim() || 'no phone number provided'
     };
+    updated.avatar = getInitials(updated.name);
+    if (checkIsGuest()) updateGuestContact(updated); else await updateUserContact(updated);
+}
 
+async function updateUserContact(updated) {
     try {
-        await fetch(`${CONTACTS_URL.replace('.json', '')}/${id}.json`, {
+        await fetch(`${CONTACTS_URL.replace('.json', '')}/${updated.id}.json`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(updatedContact)
+            body: JSON.stringify(updated)
         });
-        dialog.close();
-        await init();
-        showContactDetails(String(id));
-    } catch (e) {
-        console.error('Update error:', e);
-    }
+        await loadAndPrepareContacts();
+        finalizeUpdate(updated.id);
+    } catch (e) { console.error('Update error:', e); }
+}
+
+function updateGuestContact(updated) {
+    const idx = loadedContacts.findIndex(c => String(c.id) === String(updated.id));
+    if (idx !== -1) loadedContacts[idx] = updated;
+    finalizeUpdate(updated.id);
+}
+
+function finalizeUpdate(id) {
+    dialog.close();
+    renderContacts();
+    showContactDetails(String(id));
 }
 
 async function deleteContact(id) {
     if (!id) return;
     try {
-        await fetch(`${CONTACTS_URL.replace('.json', '')}/${id}.json`, {
-            method: 'DELETE'
-        });
-
-        if (dialog && dialog.open) dialog.close();
+        if (!checkIsGuest()) {
+            await fetch(`${CONTACTS_URL.replace('.json', '')}/${id}.json`, { method: 'DELETE' });
+            await init();
+        } else {
+            loadedContacts = loadedContacts.filter(c => String(c.id) !== String(id));
+            if (dialog?.open) dialog.close();
+            renderContacts();
+        }
         if (contactDetailsContainer) contactDetailsContainer.innerHTML = '';
-
-        await init();
     } catch (error) { console.error("Fehler beim Löschen:", error); }
 }
 
-function checkUserStatus() {
-    try {
-        const sessionData = sessionStorage.getItem('currentUser');
-        if (!sessionData) return 'guest';
-        const user = JSON.parse(sessionData);
-        return user.name && /gast|guest/i.test(user.name) ? 'guest' : 'user';
-    } catch (e) { return 'guest'; }
+function checkIsGuest() {
+    const user = sessionStorage.getItem('currentUser');
+    return user?.includes('Guest') || !user;
 }
