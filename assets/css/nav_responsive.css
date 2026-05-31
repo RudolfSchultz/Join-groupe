@@ -28,6 +28,12 @@
     .mobil-navigation {
         display: flex;
     }
+
+    .mobil-nav-link {
+        font-size: 16px;
+        padding: 4px 6px;
+        height: 60px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -46,6 +52,10 @@
 
     .header {
         padding: 0 20 0 0;
+    }
+
+    .mobil-nav-link {
+        font-size: 14px;
     }
 }
 
