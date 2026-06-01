@@ -330,14 +330,13 @@
   flex-direction: column;
   gap: 8px;
   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
+  cursor: grab;
   transition: box-shadow 0.15s, transform 0.1s;
   user-select: none;
 }
 
 .task-card:hover {
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.18);
-  transform: translateY(-2px);
+  transform: rotate(5deg);
 }
 
 .task-card-category {
@@ -428,6 +427,7 @@
 .drag-active {
   border-color: #4589FF !important;
   background: rgba(69, 137, 255, 0.05) !important;
+  cursor: grabbing;
 }
 
 .board-overlay {
