@@ -13,7 +13,7 @@
     <title>Board</title>
 </head>
 
-<body class="app-page" onload="init()">
+<body class="app-page" onload="init(); initTasks();">
     <div data-import="../html/nav_template.html"></div>
     <div class="main-wrapper">
         <main class="board-main">
@@ -21,7 +21,7 @@
                 <h1 class="page-title">Board</h1>
                 <div class="board-controls">
                     <div class="search-wrapper">
-                        <input class="search-input" type="text" placeholder="Find Task" oninput="">
+                        <input class="search-input" type="text" id="board-search" placeholder="Find Task" oninput="filterTasks()">
                         <div class="search-divider"></div>
                         <button class="search-icon-btn" aria-label="Suchen">
                             <svg width="22" height="22" viewBox="0 0 32 32" fill="none"
@@ -54,8 +54,10 @@
                             </svg>
                         </a>
                     </div>
-                    <div class="board-cards" id="todo-col">
-                        <div class="board-empty">No tasks To do</div>
+                    <div class="board-cards" id="todo"
+                        ondrop="moveTo('todo')"
+                        ondragover="allowDrop(event); highlight('todo')"
+                        ondragleave="removeHighlight('todo')">
                     </div>
                 </div>
 
@@ -69,8 +71,10 @@
                             </svg>
                         </a>
                     </div>
-                    <div class="board-cards" id="inprogress-col">
-                        <div class="board-empty">No tasks In progress</div>
+                    <div class="board-cards" id="inProgress"
+                        ondrop="moveTo('inProgress')"
+                        ondragover="allowDrop(event); highlight('inProgress')"
+                        ondragleave="removeHighlight('inProgress')">
                     </div>
                 </div>
 
@@ -84,8 +88,10 @@
                             </svg>
                         </a>
                     </div>
-                    <div class="board-cards" id="feedback-col">
-                        <div class="board-empty">No tasks Awaiting feedback</div>
+                    <div class="board-cards" id="awaitFeedback"
+                        ondrop="moveTo('awaitFeedback')"
+                        ondragover="allowDrop(event); highlight('awaitFeedback')"
+                        ondragleave="removeHighlight('awaitFeedback')">
                     </div>
                 </div>
 
@@ -93,12 +99,22 @@
                     <div class="board-col-header">
                         <span>Done</span>
                     </div>
-                    <div class="board-cards" id="done-col">
-                        <div class="board-empty">No tasks Done</div>
+                    <div class="board-cards" id="done"
+                        ondrop="moveTo('done')"
+                        ondragover="allowDrop(event); highlight('done')"
+                        ondragleave="removeHighlight('done')">
                     </div>
                 </div>
             </div>
         </main>
+    </div>
+
+    <!-- Task Detail / Edit Overlay -->
+    <div class="board-overlay d-none" id="board-overlay" onclick="handleOverlayClick(event)">
+        <div class="board-modal" onclick="event.stopPropagation()">
+            <div id="board-detail-box"></div>
+            <div id="board-edit-box" class="d-none"></div>
+        </div>
     </div>
 
     <script src="../js/board.js"></script>
