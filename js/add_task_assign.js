@@ -4,14 +4,17 @@
  */
 async function loadAssignContacts() {
     try {
-        const url = (typeof checkIsGuest === 'function' && checkIsGuest())
-            ? '../db.json'
-            : ADDTASK_CONTACTS_URL;
-        const response = await fetch(url);
+        if (typeof checkIsGuest === 'function' && checkIsGuest()) {
+            const response = await fetch('../db.json');
+            const raw = await response.json();
+            const contactsObj = raw.contacts || {};
+            const contacts = Object.entries(contactsObj).map(([key, c]) => ({ ...c, id: key }));
+            return normalizeContacts(contacts);
+        }
+        const response = await fetch(ADDTASK_CONTACTS_URL);
         const raw = await response.json();
-        const data = (typeof checkIsGuest === 'function' && checkIsGuest()) ? raw.contacts : raw;
-        if (!data) return [];
-        return normalizeContacts(Array.isArray(data) ? data : Object.values(data));
+        if (!raw) return [];
+        return normalizeContacts(Array.isArray(raw) ? raw : Object.values(raw));
     } catch (error) {
         console.error('Error loading contacts:', error);
         return [];
