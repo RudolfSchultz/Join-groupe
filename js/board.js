@@ -69,6 +69,9 @@ function taskCardTemplate(task) {
     return `
         <div class="task-card" data-task-id="${task.id}" draggable="true"
             ondragstart="startDragging(${task.id})"
+            ontouchstart="touchDragStart(event, ${task.id})"
+            ontouchmove="touchDragMove(event)"
+            ontouchend="touchDragEnd(event)"
             onclick="openTaskDetail(${task.id})">
             <span class="task-card-category ${categoryColorClass(task.category)}">${escapeHtml(task.category || '')}</span>
             <div class="task-card-title">${escapeHtml(task.title || '')}</div>
@@ -131,6 +134,74 @@ function startDragging(id) {
 
 function allowDrop(ev) {
     ev.preventDefault();
+}
+
+/* ── Touch Drag & Drop (iOS Safari fix) ── */
+let touchDragClone = null;
+let touchDragOffsetX = 0;
+let touchDragOffsetY = 0;
+
+function touchDragStart(event, id) {
+    currentDraggedTaskId = id;
+    const card = event.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const touch = event.touches[0];
+    touchDragOffsetX = touch.clientX - rect.left;
+    touchDragOffsetY = touch.clientY - rect.top;
+    touchDragClone = card.cloneNode(true);
+    touchDragClone.style.cssText = `
+        position: fixed;
+        left: ${rect.left}px;
+        top: ${rect.top}px;
+        width: ${rect.width}px;
+        opacity: 0.8;
+        pointer-events: none;
+        z-index: 9999;
+        transform: rotate(3deg);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    `;
+    document.body.appendChild(touchDragClone);
+    card.style.opacity = '0.4';
+}
+
+function touchDragMove(event) {
+    if (!touchDragClone) return;
+    event.preventDefault();
+    const touch = event.touches[0];
+    touchDragClone.style.left = (touch.clientX - touchDragOffsetX) + 'px';
+    touchDragClone.style.top  = (touch.clientY - touchDragOffsetY) + 'px';
+    ['todo', 'inProgress', 'awaitFeedback', 'done'].forEach(colId => {
+        const col = document.getElementById(colId);
+        if (!col) return;
+        const r = col.getBoundingClientRect();
+        if (touch.clientX >= r.left && touch.clientX <= r.right &&
+            touch.clientY >= r.top  && touch.clientY <= r.bottom) {
+            highlight(colId);
+        } else {
+            removeHighlight(colId);
+        }
+    });
+}
+
+function touchDragEnd(event) {
+    if (!touchDragClone) return;
+    const touch = event.changedTouches[0];
+    if (touchDragClone) {
+        touchDragClone.remove();
+        touchDragClone = null;
+    }
+    const card = event.currentTarget;
+    card.style.opacity = '';
+    ['todo', 'inProgress', 'awaitFeedback', 'done'].forEach(colId => {
+        removeHighlight(colId);
+        const col = document.getElementById(colId);
+        if (!col) return;
+        const r = col.getBoundingClientRect();
+        if (touch.clientX >= r.left && touch.clientX <= r.right &&
+            touch.clientY >= r.top  && touch.clientY <= r.bottom) {
+            moveTo(colId);
+        }
+    });
 }
 
 function highlight(id) {
