@@ -98,7 +98,7 @@ function showEmptyPlaceholders() {
     const texts = {
         todo: 'No tasks To do',
         inProgress: 'No tasks In progress',
-        awaitFeedback: 'No tasks Awaiting feedback',
+        awaitFeedback: 'No tasks In feedback',
         done: 'No tasks Done'
     };
     Object.entries(texts).forEach(([id, text]) => {

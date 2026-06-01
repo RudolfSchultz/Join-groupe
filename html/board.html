@@ -13,101 +13,92 @@
     <title>Board</title>
 </head>
 
-<body class="app-page" onload="init(); initTasks();">
+<body onload="init(); initTasks();">
     <div data-import="../html/nav_template.html"></div>
-    <div class="main-wrapper">
-        <main class="board-main">
-            <div class="board-header">
-                <h1 class="page-title">Board</h1>
-                <div class="board-controls">
-                    <div class="search-wrapper">
-                        <input class="search-input" type="text" id="board-search" placeholder="Find Task" oninput="filterTasks()">
-                        <div class="search-divider"></div>
-                        <button class="search-icon-btn" aria-label="Suchen">
-                            <svg width="22" height="22" viewBox="0 0 32 32" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M20.5 18.5H19.71L19.43 18.23C20.63 16.83 21.25 14.92 20.88 12.89C20.37 10.11 18.06 7.89 15.27 7.49C11.01 6.9 7.39 10.51 7.99 14.77C8.39 17.56 10.61 19.87 13.39 20.38C15.42 20.75 17.33 20.13 18.73 18.93L19 19.21V20L23.25 24.25C23.66 24.66 24.33 24.66 24.74 24.25C25.15 23.84 25.15 23.17 24.74 22.76L20.5 18.5ZM14.5 18.5C12.01 18.5 10 16.49 10 14C10 11.51 12.01 9.5 14.5 9.5C16.99 9.5 19 11.51 19 14C19 16.49 16.99 18.5 14.5 18.5Z"
-                                    fill="#2A3647" />
-                            </svg>
-                        </button>
-                    </div>
-                    <a href="add_task.html" class="btn-add-task">
-                        Add task
-                        <svg class="btn-add-task-icon" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path d="M10 1V19" stroke="white" stroke-width="2" stroke-linecap="round" />
-                            <path d="M1 10H19" stroke="white" stroke-width="2" stroke-linecap="round" />
+    <main class="board-main">
+        <div class="board-header">
+            <h1 class="page-title">Board</h1>
+            <div class="board-controls">
+                <div class="search-wrapper">
+                    <input class="search-input" type="text" id="board-search" placeholder="Find Task"
+                        oninput="filterTasks()">
+                    <div class="search-divider"></div>
+                    <button class="search-icon-btn" aria-label="Suchen">
+                        <svg width="22" height="22" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M20.5 18.5H19.71L19.43 18.23C20.63 16.83 21.25 14.92 20.88 12.89C20.37 10.11 18.06 7.89 15.27 7.49C11.01 6.9 7.39 10.51 7.99 14.77C8.39 17.56 10.61 19.87 13.39 20.38C15.42 20.75 17.33 20.13 18.73 18.93L19 19.21V20L23.25 24.25C23.66 24.66 24.33 24.66 24.74 24.25C25.15 23.84 25.15 23.17 24.74 22.76L20.5 18.5ZM14.5 18.5C12.01 18.5 10 16.49 10 14C10 11.51 12.01 9.5 14.5 9.5C16.99 9.5 19 11.51 19 14C19 16.49 16.99 18.5 14.5 18.5Z"
+                                fill="#2A3647" />
+                        </svg>
+                    </button>
+                </div>
+                <a href="add_task.html" class="btn-add-task">
+                    Add task
+                    <svg class="btn-add-task-icon" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 1V19" stroke="white" stroke-width="2" stroke-linecap="round" />
+                        <path d="M1 10H19" stroke="white" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+        <div class="board-columns">
+            <div class="board-col">
+                <div class="board-col-header">
+                    <span>To do</span>
+                    <a href="add_task.html" class="col-add-btn" aria-label="Task hinzufügen">
+                        <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+                            <path d="M7.5 1V14" stroke="#2A3647" stroke-width="2" stroke-linecap="round" />
+                            <path d="M1 7.5H14" stroke="#2A3647" stroke-width="2" stroke-linecap="round" />
                         </svg>
                     </a>
                 </div>
-            </div>
-
-            <div class="board-columns">
-                <div class="board-col">
-                    <div class="board-col-header">
-                        <span>To do</span>
-                        <a href="add_task.html" class="col-add-btn" aria-label="Task hinzufügen">
-                            <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-                                <path d="M7.5 1V14" stroke="#2A3647" stroke-width="2" stroke-linecap="round" />
-                                <path d="M1 7.5H14" stroke="#2A3647" stroke-width="2" stroke-linecap="round" />
-                            </svg>
-                        </a>
-                    </div>
-                    <div class="board-cards" id="todo"
-                        ondrop="moveTo('todo')"
-                        ondragover="allowDrop(event); highlight('todo')"
-                        ondragleave="removeHighlight('todo')">
-                    </div>
-                </div>
-
-                <div class="board-col">
-                    <div class="board-col-header">
-                        <span>In progress</span>
-                        <a href="add_task.html" class="col-add-btn" aria-label="Task hinzufügen">
-                            <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-                                <path d="M7.5 1V14" stroke="#2A3647" stroke-width="2" stroke-linecap="round" />
-                                <path d="M1 7.5H14" stroke="#2A3647" stroke-width="2" stroke-linecap="round" />
-                            </svg>
-                        </a>
-                    </div>
-                    <div class="board-cards" id="inProgress"
-                        ondrop="moveTo('inProgress')"
-                        ondragover="allowDrop(event); highlight('inProgress')"
-                        ondragleave="removeHighlight('inProgress')">
-                    </div>
-                </div>
-
-                <div class="board-col">
-                    <div class="board-col-header">
-                        <span>Await feedback</span>
-                        <a href="add_task.html" class="col-add-btn" aria-label="Task hinzufügen">
-                            <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-                                <path d="M7.5 1V14" stroke="#2A3647" stroke-width="2" stroke-linecap="round" />
-                                <path d="M1 7.5H14" stroke="#2A3647" stroke-width="2" stroke-linecap="round" />
-                            </svg>
-                        </a>
-                    </div>
-                    <div class="board-cards" id="awaitFeedback"
-                        ondrop="moveTo('awaitFeedback')"
-                        ondragover="allowDrop(event); highlight('awaitFeedback')"
-                        ondragleave="removeHighlight('awaitFeedback')">
-                    </div>
-                </div>
-
-                <div class="board-col">
-                    <div class="board-col-header">
-                        <span>Done</span>
-                    </div>
-                    <div class="board-cards" id="done"
-                        ondrop="moveTo('done')"
-                        ondragover="allowDrop(event); highlight('done')"
-                        ondragleave="removeHighlight('done')">
-                    </div>
+                <div class="board-cards" id="todo" ondrop="moveTo('todo')"
+                    ondragover="allowDrop(event); highlight('todo')" ondragleave="removeHighlight('todo')">
                 </div>
             </div>
-        </main>
-    </div>
+
+            <div class="board-col">
+                <div class="board-col-header">
+                    <span>In progress</span>
+                    <a href="add_task.html" class="col-add-btn" aria-label="Task hinzufügen">
+                        <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+                            <path d="M7.5 1V14" stroke="#2A3647" stroke-width="2" stroke-linecap="round" />
+                            <path d="M1 7.5H14" stroke="#2A3647" stroke-width="2" stroke-linecap="round" />
+                        </svg>
+                    </a>
+                </div>
+                <div class="board-cards" id="inProgress" ondrop="moveTo('inProgress')"
+                    ondragover="allowDrop(event); highlight('inProgress')" ondragleave="removeHighlight('inProgress')">
+                </div>
+            </div>
+
+            <div class="board-col">
+                <div class="board-col-header">
+                    <span>Await feedback</span>
+                    <a href="add_task.html" class="col-add-btn" aria-label="Task hinzufügen">
+                        <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+                            <path d="M7.5 1V14" stroke="#2A3647" stroke-width="2" stroke-linecap="round" />
+                            <path d="M1 7.5H14" stroke="#2A3647" stroke-width="2" stroke-linecap="round" />
+                        </svg>
+                    </a>
+                </div>
+                <div class="board-cards" id="awaitFeedback" ondrop="moveTo('awaitFeedback')"
+                    ondragover="allowDrop(event); highlight('awaitFeedback')"
+                    ondragleave="removeHighlight('awaitFeedback')">
+                </div>
+            </div>
+
+            <div class="board-col">
+                <div class="board-col-header">
+                    <span>Done</span>
+                </div>
+                <div class="board-cards" id="done" ondrop="moveTo('done')"
+                    ondragover="allowDrop(event); highlight('done')" ondragleave="removeHighlight('done')">
+                </div>
+            </div>
+        </div>
+    </main>
 
     <!-- Task Detail / Edit Overlay -->
     <div class="board-overlay d-none" id="board-overlay" onclick="handleOverlayClick(event)">
