@@ -265,9 +265,9 @@ function renderEditSubtasksHTML(editSubtasks) {
         <li class="edit-subtask-item" id="edit-sub-item-${i}">
             <span class="subtask-text">&#8226; ${escapeHtml(s.title)}</span>
             <div class="edit-subtask-item-actions">
-                <button type="button" class="subtask-icon-btn" onclick="startEditSubtask(${i})">&#9998;</button>
+                <button type="button" class="subtask-icon-btn" onclick="startEditSubtask(${i})"><img src="../assets/icons/edit.svg" alt="Edit"></button>
                 <span class="subtask-action-divider"></span>
-                <button type="button" class="subtask-icon-btn" onclick="deleteEditSubtask(${i})">&#128465;</button>
+                <button type="button" class="subtask-icon-btn" onclick="deleteEditSubtask(${i})"><img src="../assets/icons/delete.svg" alt="Delete"></button>
             </div>
         </li>`).join('');
 }
@@ -278,7 +278,7 @@ function renderEditSubtaskInputHTML(index, title) {
             value="${escapeHtml(title)}"
             onkeydown="if(event.key==='Enter'){saveEditSubtask(${index});}">
         <div class="edit-subtask-item-actions">
-            <button type="button" class="subtask-icon-btn" onclick="saveEditSubtask(${index})">&#10003;</button>
-            <button type="button" class="subtask-icon-btn" onclick="deleteEditSubtask(${index})">&#128465;</button>
+            <button type="button" class="subtask-icon-btn" onclick="saveEditSubtask(${index})"><img src="../assets/icons/checkbox-checked.svg" alt="Save"></button>
+            <button type="button" class="subtask-icon-btn" onclick="deleteEditSubtask(${index})"><img src="../assets/icons/delete.svg" alt="Delete"></button>
         </div>`;
 }
