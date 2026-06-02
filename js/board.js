@@ -56,9 +56,9 @@ function renderTaskCard(task) {
 function showEmptyPlaceholders() {
     const texts = {
         todo: 'No tasks To do',
-        inProgress: 'No tasks In progress',
-        awaitFeedback: 'No tasks Awaiting feedback',
-        done: 'No tasks Done'
+        inProgress: 'No tasks progress',
+        awaitFeedback: 'No tasks feedback',
+        done: 'No tasks done'
     };
     Object.entries(texts).forEach(([id, text]) => {
         const el = document.getElementById(id);
