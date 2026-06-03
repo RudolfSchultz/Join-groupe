@@ -332,10 +332,9 @@
 @media (max-width: 480px) {
   .summary-main {
     flex-direction: column;
-    padding: 128px 16px 24px;
+    padding: 140px 16px 24px;
     min-height: auto;
     gap: 20px;
-    overflow: visible;
   }
 
   .summary-left {
