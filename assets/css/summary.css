@@ -340,8 +340,6 @@
 
   .summary-left {
     width: 100%;
-    position: relative;
-    z-index: 15;
   }
 
   @keyframes greetingFadeOut {
