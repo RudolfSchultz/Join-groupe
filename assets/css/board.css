@@ -270,9 +270,6 @@
   }
 
   .btn-add-task {
-    position: absolute;
-    right: 0;
-    top: 8px;
     width: 40px;
     height: 40px;
     padding: 3px;
@@ -280,6 +277,8 @@
     font-size: 0;
     gap: 0;
     justify-content: center;
+    width: fit-content;
+    padding: 0 20px 0 20px;
   }
 
   .board-columns {
