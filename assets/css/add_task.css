@@ -273,17 +273,17 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   }
 
   .form-label {
-    font-size: 14px;
+    font-size: 20px;
   }
 
   .form-input {
-    font-size: 14px;
+    font-size: 20px;
     height: 40px;
     padding: 8px 16px;
   }
 
   .prio-btn {
-    font-size: 14px;
+    font-size: 20px;
   }
 
   #task-title {
@@ -307,6 +307,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 /* ── Einspaltig ≤1024px ── */
 @media (max-width: 1024px) {
+  .main-wrapper:has(.add-task-main) {
+    margin-left: 200px;
+  }
+  .add-task-main {
+    padding: 206px 40px 0px 24px;
+  }
   .form-columns  { flex-direction: column; gap: 24px; }
   .form-divider-vertical { display: none; }
 }
@@ -314,16 +320,16 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /* ── Tablet ── */
 @media (max-width: 768px) {
   .add-task-main {
-    padding: 140px 16px 24px;
+    padding: 140px 16px 112px;
   }
 
   .page-title { font-size: 42px; }
 
-  .form-label { font-size: 14px; }
+  .form-label { font-size: 20px; }
 
-  .form-input { font-size: 14px; }
+  .form-input { font-size: 20px; }
 
-  .prio-btn  { font-size: 14px; }
+  .prio-btn  { font-size: 20px; }
 
   .form-columns {
     flex-direction: column;
@@ -338,7 +344,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 /* ── Mobile ── */
-@media (max-width: 480px) {
+@media (max-width: 424px) {
   .add-task-main {
     height: auto;
     padding: 140px 16px 24px;
