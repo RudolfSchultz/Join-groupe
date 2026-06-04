@@ -329,7 +329,7 @@
 }
 
 /* ── Mobile ── */
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   .summary-main {
     flex-direction: column;
     padding: 140px 16px 24px;
