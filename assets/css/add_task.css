@@ -1,7 +1,6 @@
 .add-task-main {
   padding: 206px 40px 0px 100px;
- /*  height: calc(100vh - 96px); */
-  overflow-y: auto;
+  overflow: auto;
 }
 
 .page-title {
@@ -131,7 +130,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 12px;
   font-size: 20px;
   font-weight: 400;
   font-family: 'Inter', sans-serif;
@@ -254,6 +253,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   filter: brightness(0) invert(1);
 }
 
+@media (max-width: 1280px) {
+  .prio-btn { font-size: 16px; }
+}
+
 /* ── Compact desktop (125% DPI / shorter viewports) ── */
 @media (min-width: 769px) and (max-height: 900px) {
   .add-task-main {
@@ -270,13 +273,17 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   }
 
   .form-label {
-    font-size: 16px;
+    font-size: 14px;
   }
 
   .form-input {
-    font-size: 16px;
+    font-size: 14px;
     height: 40px;
     padding: 8px 16px;
+  }
+
+  .prio-btn {
+    font-size: 14px;
   }
 
   #task-title {
@@ -298,13 +305,26 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   }
 }
 
+/* ── Einspaltig ≤1024px ── */
+@media (max-width: 1024px) {
+  .add-task-main { padding: 206px 40px 0px 24px; }
+  .form-columns  { flex-direction: column; gap: 24px; }
+  .form-divider-vertical { display: none; }
+}
+
 /* ── Tablet ── */
 @media (max-width: 768px) {
   .add-task-main {
-    padding: 40px 32px 40px 32px;
+    padding: 140px 16px 24px;
   }
 
   .page-title { font-size: 42px; }
+
+  .form-label { font-size: 14px; }
+
+  .form-input { font-size: 14px; }
+
+  .prio-btn  { font-size: 14px; }
 
   .form-columns {
     flex-direction: column;
@@ -477,14 +497,15 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .select-options {
   position: absolute;
-  top: calc(100% + 4px);
+  top: 100%;
+  margin-top: 4px;
   left: 0;
   right: 0;
   background: #ffffff;
   border: 1px solid #D1D1D1;
   border-radius: 10px;
-  max-height: 220px;
-  overflow-y: auto;
+  height: 220px;
+  overflow: auto;
   z-index: 50;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
