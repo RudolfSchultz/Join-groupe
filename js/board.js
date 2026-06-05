@@ -54,6 +54,7 @@ function renderTaskCard(task) {
 }
 
 function showEmptyPlaceholders() {
+    if (document.getElementById('board-no-results')) return;
     const texts = {
         todo: 'No tasks To do',
         inProgress: 'No tasks progress',
@@ -77,11 +78,40 @@ function addDragHighlightBoxes() {
 
 function filterTasks() {
     const term = (document.getElementById('board-search')?.value || '').toLowerCase();
-    if (!term) { displayTasks(allTasks); return; }
-    displayTasks(allTasks.filter(t =>
+    if (!term) {
+        hideNoResultsMessage();
+        displayTasks(allTasks);
+        return;
+    }
+
+    const filtered = allTasks.filter(t =>
         (t.title || '').toLowerCase().includes(term) ||
         (t.description || '').toLowerCase().includes(term)
-    ));
+    );
+
+    if (filtered.length === 0) {
+        displayTasks([]);
+        showNoResultsMessage();
+    } else {
+        hideNoResultsMessage();
+        displayTasks(filtered);
+    }
+}
+
+function showNoResultsMessage() {
+    hideNoResultsMessage();
+    const container = document.querySelector('.board-columns');
+    if (!container) return;
+    const el = document.createElement('div');
+    el.id = 'board-no-results';
+    el.className = 'board-no-results';
+    el.innerHTML = `<div class="board-empty">Keine Ergebnisse gefunden</div>`;
+    container.appendChild(el);
+}
+
+function hideNoResultsMessage() {
+    const existing = document.getElementById('board-no-results');
+    if (existing && existing.parentNode) existing.parentNode.removeChild(existing);
 }
 
 function openOverlay() {
