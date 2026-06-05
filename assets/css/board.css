@@ -238,7 +238,7 @@
     width: 100%;
     flex-direction: row;
     gap: 20px;
-}
+  }
 
   .btn-add-task-text {
     display: none;
@@ -336,20 +336,20 @@
   .board-controls {
     width: 100%;
     gap: 20px;
-}
+  }
 }
 
 @media (max-width: 415px) {
   .board-controls {
     width: 80%;
     gap: 20px;
-}
+  }
 }
 
 @media (max-width: 320px) {
   .board-controls {
     gap: 10px;
-}
+  }
 }
 
 .task-card {
@@ -494,7 +494,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 4px;
+  margin-bottom: 20px;
 }
 
 .detail-close-btn {
@@ -514,7 +514,7 @@
 }
 
 .detail-title {
-  font-size: 27px;
+  font-size: 48px;
   font-weight: 700;
   color: #2A3647;
 }
@@ -523,6 +523,8 @@
   font-size: 16px;
   color: #2A3647;
   line-height: 1.5;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .detail-row {
@@ -549,6 +551,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  margin-top: 20px;
 }
 
 .detail-assignees {
@@ -601,6 +604,7 @@
 
 .detail-actions {
   display: flex;
+  justify-content: flex-end;
   align-items: center;
   gap: 8px;
   padding-top: 8px;
@@ -932,6 +936,10 @@ button.btn-add-task:active {
     max-width: 425px;
   }
 
+  .detail-title {
+    font-size: 32px;
+  }
+
   .modal-title {
     font-size: 24px;
     margin-bottom: 24px;
@@ -1004,6 +1012,10 @@ button.btn-add-task:active {
   .add-task-modal {
     max-width: 320px;
     border-radius: 12px;
+  }
+
+  .edit-prio-group {
+    flex-direction: column;
   }
 
   .modal-title {
