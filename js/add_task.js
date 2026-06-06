@@ -62,6 +62,10 @@ function selectCategory(value) {
 }
 
 
+/**
+ * Enables the Create Task button only when all required fields are filled.
+ * @returns {void}
+ */
 function updateCreateButton() {
     const title = document.getElementById('task-title').value.trim();
     const due = document.getElementById('task-due').value;
