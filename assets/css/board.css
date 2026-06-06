@@ -860,6 +860,51 @@
   position: relative;
 }
 
+/* Progress popover (tooltip / detail) */
+.progress-popover {
+  position: absolute;
+  background: #ffffff;
+  border: 1px solid #D1D1D1;
+  border-radius: 8px;
+  padding: 8px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  z-index: 400;
+  min-width: 200px;
+}
+.progress-popover.d-none { display: none; }
+.progress-popover-header {
+  font-weight: 700;
+  font-size: 13px;
+  color: #2A3647;
+  margin-bottom: 6px;
+}
+.progress-popover-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 220px;
+  overflow: auto;
+}
+.progress-popover-item {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 4px 0;
+  font-size: 14px;
+  color: #2A3647;
+}
+.progress-popover-item.done {
+  color: #8A8A8A;
+  text-decoration: line-through;
+}
+.progress-popover-check {
+  width: 18px;
+  flex-shrink: 0;
+}
+.progress-popover-title {
+  flex: 1;
+}
+
 .modal-close-btn {
   position: absolute;
   top: 32px;
