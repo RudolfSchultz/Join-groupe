@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: assets/templates/contacts_template.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: assets/templates/contacts_template.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @fileoverview Templates für Kontakte-UI (Liste, Detail, Dialoge).
+ * @module assets/templates/contacts_template
+ */
+
+/**
+ * Rendert ein Kontakt-Listenelement.
+ * @param {Object} contact - Kontakt-Objekt
+ * @param {string|number} contact.id
+ * @param {string} contact.name
+ * @param {string} contact.email
+ * @param {string} contact.color
+ * @param {string} contact.avatar
+ * @returns {string} HTML-Markup für ein Listenelement
+ */
+function renderContactlist(contact) {
+    return `&lt;div class="contact-item" id="${contact.id}" onclick="showContactDetails('${contact.id}')">
+        &lt;div class="avatar" style="background-color: ${contact.color};">${contact.avatar}&lt;/div>
+        &lt;div class="contact-info">
+            &lt;span class="name">${contact.name}&lt;/span>
+            &lt;span class="email">${contact.email}&lt;/span>
+        &lt;/div>
+    &lt;/div>`;
+}
+
+/**
+ * Rendert eine Gruppenbox für einen Buchstaben in der Kontaktliste.
+ * @param {string} letter - Buchstabe der Gruppe
+ * @param {string} itemsHtml - bereits gerendertes HTML der Einträge
+ * @returns {string} HTML-Markup für die Letter-Group
+ */
+function renderLetterGroupTemplate(letter, itemsHtml) {
+    return `
+        &lt;div class="letter-group">
+            &lt;h2 class="letter-group-title">${letter}&lt;/h2>
+            ${itemsHtml}
+        &lt;/div>
+    `;
+}
+
+/**
+ * Rendert die Detailansicht eines Kontakts.
+ * @param {Object} contact - Kontakt-Objekt
+ * @param {string|number} contact.id
+ * @param {string} contact.name
+ * @param {string} contact.email
+ * @param {string} [contact.phone]
+ * @param {string} [contact.color]
+ * @param {string} [contact.avatar]
+ * @returns {string} HTML-Markup für die Kontakt-Detailansicht
+ */
+function renderContactDetails(contact) {
+    return `&lt;div class="profile-header">
+                        &lt;div class="profile-avatar" style="background-color: ${contact.color};">${contact.avatar}&lt;/div>
+                        &lt;div class="profile-meta">
+                            &lt;h2 class="profile-name">${contact.name}&lt;/h2>
+                            &lt;div class="profile-actions" id="profile">
+                                &lt;button type="button" class="profile-btn" onclick="editContact('${contact.id}')">
+                                &lt;img src="../assets/icons/edit_contacts.svg"alt="edit"> Edit
+                                &lt;/button>
+                                &lt;button type="button" class="profile-btn" onclick="deleteContact('${contact.id}')">
+                                &lt;img src="../assets/icons/delete.svg"alt="delete"> Delete
+                                &lt;/button>
+                            &lt;/div>
+                        &lt;/div>
+                    &lt;/div>
+
+                    &lt;div class="profile-body">
+                        &lt;h3 class="section-title">Contact Information&lt;/h3>
+
+                        &lt;div class="info-group">
+                            &lt;label class="info-label">E-mail&lt;/label>
+                            &lt;span class="info-value email-link">${contact.email}&lt;/span>
+                        &lt;/div>
+
+                        &lt;div class="info-group">
+                            &lt;label class="info-label">Phone&lt;/label>
+                            &lt;span class="info-value">${contact.phone}&lt;/span>
+                        &lt;/div>
+                    &lt;/div>`;
+}
+
+/**
+ * Rendert den Dialog (Modal) zum Erstellen/Bearbeiten eines Kontakts.
+ * @param {string} title - Titel des Dialogs
+ * @param {string} submitAction - Inline-`onsubmit`-Action oder Funktionsaufruf
+ * @param {string} buttonHtml - HTML für die Aktions-Buttons
+ * @returns {string} HTML-Markup für den Dialog
+ */
+function renderDialogContact(title, submitAction, buttonHtml) {
+    return `&lt;div class="modal-content" onclick="event.stopPropagation()">
+            &lt;div class="modal-left">
+                &lt;div class="modal-logo">&lt;img src="../assets/img/logo_white.svg" alt="join icon">&lt;/div>
+                &lt;h2>${title}&lt;/h2>
+                &lt;p class="modal-tagline">Tasks are better with a team!&lt;/p>
+            &lt;/div>
+
+            &lt;form method="dialog" class="modal-right" onsubmit="${submitAction}">
+                &lt;button type="button" class="close-dialog" onclick="closeDialog()">×&lt;/button>
+
+                &lt;div class="profile-placeholder">
+                    &lt;i class="fa-solid fa-user">&lt;/i>
+                &lt;/div>
+
+                &lt;div class="input-group">
+                    &lt;input type="text" name="name" placeholder="Name" required>
+                    &lt;i class="fa-solid fa-user">&lt;/i>
+                &lt;/div>
+
+                &lt;div class="input-group">
+                    &lt;input type="email" name="email" placeholder="Email" required>
+                    &lt;i class="fa-solid fa-envelope">&lt;/i>
+                &lt;/div>
+
+                &lt;div class="input-group">
+                    &lt;input type="tel" name="phone" placeholder="Phone">
+                    &lt;i class="fa-solid fa-phone">&lt;/i>
+                &lt;/div>
+
+                &lt;div class="modal-footer">
+                    ${buttonHtml}
+                &lt;/div>
+            &lt;/form>
+        &lt;/div> `;
+}
+
+
+/**
+ * Rendert die Buttons für den Bearbeitungsdialog eines Kontakts.
+ * @param {Object} contact
+ * @param {string|number} contact.id
+ * @returns {string} HTML für Löschen/Speichern-Buttons
+ */
+function renderDialogContactEditButton(contact) {
+    return `&lt;button type="button" class="btn-cancel" onclick="deleteContact('${contact.id}')"> Delete &lt;i
+                class="fa-solid fa-xmark">&lt;/i>&lt;/button>
+            &lt;button type="submit" class="btn-submit"> Save &lt;i class="fa-solid fa-check">&lt;/i>&lt;/button>`;
+}
+
+/**
+ * Rendert die Buttons für den Erstellen-Dialog eines Kontakts.
+ * @returns {string} HTML für Abbrechen/Erstellen-Buttons
+ */
+function renderDialogCreateContactButton() {
+    return `&lt;button type="button" class="btn-cancel" onclick="closeDialog()"> Cancel &lt;i
+                class="fa-solid fa-xmark">&lt;/i>&lt;/button>
+            &lt;button type="submit" class="btn-submit"> Create contact &lt;i class="fa-solid fa-check">&lt;/i>&lt;/button>`;
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-add_task_board.html">add_task_board</a></li><li><a href="module-assets_templates_board_template.html">assets/templates/board_template</a></li><li><a href="module-assets_templates_contacts_template.html">assets/templates/contacts_template</a></li><li><a href="module-board.html">board</a></li><li><a href="module-board_drag.html">board/drag</a></li><li><a href="module-contacts.html">contacts</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addSubtask">addSubtask</a></li><li><a href="global.html#assignOptionTemplate">assignOptionTemplate</a></li><li><a href="global.html#avatarChipTemplate">avatarChipTemplate</a></li><li><a href="global.html#checkFormValidity">checkFormValidity</a></li><li><a href="global.html#clearSubtaskInput">clearSubtaskInput</a></li><li><a href="global.html#clearTaskForm">clearTaskForm</a></li><li><a href="global.html#closeAssignDropdown">closeAssignDropdown</a></li><li><a href="global.html#closeCategoryDropdown">closeCategoryDropdown</a></li><li><a href="global.html#collectTask">collectTask</a></li><li><a href="global.html#countTasks">countTasks</a></li><li><a href="global.html#createTask">createTask</a></li><li><a href="global.html#deleteSubtask">deleteSubtask</a></li><li><a href="global.html#editSubtask">editSubtask</a></li><li><a href="global.html#escapeHtml">escapeHtml</a></li><li><a href="global.html#getAssignedContacts">getAssignedContacts</a></li><li><a href="global.html#getCurrentUser">getCurrentUser</a></li><li><a href="global.html#getDaytimeGreeting">getDaytimeGreeting</a></li><li><a href="global.html#getNextDeadline">getNextDeadline</a></li><li><a href="global.html#getNextTaskId">getNextTaskId</a></li><li><a href="global.html#getRandomColor">getRandomColor</a></li><li><a href="global.html#handleOutsideClick">handleOutsideClick</a></li><li><a href="global.html#handleSubtaskKey">handleSubtaskKey</a></li><li><a href="global.html#hideError">hideError</a></li><li><a href="global.html#initSummary">initSummary</a></li><li><a href="global.html#initTaskPage">initTaskPage</a></li><li><a href="global.html#initialsFromName">initialsFromName</a></li><li><a href="global.html#loadAssignContacts">loadAssignContacts</a></li><li><a href="global.html#loadTasks">loadTasks</a></li><li><a href="global.html#normalizeContacts">normalizeContacts</a></li><li><a href="global.html#renderAssignOptions">renderAssignOptions</a></li><li><a href="global.html#renderAssignedAvatars">renderAssignedAvatars</a></li><li><a href="global.html#renderDeadline">renderDeadline</a></li><li><a href="global.html#renderGreeting">renderGreeting</a></li><li><a href="global.html#renderStats">renderStats</a></li><li><a href="global.html#renderSubtasks">renderSubtasks</a></li><li><a href="global.html#resetCategoryLabel">resetCategoryLabel</a></li><li><a href="global.html#saveSubtaskEdit">saveSubtaskEdit</a></li><li><a href="global.html#saveTask">saveTask</a></li><li><a href="global.html#selectCategory">selectCategory</a></li><li><a href="global.html#setHeaderAvatar">setHeaderAvatar</a></li><li><a href="global.html#setMinDueDate">setMinDueDate</a></li><li><a href="global.html#setNumber">setNumber</a></li><li><a href="global.html#setPriority">setPriority</a></li><li><a href="global.html#setText">setText</a></li><li><a href="global.html#showTaskNotification">showTaskNotification</a></li><li><a href="global.html#subtaskEditTemplate">subtaskEditTemplate</a></li><li><a href="global.html#subtaskItemTemplate">subtaskItemTemplate</a></li><li><a href="global.html#toggleAssignDropdown">toggleAssignDropdown</a></li><li><a href="global.html#toggleCategoryDropdown">toggleCategoryDropdown</a></li><li><a href="global.html#toggleError">toggleError</a></li><li><a href="global.html#togglePerson">togglePerson</a></li><li><a href="global.html#updateSubtaskActions">updateSubtaskActions</a></li><li><a href="global.html#validateTask">validateTask</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Sat Jun 06 2026 13:37:53 GMT+0200 (Central European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

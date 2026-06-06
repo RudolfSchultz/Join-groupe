@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: js/add_task_board.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: js/add_task_board.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @fileoverview Modal / Add-task helpers used by the Board UI (create task modal,
+ * modal form handling, modal subtasks and assign dropdowns).
+ * @module add_task_board
+ */
+
+const ADDTASK_BASE_URL = 'https://remotestorage-c0469-default-rtdb.europe-west1.firebasedatabase.app';
+const ADDTASK_CONTACTS_URL = `${ADDTASK_BASE_URL}/contacts.json`;
+
+let modalSelectedPriority = 'medium';
+let modalSelectedCategory = '';
+let modalAssignedIds = [];
+let modalSubtasks = [];
+let modalContacts = [];
+let modalDefaultStatus = 'todo';
+
+async function openAddTaskModal(status = 'todo') {
+    modalDefaultStatus = status || 'todo';
+    const overlay = document.getElementById('add-task-overlay');
+    overlay.classList.remove('d-none');
+    
+    if (modalContacts.length === 0) {
+        modalContacts = await loadAssignContacts();
+    }
+    
+    clearModalTaskForm();
+    setMinModalDueDate();
+    
+    document.addEventListener('click', handleModalOutsideClick);
+}
+
+/**
+ * Close the add-task modal overlay.
+ * @param {Event=} event
+ * @returns {void}
+ */
+function closeAddTaskModal(event) {
+    if (event &amp;&amp; event.target.id !== 'add-task-overlay') return;
+    
+    const overlay = document.getElementById('add-task-overlay');
+    overlay.classList.add('d-none');
+    clearModalTaskForm();
+    
+    document.removeEventListener('click', handleModalOutsideClick);
+}
+
+function handleModalOutsideClick(event) {
+    if (!event.target.closest('#modal-assign-select')) closeModalAssignDropdown();
+    if (!event.target.closest('#modal-category-select')) closeModalCategoryDropdown();
+}
+
+/**
+ * Set the minimum allowed due date (today) for the modal date input.
+ * @returns {void}
+ */
+function setMinModalDueDate() {
+    const today = new Date().toISOString().split('T')[0];
+    const input = document.getElementById('modal-task-due');
+    if (input) input.setAttribute('min', today);
+}
+
+/**
+ * Select priority in modal and update UI.
+ * @param {HTMLElement} button
+ * @returns {void}
+ */
+function setModalPriority(button) {
+    document.querySelectorAll('#add-task-overlay .prio-btn').forEach(btn => 
+        btn.classList.remove('prio-active')
+    );
+    button.classList.add('prio-active');
+    modalSelectedPriority = button.dataset.prio;
+}
+
+/**
+ * Toggle the modal category dropdown visibility.
+ * @returns {void}
+ */
+function toggleModalCategoryDropdown() {
+    closeModalAssignDropdown();
+    document.getElementById('modal-category-options').classList.toggle('d-none');
+}
+
+function closeModalCategoryDropdown() {
+    document.getElementById('modal-category-options').classList.add('d-none');
+}
+
+/**
+ * Select a category for the modal form and update state/UI.
+ * @param {string} value
+ * @returns {void}
+ */
+function selectModalCategory(value) {
+    modalSelectedCategory = value;
+    const label = document.getElementById('modal-category-selected');
+    label.textContent = value;
+    label.classList.remove('select-placeholder');
+    closeModalCategoryDropdown();
+    document.getElementById('modal-error-category').classList.add('d-none');
+    updateModalCreateButton();
+}
+
+/**
+ * Toggle the assign dropdown in the modal and render options.
+ * @returns {void}
+ */
+function toggleModalAssignDropdown() {
+    const options = document.getElementById('modal-assign-options');
+    closeModalCategoryDropdown();
+    renderModalAssignOptions();
+    options.classList.toggle('d-none');
+}
+
+function closeModalAssignDropdown() {
+    document.getElementById('modal-assign-options').classList.add('d-none');
+}
+
+/**
+ * Render the list of assignable contacts for the modal.
+ * @returns {void}
+ */
+function renderModalAssignOptions() {
+    const options = document.getElementById('modal-assign-options');
+    options.innerHTML = modalContacts
+        .map(contact => modalAssignOptionTemplate(contact, modalAssignedIds.includes(contact.id)))
+        .join('');
+}
+
+function modalAssignOptionTemplate(contact, isSelected) {
+    return `
+        &lt;div class="assign-option ${isSelected ? 'assign-option--active' : ''}" onclick="toggleModalPerson('${contact.id}')">
+            &lt;span class="assign-option-left">
+                &lt;span class="avatar-chip" style="background-color:${contact.color}">${contact.avatar}&lt;/span>
+                &lt;span class="assign-option-name">${escapeHtml(contact.name)}&lt;/span>
+            &lt;/span>
+            &lt;span class="assign-checkbox">${isSelected ? '&amp;#10003;' : ''}&lt;/span>
+        &lt;/div>`;
+}
+
+/**
+ * Toggle selection of a person in the modal assign list.
+ * @param {string|number} id
+ * @returns {void}
+ */
+function toggleModalPerson(id) {
+    if (modalAssignedIds.includes(id)) {
+        modalAssignedIds = modalAssignedIds.filter(assignedId => assignedId !== id);
+    } else {
+        modalAssignedIds.push(id);
+    }
+    renderModalAssignOptions();
+    renderModalAssignedAvatars();
+}
+
+/**
+ * Render selected assigned avatars in the modal.
+ * @returns {void}
+ */
+function renderModalAssignedAvatars() {
+    const container = document.getElementById('modal-assigned-avatars');
+    const selected = modalContacts.filter(contact => modalAssignedIds.includes(contact.id));
+    container.innerHTML = selected.map(contact => 
+        `&lt;span class="avatar-chip" style="background-color:${contact.color}">${contact.avatar}&lt;/span>`
+    ).join('');
+}
+
+/**
+ * Keyboard handler to add a subtask on Enter key inside the modal.
+ * @param {KeyboardEvent} event
+ * @returns {void}
+ */
+function handleModalSubtaskKey(event) {
+    if (event.key !== 'Enter') return;
+    event.preventDefault();
+    addModalSubtask();
+}
+
+function updateModalSubtaskActions() {
+    const hasText = document.getElementById('modal-task-subtask').value.trim().length > 0;
+    const editActions = document.getElementById('modal-subtask-edit-actions');
+    if (editActions) editActions.classList.toggle('d-none', !hasText);
+}
+
+/**
+ * Add a new subtask to the modal's subtask list.
+ * @returns {void}
+ */
+function addModalSubtask() {
+    const input = document.getElementById('modal-task-subtask');
+    const title = input.value.trim();
+    if (!title) return;
+    modalSubtasks.push({ title, done: false });
+    input.value = '';
+    updateModalSubtaskActions();
+    renderModalSubtasks();
+}
+
+/**
+ * Clear the modal subtask input field.
+ * @returns {void}
+ */
+function clearModalSubtaskInput() {
+    document.getElementById('modal-task-subtask').value = '';
+    updateModalSubtaskActions();
+}
+
+/**
+ * Delete a modal subtask by index.
+ * @param {number} index
+ * @returns {void}
+ */
+function deleteModalSubtask(index) {
+    modalSubtasks.splice(index, 1);
+    renderModalSubtasks();
+}
+
+/**
+ * Start editing a modal subtask (replace list item with edit input).
+ * @param {number} index
+ * @returns {void}
+ */
+function editModalSubtask(index) {
+    const list = document.getElementById('modal-subtask-list');
+    list.children[index].outerHTML = modalSubtaskEditTemplate(modalSubtasks[index], index);
+    document.getElementById(`modal-subtask-edit-${index}`).focus();
+}
+
+/**
+ * Save an edited modal subtask.
+ * @param {number} index
+ * @returns {void}
+ */
+function saveModalSubtaskEdit(index) {
+    const value = document.getElementById(`modal-subtask-edit-${index}`).value.trim();
+    if (!value) return deleteModalSubtask(index);
+    modalSubtasks[index].title = value;
+    renderModalSubtasks();
+}
+
+/**
+ * Render all modal subtasks to the DOM.
+ * @returns {void}
+ */
+function renderModalSubtasks() {
+    const list = document.getElementById('modal-subtask-list');
+    list.innerHTML = modalSubtasks.map((subtask, index) => modalSubtaskItemTemplate(subtask, index)).join('');
+}
+
+function modalSubtaskItemTemplate(subtask, index) {
+    return `
+        &lt;li class="subtask-item" ondblclick="editModalSubtask(${index})">
+            &lt;span class="subtask-text">&amp;bull; ${escapeHtml(subtask.title)}&lt;/span>
+            &lt;span class="subtask-item-actions">
+                &lt;button type="button" class="subtask-icon-btn" title="Edit" onclick="editModalSubtask(${index})">&amp;#9998;&lt;/button>
+                &lt;span class="subtask-action-divider">&lt;/span>
+                &lt;button type="button" class="subtask-icon-btn" title="Delete" onclick="deleteModalSubtask(${index})">&amp;#128465;&lt;/button>
+            &lt;/span>
+        &lt;/li>`;
+}
+
+function modalSubtaskEditTemplate(subtask, index) {
+    return `
+        &lt;li class="subtask-item subtask-item--editing">
+            &lt;input class="subtask-edit-input" id="modal-subtask-edit-${index}" value="${escapeHtml(subtask.title)}"
+                onkeydown="if(event.key==='Enter'){event.preventDefault();saveModalSubtaskEdit(${index});}">
+            &lt;span class="subtask-item-actions">
+                &lt;button type="button" class="subtask-icon-btn" title="Delete" onclick="deleteModalSubtask(${index})">&amp;#128465;&lt;/button>
+                &lt;span class="subtask-action-divider">&lt;/span>
+                &lt;button type="button" class="subtask-icon-btn" title="Save" onclick="saveModalSubtaskEdit(${index})">&amp;#10003;&lt;/button>
+            &lt;/span>
+        &lt;/li>`;
+}
+
+/**
+ * Enable or disable the modal create button based on form validity.
+ * @returns {void}
+ */
+function updateModalCreateButton() {
+    const title = document.getElementById('modal-task-title').value.trim();
+    const due = document.getElementById('modal-task-due').value;
+    const btn = document.getElementById('modal-btn-create');
+    btn.disabled = !(title &amp;&amp; due &amp;&amp; modalSelectedCategory);
+}
+
+/**
+ * Reset the modal form to default state.
+ * @returns {void}
+ */
+function clearModalTaskForm() {
+    document.getElementById('modal-task-title').value = '';
+    document.getElementById('modal-task-desc').value = '';
+    document.getElementById('modal-task-due').value = '';
+    
+    modalSelectedPriority = 'medium';
+    document.querySelectorAll('#add-task-overlay .prio-btn').forEach(btn => {
+        btn.classList.remove('prio-active');
+        if (btn.dataset.prio === 'medium') btn.classList.add('prio-active');
+    });
+    
+    modalSelectedCategory = '';
+    const categoryLabel = document.getElementById('modal-category-selected');
+    categoryLabel.textContent = 'Select task category';
+    categoryLabel.classList.add('select-placeholder');
+    
+    modalAssignedIds = [];
+    modalSubtasks = [];
+    renderModalAssignedAvatars();
+    renderModalSubtasks();
+    
+    document.getElementById('modal-task-subtask').value = '';
+    updateModalSubtaskActions();
+    
+    document.querySelectorAll('#add-task-overlay .field-error').forEach(el => 
+        el.classList.add('d-none')
+    );
+    
+    updateModalCreateButton();
+}
+
+/**
+ * Create a task from modal form data and persist it.
+ * @param {Event} event
+ * @returns {Promise&lt;void>}
+ */
+async function createTaskFromModal(event) {
+    event.preventDefault();
+    
+    const task = collectModalTask();
+    if (!validateModalTask(task)) return;
+    
+    const button = document.getElementById('modal-btn-create');
+    button.disabled = true;
+    
+    try {
+        await saveModalTask(task);
+        showTaskNotification('Task added to board');
+        closeAddTaskModal();
+        
+        // Reload tasks to show the new one
+        await initTasks();
+    } catch (error) {
+        console.error('Error saving task:', error);
+        showTaskNotification('Could not save task. Please try again.', true);
+        button.disabled = false;
+    }
+}
+
+/**
+ * Collect modal form values into a task object.
+ * @returns {Object} task
+ */
+function collectModalTask() {
+    const assignedTo = modalContacts
+        .filter(c => modalAssignedIds.includes(c.id))
+        .map(c => ({ id: c.id, name: c.name, color: c.color, initials: c.avatar }));
+    
+    return {
+        title: document.getElementById('modal-task-title').value.trim(),
+        description: document.getElementById('modal-task-desc').value.trim(),
+        dueDate: document.getElementById('modal-task-due').value,
+        priority: modalSelectedPriority,
+        category: modalSelectedCategory,
+        assignedTo,
+        subtasks: modalSubtasks,
+        status: modalDefaultStatus
+    };
+}
+
+/**
+ * Validate required modal task fields and show inline errors.
+ * @param {Object} task
+ * @returns {boolean}
+ */
+function validateModalTask(task) {
+    let valid = true;
+    
+    const titleError = document.getElementById('modal-error-title');
+    if (!task.title) {
+        titleError.classList.remove('d-none');
+        valid = false;
+    } else {
+        titleError.classList.add('d-none');
+    }
+    
+    const dueError = document.getElementById('modal-error-due');
+    if (!task.dueDate) {
+        dueError.classList.remove('d-none');
+        valid = false;
+    } else {
+        dueError.classList.add('d-none');
+    }
+    
+    const categoryError = document.getElementById('modal-error-category');
+    if (!task.category) {
+        categoryError.classList.remove('d-none');
+        valid = false;
+    } else {
+        categoryError.classList.add('d-none');
+    }
+    
+    return valid;
+}
+
+/**
+ * Save a task created in the modal either locally (guest) or remotely.
+ * @param {Object} task
+ * @returns {Promise&lt;void>}
+ */
+async function saveModalTask(task) {
+    if (checkIsGuest()) {
+        const guestTasks = getGuestTasks();
+        task.id = guestTasks.length ? Math.max(...guestTasks.map(t => Number(t.id) || 0)) + 1 : 1;
+        guestTasks.push(task);
+        saveGuestTasks(guestTasks);
+        return;
+    }
+    
+    const id = await getNextModalTaskId();
+    task.id = id;
+    await fetch(`${ADDTASK_BASE_URL}/tasks/${id}.json`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(task)
+    });
+}
+
+/**
+ * Determine next numeric ID for remote tasks.
+ * @returns {Promise&lt;number>} next id
+ */
+async function getNextModalTaskId() {
+    try {
+        const response = await fetch(`${ADDTASK_BASE_URL}/tasks.json`);
+        const data = await response.json();
+        if (!data) return 1;
+        const tasks = Array.isArray(data) ? data.filter(Boolean) : Object.values(data).filter(Boolean);
+        if (tasks.length === 0) return 1;
+        const maxId = Math.max(...tasks.map(t => Number(t.id) || 0));
+        return maxId + 1;
+    } catch (error) {
+        console.error('Error getting next task ID:', error);
+        return 1;
+    }
+}
+
+/**
+ * Show a transient notification message on the board UI.
+ * @param {string} message
+ * @param {boolean} [isError=false]
+ * @returns {void}
+ */
+function showTaskNotification(message, isError = false) {
+    const notification = document.getElementById('notification');
+    if (!notification) return;
+    
+    notification.textContent = message;
+    notification.className = 'notification';
+    if (isError) notification.classList.add('notification--error');
+    notification.classList.remove('d-none');
+    
+    setTimeout(() => {
+        notification.classList.add('d-none');
+    }, 2000);
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-add_task_board.html">add_task_board</a></li><li><a href="module-assets_templates_board_template.html">assets/templates/board_template</a></li><li><a href="module-assets_templates_contacts_template.html">assets/templates/contacts_template</a></li><li><a href="module-board.html">board</a></li><li><a href="module-board_drag.html">board/drag</a></li><li><a href="module-contacts.html">contacts</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addSubtask">addSubtask</a></li><li><a href="global.html#assignOptionTemplate">assignOptionTemplate</a></li><li><a href="global.html#avatarChipTemplate">avatarChipTemplate</a></li><li><a href="global.html#checkFormValidity">checkFormValidity</a></li><li><a href="global.html#clearSubtaskInput">clearSubtaskInput</a></li><li><a href="global.html#clearTaskForm">clearTaskForm</a></li><li><a href="global.html#closeAssignDropdown">closeAssignDropdown</a></li><li><a href="global.html#closeCategoryDropdown">closeCategoryDropdown</a></li><li><a href="global.html#collectTask">collectTask</a></li><li><a href="global.html#countTasks">countTasks</a></li><li><a href="global.html#createTask">createTask</a></li><li><a href="global.html#deleteSubtask">deleteSubtask</a></li><li><a href="global.html#editSubtask">editSubtask</a></li><li><a href="global.html#escapeHtml">escapeHtml</a></li><li><a href="global.html#getAssignedContacts">getAssignedContacts</a></li><li><a href="global.html#getCurrentUser">getCurrentUser</a></li><li><a href="global.html#getDaytimeGreeting">getDaytimeGreeting</a></li><li><a href="global.html#getNextDeadline">getNextDeadline</a></li><li><a href="global.html#getNextTaskId">getNextTaskId</a></li><li><a href="global.html#getRandomColor">getRandomColor</a></li><li><a href="global.html#handleOutsideClick">handleOutsideClick</a></li><li><a href="global.html#handleSubtaskKey">handleSubtaskKey</a></li><li><a href="global.html#hideError">hideError</a></li><li><a href="global.html#initSummary">initSummary</a></li><li><a href="global.html#initTaskPage">initTaskPage</a></li><li><a href="global.html#initialsFromName">initialsFromName</a></li><li><a href="global.html#loadAssignContacts">loadAssignContacts</a></li><li><a href="global.html#loadTasks">loadTasks</a></li><li><a href="global.html#normalizeContacts">normalizeContacts</a></li><li><a href="global.html#renderAssignOptions">renderAssignOptions</a></li><li><a href="global.html#renderAssignedAvatars">renderAssignedAvatars</a></li><li><a href="global.html#renderDeadline">renderDeadline</a></li><li><a href="global.html#renderGreeting">renderGreeting</a></li><li><a href="global.html#renderStats">renderStats</a></li><li><a href="global.html#renderSubtasks">renderSubtasks</a></li><li><a href="global.html#resetCategoryLabel">resetCategoryLabel</a></li><li><a href="global.html#saveSubtaskEdit">saveSubtaskEdit</a></li><li><a href="global.html#saveTask">saveTask</a></li><li><a href="global.html#selectCategory">selectCategory</a></li><li><a href="global.html#setHeaderAvatar">setHeaderAvatar</a></li><li><a href="global.html#setMinDueDate">setMinDueDate</a></li><li><a href="global.html#setNumber">setNumber</a></li><li><a href="global.html#setPriority">setPriority</a></li><li><a href="global.html#setText">setText</a></li><li><a href="global.html#showTaskNotification">showTaskNotification</a></li><li><a href="global.html#subtaskEditTemplate">subtaskEditTemplate</a></li><li><a href="global.html#subtaskItemTemplate">subtaskItemTemplate</a></li><li><a href="global.html#toggleAssignDropdown">toggleAssignDropdown</a></li><li><a href="global.html#toggleCategoryDropdown">toggleCategoryDropdown</a></li><li><a href="global.html#toggleError">toggleError</a></li><li><a href="global.html#togglePerson">togglePerson</a></li><li><a href="global.html#updateSubtaskActions">updateSubtaskActions</a></li><li><a href="global.html#validateTask">validateTask</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Sat Jun 06 2026 13:37:53 GMT+0200 (Central European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

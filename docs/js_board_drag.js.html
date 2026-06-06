@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: js/board_drag.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: js/board_drag.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @fileoverview Drag &amp; touch handlers for board task cards (desktop + touch).
+ * Provides `startDragging`, `touchDragStart`, `touchDragMove`, `touchDragEnd`
+ * and helpers to move tasks between columns.
+ * @module board/drag
+ */
+
+let touchDragClone = null;
+let touchDragOffsetX = 0;
+let touchDragOffsetY = 0;
+
+/**
+ * Start desktop drag for a task card.
+ * @param {string|number} id - ID of the task being dragged
+ * @returns {void}
+ */
+function startDragging(id) {
+    currentDraggedTaskId = id;
+}
+
+/**
+ * Allow drop handler for dragover events.
+ * @param {Event} ev
+ * @returns {void}
+ */
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+/**
+ * Highlight a column drop target.
+ * @param {string} id - column id (todo|inProgress|awaitFeedback|done)
+ * @returns {void}
+ */
+function highlight(id) {
+    document.getElementById(`drag-hl-${id}`)?.classList.add('drag-active');
+}
+
+/**
+ * Remove highlight from a column drop target.
+ * @param {string} id - column id
+ * @returns {void}
+ */
+function removeHighlight(id) {
+    document.getElementById(`drag-hl-${id}`)?.classList.remove('drag-active');
+}
+
+/**
+ * Move the currently dragged task to a new status column.
+ * @param {string} status - target status column id
+ * @returns {Promise&lt;void>}
+ */
+async function moveTo(status) {
+    if (currentDraggedTaskId === null) return;
+    const task = allTasks.find(t => t.id == currentDraggedTaskId);
+    if (!task) return;
+    task.status = status;
+    await updateTaskStatus(task);
+    displayTasks(allTasks);
+    currentDraggedTaskId = null;
+}
+
+/**
+ * Persist a task's status change either locally (guest) or remote.
+ * @param {Object} task
+ * @returns {Promise&lt;void>}
+ */
+async function updateTaskStatus(task) {
+    if (checkIsGuest()) {
+        saveGuestTasks(allTasks);
+    } else {
+        await updateTaskStatusRemote(task.id, task.status);
+    }
+}
+
+/**
+ * PATCH update status remotely for a task.
+ * @param {string|number} taskId
+ * @param {string} status
+ * @returns {Promise&lt;void>}
+ */
+async function updateTaskStatusRemote(taskId, status) {
+    try {
+        await fetch(`${BOARD_BASE_URL}/tasks/${taskId}.json`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status })
+        });
+    } catch (e) {
+        console.error('Error updating task status:', e);
+    }
+}
+
+/**
+ * Initialize touch dragging: create visual clone and store offsets.
+ * @param {TouchEvent} event
+ * @param {string|number} id - id of the task
+ * @returns {void}
+ */
+function touchDragStart(event, id) {
+    currentDraggedTaskId = id;
+    const card = event.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const touch = event.touches[0];
+    touchDragOffsetX = touch.clientX - rect.left;
+    touchDragOffsetY = touch.clientY - rect.top;
+    createTouchClone(card, rect);
+    card.style.opacity = '0.4';
+}
+
+/**
+ * Create a floating clone of the card element during touch drag.
+ * @param {Element} card
+ * @param {DOMRect} rect
+ * @returns {void}
+ */
+function createTouchClone(card, rect) {
+    touchDragClone = card.cloneNode(true);
+    touchDragClone.style.cssText = `
+        position: fixed;
+        left: ${rect.left}px;
+        top: ${rect.top}px;
+        width: ${rect.width}px;
+        opacity: 0.8;
+        pointer-events: none;
+        z-index: 9999;
+        transform: rotate(3deg);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    `;
+    document.body.appendChild(touchDragClone);
+}
+
+/**
+ * Move the floating clone along with the touch and update column highlights.
+ * @param {TouchEvent} event
+ * @returns {void}
+ */
+function touchDragMove(event) {
+    if (!touchDragClone) return;
+    event.preventDefault();
+    const touch = event.touches[0];
+    touchDragClone.style.left = (touch.clientX - touchDragOffsetX) + 'px';
+    touchDragClone.style.top  = (touch.clientY - touchDragOffsetY) + 'px';
+    updateColumnHighlights(touch);
+}
+
+/**
+ * Highlight the column currently under the provided touch point.
+ * @param {{clientX:number,clientY:number}} touch
+ * @returns {void}
+ */
+function updateColumnHighlights(touch) {
+    ['todo', 'inProgress', 'awaitFeedback', 'done'].forEach(colId => {
+        const col = document.getElementById(colId);
+        if (!col) return;
+        const r = col.getBoundingClientRect();
+        if (touch.clientX >= r.left &amp;&amp; touch.clientX &lt;= r.right &amp;&amp;
+            touch.clientY >= r.top  &amp;&amp; touch.clientY &lt;= r.bottom) {
+            highlight(colId);
+        } else {
+            removeHighlight(colId);
+        }
+    });
+}
+
+/**
+ * End touch drag and perform drop logic.
+ * @param {TouchEvent} event
+ * @returns {void}
+ */
+function touchDragEnd(event) {
+    if (!touchDragClone) return;
+    const touch = event.changedTouches[0];
+    cleanupTouchDrag(event.currentTarget);
+    checkDropZone(touch);
+}
+
+/**
+ * Cleanup after touch drag: remove clone and reset styles.
+ * @param {Element} card
+ * @returns {void}
+ */
+function cleanupTouchDrag(card) {
+    if (touchDragClone) {
+        touchDragClone.remove();
+        touchDragClone = null;
+    }
+    card.style.opacity = '';
+}
+
+/**
+ * Check which column contains the touch and move task there.
+ * @param {{clientX:number,clientY:number}} touch
+ * @returns {void}
+ */
+function checkDropZone(touch) {
+    ['todo', 'inProgress', 'awaitFeedback', 'done'].forEach(colId => {
+        removeHighlight(colId);
+        const col = document.getElementById(colId);
+        if (!col) return;
+        const r = col.getBoundingClientRect();
+        if (touch.clientX >= r.left &amp;&amp; touch.clientX &lt;= r.right &amp;&amp;
+            touch.clientY >= r.top  &amp;&amp; touch.clientY &lt;= r.bottom) {
+            moveTo(colId);
+        }
+    });
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-add_task_board.html">add_task_board</a></li><li><a href="module-assets_templates_board_template.html">assets/templates/board_template</a></li><li><a href="module-assets_templates_contacts_template.html">assets/templates/contacts_template</a></li><li><a href="module-board.html">board</a></li><li><a href="module-board_drag.html">board/drag</a></li><li><a href="module-contacts.html">contacts</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addSubtask">addSubtask</a></li><li><a href="global.html#assignOptionTemplate">assignOptionTemplate</a></li><li><a href="global.html#avatarChipTemplate">avatarChipTemplate</a></li><li><a href="global.html#checkFormValidity">checkFormValidity</a></li><li><a href="global.html#clearSubtaskInput">clearSubtaskInput</a></li><li><a href="global.html#clearTaskForm">clearTaskForm</a></li><li><a href="global.html#closeAssignDropdown">closeAssignDropdown</a></li><li><a href="global.html#closeCategoryDropdown">closeCategoryDropdown</a></li><li><a href="global.html#collectTask">collectTask</a></li><li><a href="global.html#countTasks">countTasks</a></li><li><a href="global.html#createTask">createTask</a></li><li><a href="global.html#deleteSubtask">deleteSubtask</a></li><li><a href="global.html#editSubtask">editSubtask</a></li><li><a href="global.html#escapeHtml">escapeHtml</a></li><li><a href="global.html#getAssignedContacts">getAssignedContacts</a></li><li><a href="global.html#getCurrentUser">getCurrentUser</a></li><li><a href="global.html#getDaytimeGreeting">getDaytimeGreeting</a></li><li><a href="global.html#getNextDeadline">getNextDeadline</a></li><li><a href="global.html#getNextTaskId">getNextTaskId</a></li><li><a href="global.html#getRandomColor">getRandomColor</a></li><li><a href="global.html#handleOutsideClick">handleOutsideClick</a></li><li><a href="global.html#handleSubtaskKey">handleSubtaskKey</a></li><li><a href="global.html#hideError">hideError</a></li><li><a href="global.html#initSummary">initSummary</a></li><li><a href="global.html#initTaskPage">initTaskPage</a></li><li><a href="global.html#initialsFromName">initialsFromName</a></li><li><a href="global.html#loadAssignContacts">loadAssignContacts</a></li><li><a href="global.html#loadTasks">loadTasks</a></li><li><a href="global.html#normalizeContacts">normalizeContacts</a></li><li><a href="global.html#renderAssignOptions">renderAssignOptions</a></li><li><a href="global.html#renderAssignedAvatars">renderAssignedAvatars</a></li><li><a href="global.html#renderDeadline">renderDeadline</a></li><li><a href="global.html#renderGreeting">renderGreeting</a></li><li><a href="global.html#renderStats">renderStats</a></li><li><a href="global.html#renderSubtasks">renderSubtasks</a></li><li><a href="global.html#resetCategoryLabel">resetCategoryLabel</a></li><li><a href="global.html#saveSubtaskEdit">saveSubtaskEdit</a></li><li><a href="global.html#saveTask">saveTask</a></li><li><a href="global.html#selectCategory">selectCategory</a></li><li><a href="global.html#setHeaderAvatar">setHeaderAvatar</a></li><li><a href="global.html#setMinDueDate">setMinDueDate</a></li><li><a href="global.html#setNumber">setNumber</a></li><li><a href="global.html#setPriority">setPriority</a></li><li><a href="global.html#setText">setText</a></li><li><a href="global.html#showTaskNotification">showTaskNotification</a></li><li><a href="global.html#subtaskEditTemplate">subtaskEditTemplate</a></li><li><a href="global.html#subtaskItemTemplate">subtaskItemTemplate</a></li><li><a href="global.html#toggleAssignDropdown">toggleAssignDropdown</a></li><li><a href="global.html#toggleCategoryDropdown">toggleCategoryDropdown</a></li><li><a href="global.html#toggleError">toggleError</a></li><li><a href="global.html#togglePerson">togglePerson</a></li><li><a href="global.html#updateSubtaskActions">updateSubtaskActions</a></li><li><a href="global.html#validateTask">validateTask</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Sat Jun 06 2026 13:37:53 GMT+0200 (Central European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
