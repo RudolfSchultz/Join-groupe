@@ -131,6 +131,8 @@
                                 <input class="form-input" type="text" id="task-subtask" placeholder="Add new subtask"
                                     oninput="updateSubtaskActions()" onkeydown="handleSubtaskKey(event)">
                                 <div class="subtask-actions">
+                                    <button type="button" class="subtask-icon-btn" id="subtask-add-default"
+                                        title="Add subtask" onclick="focusSubtaskInput()">&#43;</button>
                                     <span class="subtask-edit-actions d-none" id="subtask-edit-actions">
                                         <button type="button" class="subtask-icon-btn" title="Clear"
                                             onclick="clearSubtaskInput()">&#10005;</button>
@@ -166,6 +168,7 @@
     <script src="../script.js"></script>
     <script src="../assets/templates/add_task_template.js"></script>
     <script src="../js/add_task.js"></script>
+    <script src="../js/add_task_subtasks.js"></script>
     <script src="../js/add_task_assign.js"></script>
 </body>
 

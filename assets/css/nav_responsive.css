@@ -34,6 +34,10 @@
         padding: 4px 6px;
         height: 60px;
     }
+
+    .help-icon-link {
+        display: none;
+    }
 }
 
 @media (max-width: 480px) {

@@ -33,7 +33,7 @@ function prioSvg(prio) {
 }
 
 function taskCardTemplate(task) {
-    const progress = buildProgressBar(task.subtasks || []);
+    const progress = buildProgressBar(task.subtasks || [], task.id);
     const avatars = buildAvatars(task.assignedTo || []);
     return `
         <div class="task-card" data-task-id="${task.id}" draggable="true"
@@ -53,15 +53,18 @@ function taskCardTemplate(task) {
         </div>`;
 }
 
-function buildProgressBar(subtasks) {
+function buildProgressBar(subtasks, taskId) {
     const done = subtasks.filter(s => s.done).length;
     const total = subtasks.length;
     return total > 0 ? `
-        <div class="card-progress">
+        <div class="card-progress" data-task-id="${taskId}"
+             onclick="toggleProgressDetails(event, ${taskId})"
+             onmouseenter="showProgressTooltip(event, ${taskId})"
+             onmouseleave="hideProgressTooltip()">
             <div class="card-progressbar">
                 <div class="card-progressbar-fill" style="width:${Math.round(100 / total * done)}%"></div>
             </div>
-            <span class="card-progress-label">${done}/${total} Done</span>
+            <span class="card-progress-label" title="${done} von ${total} Subtasks erledigt">${done}/${total}</span>
         </div>` : '';
 }
 
