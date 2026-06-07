@@ -1,0 +1,290 @@
+@media (max-width: 1024px) {
+  .board-main {
+    padding: 206px 20px 0px 260px;
+    height: auto;
+    overflow-y: auto;
+  }
+
+  .board-columns {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    flex: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .board-main {
+    padding: 150px 20px 0px 20px;
+    height: auto;
+    overflow-y: auto;
+  }
+
+  .main-wrapper {
+    margin-left: 0;
+  }
+
+  .page-title {
+    font-size: 42px;
+  }
+
+  .board-columns {
+    grid-template-columns: 1fr 1fr;
+    overflow: visible;
+    gap: 16px;
+  }
+
+  .search-wrapper {
+    width: 220px;
+  }
+}
+
+@media (max-width: 435px) {
+  .btn-add-task {
+    width: 48px;
+    min-width: 48px;
+    padding: 8px;
+    gap: 0;
+    justify-content: center;
+  }
+
+  .board-controls {
+    width: 100%;
+    flex-direction: row;
+    gap: 20px;
+  }
+
+  .btn-add-task-text {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .board-main {
+    padding: 108px 16px 24px;
+    height: auto;
+    overflow: visible;
+  }
+
+  .board-header {
+    position: relative;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .page-title {
+    font-size: 47px;
+  }
+
+  .board-controls {
+    width: 100%;
+    flex-direction: row;
+    gap: 0;
+  }
+
+  .search-wrapper {
+    width: 100%;
+    flex: 1;
+  }
+
+  .btn-add-task {
+    width: 40px;
+    height: 40px;
+    padding: 3px;
+    border-radius: 10px;
+    font-size: 0;
+    gap: 0;
+    justify-content: center;
+    width: fit-content;
+    padding: 0 20px 0 20px;
+  }
+
+  .board-columns {
+    grid-template-columns: 1fr;
+    overflow: visible;
+    gap: 26px;
+  }
+
+  .board-col-header span {
+    font-size: 27px;
+    color: #2A3647;
+  }
+
+  .board-col-header {
+    height: 32px;
+  }
+
+  .col-add-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+  }
+
+  .col-add-btn:active {
+    border-color: var(--secondaryColor);
+  }
+
+  .col-add-btn:active svg path {
+    stroke: var(--secondaryColor);
+  }
+
+  .board-cards {
+    min-height: 48px;
+  }
+
+  .board-empty {
+    height: 48px;
+  }
+
+  #feedback-col {
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    flex-wrap: nowrap;
+  }
+}
+
+@media (max-width: 425px) {
+  .board-controls {
+    width: 100%;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 415px) {
+  .board-controls {
+    width: 80%;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 320px) {
+  .board-controls {
+    gap: 10px;
+  }
+}
+
+@media (max-width: 425px) {
+  .add-task-modal {
+    padding: 20px;
+    max-width: 425px;
+  }
+
+  .detail-title {
+    font-size: 32px;
+  }
+
+  .modal-title {
+    font-size: 24px;
+    margin-bottom: 24px;
+  }
+
+  .modal-close-btn {
+    top: 16px;
+    right: 16px;
+    font-size: 24px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .add-task-modal .edit-input,
+  .add-task-modal .edit-textarea,
+  .add-task-modal .detail-desc {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 375px) {
+  .add-task-modal {
+    max-width: 375px;
+    border-radius: 16px;
+  }
+
+  .modal-title {
+    font-size: 24px;
+    margin-bottom: 18px;
+  }
+
+  .prio-btn {
+    height: 41px;
+    padding: 0 5px;
+    font-size: 16px;
+  }
+
+  .btn-clear {
+    width: fit-content;
+    height: 48px;
+    padding: 0 12px 0 12px;
+    justify-content: center;
+    font-size: 16px;
+  }
+
+  .btn-create {
+    width: fit-content;
+    height: 48px;
+    padding: 0 12px 0 12px;
+    justify-content: center;
+    font-size: 16px;
+  }
+
+  .modal-close-btn {
+    top: 12px;
+    right: 12px;
+    font-size: 26px;
+    width: 26px;
+    height: 26px;
+  }
+
+  .add-task-modal .edit-input,
+  .add-task-modal .edit-textarea,
+  .add-task-modal .detail-desc {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 320px) {
+  .add-task-modal {
+    max-width: 320px;
+    border-radius: 12px;
+  }
+
+  .edit-prio-group {
+    flex-direction: column;
+  }
+
+  .modal-title {
+    font-size: 26px;
+    margin-bottom: 12px;
+  }
+
+  .prio-buttons {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .prio-btn {
+    height: 41px;
+    padding: 5px 5px;
+    font-size: 20px;
+  }
+
+  .select-toggle span {
+    font-size: 14px;
+  }
+
+  .modal-close-btn {
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+  }
+
+  .add-task-modal .edit-input,
+  .add-task-modal .edit-textarea,
+  .add-task-modal .detail-desc {
+    font-size: 13px;
+  }
+}
