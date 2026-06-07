@@ -51,7 +51,7 @@ function renderContactDetails(contact) {
 function renderDialogContact(title, submitAction, buttonHtml) {
     return `<div class="modal-content" onclick="event.stopPropagation()">
             <div class="modal-left">
-                <div class="modal-logo"><img src="../assets/img/logo_white.svg" alt="join icon"></div>
+                <div class="modal-logo for-mobile-hide"><img src="../assets/img/logo_white.svg" alt="join icon"></div>
                 <h2>${title}</h2>
                 <p class="modal-tagline">Tasks are better with a team!</p>
             </div>
