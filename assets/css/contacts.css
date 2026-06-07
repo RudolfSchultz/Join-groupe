@@ -554,7 +554,6 @@
         padding: 14px;
         box-sizing: border-box;
         object-fit: contain;
-        filter: brightness(0) invert(1);
         transition: background-color 0.15s ease-in-out, transform 0.1s ease;
         cursor: pointer;
     }
