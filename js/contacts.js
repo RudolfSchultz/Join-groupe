@@ -77,17 +77,19 @@ function closeDialog() {
 function showContactDetails(contactId) {
     const currentActive = document.querySelector('.contact-item.active');
     if (currentActive) currentActive.classList.remove('active');
-    
     const clickedElement = document.getElementById(contactId);
     if (clickedElement) clickedElement.classList.add('active');
-
     const contact = loadedContacts.find(c => String(c.id) === String(contactId));
     if (contact) contactDetailsContainer.innerHTML = renderContactDetails(contact);
+
+    if (window.innerWidth <= 768) {
+        toggleMobileContactView(true);
+    }
 }
 
 function editContact(id) {
     if (!dialog) return;
-    
+
     const contact = loadedContacts.find(c => String(c.id) === String(id));
     if (contact) {
         dialog.innerHTML = renderEditContactTemplate(contact);
@@ -233,3 +235,31 @@ function checkIsGuest() {
         return true;
     }
 }
+
+function toggleMobileContactView(showDetails) {
+    const left = document.querySelector('.contacts-split-left');
+    const right = document.querySelector('.contacts-split-right');
+    if (left && right) {
+        left.style.display = showDetails ? 'none' : '';
+        right.style.display = showDetails ? 'flex' : '';
+    }
+}
+
+function resetMobileContactView() {
+    toggleMobileContactView(false);
+    const currentActive = document.querySelector('.contact-item.active');
+    if (currentActive) {
+        currentActive.classList.remove('active');
+    }
+}
+
+window.addEventListener('resize', function () {
+    if (window.innerWidth > 768) {
+        const left = document.querySelector('.contacts-split-left');
+        const right = document.querySelector('.contacts-split-right');
+        if (left && right) {
+            left.style.display = '';
+            right.style.display = '';
+        }
+    }
+});

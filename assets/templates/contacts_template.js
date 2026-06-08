@@ -22,7 +22,7 @@ function renderContactDetails(contact) {
                         <div class="profile-avatar" style="background-color: ${contact.color};">${contact.avatar}</div>
                         <div class="profile-meta">
                             <h2 class="profile-name">${contact.name}</h2>
-                            <div class="profile-actions" id="profile">
+                            <div class="profile-actions for-mobile-hide" id="profile">
                                 <button type="button" class="profile-btn" onclick="editContact('${contact.id}')">
                                 <img src="../assets/icons/edit_contacts.svg"alt="edit"> Edit
                                 </button>
