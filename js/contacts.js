@@ -253,6 +253,25 @@ function resetMobileContactView() {
     }
 }
 
+function toggleMobileOptions(event) {
+    event.stopPropagation();
+    const menu = document.getElementById('mobile-options-menu');
+    if (menu) {
+        menu.classList.toggle('show');
+    }
+    if (menu && menu.classList.contains('show')) {
+        document.addEventListener('click', closeMobileOptionsOutside);
+    }
+}
+
+function closeMobileOptionsOutside() {
+    const menu = document.getElementById('mobile-options-menu');
+    if (menu) {
+        menu.classList.remove('show');
+    }
+    document.removeEventListener('click', closeMobileOptionsOutside);
+}
+
 window.addEventListener('resize', function () {
     if (window.innerWidth > 768) {
         const left = document.querySelector('.contacts-split-left');
@@ -263,3 +282,5 @@ window.addEventListener('resize', function () {
         }
     }
 });
+
+

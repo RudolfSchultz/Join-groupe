@@ -45,6 +45,25 @@ function renderContactDetails(contact) {
                             <label class="info-label">Phone</label>
                             <span class="info-value">${contact.phone}</span>
                         </div>
+
+                        <button type="button" class="btn-options-mobile" onclick="toggleMobileOptions(event)">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="5" r="2" fill="white"/>
+                                <circle cx="12" cy="12" r="2" fill="white"/>
+                                <circle cx="12" cy="19" r="2" fill="white"/>
+                            </svg>
+                        </button>
+
+                        <div id="mobile-options-menu" class="mobile-options-popup" onclick="event.stopPropagation()">
+                            <div class="menu-item" onclick="editContact('${contact.id}')">
+                               <img src="../assets/icons/edit_contacts.svg" alt="Edit">
+                               <span>Edit</span>
+                           </div>
+                            <div class="menu-item" onclick="deleteContact('${contact.id}')">
+                                <img src="../assets/icons/delete.svg" alt="Delete">
+                                <span>Delete</span>
+                            </div>
+                      </div>
                     </div>`;
 }
 
