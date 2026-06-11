@@ -82,19 +82,41 @@ function updatePasswordHint(hint, pw, pwConfirm) {
     hint.style.display = mismatch ? 'block' : 'none';
 }
 
-function validateRegistrationForm() {
-    const name = document.getElementById('reg_name').value.trim();
-    const email = document.getElementById('reg_email').value.trim();
-    const pw = document.getElementById('reg_passwort').value;
-    const pwConfirm = document.getElementById('reg_password_confirm').value;
-    const privacy = document.getElementById('reg_datenschutz').checked;
-    updatePasswordHint(document.getElementById('pw_match_hint'), pw, pwConfirm);
-    const emailValid = validateEmailFormat(email);
-    const isValid = name && email && emailValid && pw && pw === pwConfirm && privacy;
+function getRegValues(){
+    return {
+        name:document.getElementById('reg_name').value.trim(),
+        email:document.getElementById('reg_email').value.trim(),
+        pw:document.getElementById('reg_passwort').value,
+        pwConfirm:document.getElementById('reg_password_confirm').value,
+        privacy:document.getElementById('reg_datenschutz').checked
+    };
+}
+
+function setPasswordValidity(pw){
+    const pwInput=document.getElementById('reg_passwort'),hasSpaces=/\s/.test(pw),hint=document.getElementById('pw_space_hint');
+    pwInput.setCustomValidity(hasSpaces? 'Passwörter dürfen keine Leerzeichen enthalten.' : '');
+    if(hint) hint.style.display = (pw && hasSpaces)? 'block' : 'none';
+    return hasSpaces;
+}
+
+function setEmailValidity(email,emailValid){
+    const emailInput=document.getElementById('reg_email'),hint=document.getElementById('email_format_hint');
+    emailInput.setCustomValidity(email && !emailValid? 'Please enter a valid email address (e.g. name@domain.de)' : '');
+    if(hint) hint.style.display = (email && !emailValid)? 'block':'none';
+}
+
+function updateSubmitState(isValid){
     document.getElementById('reg_submit_btn').disabled = !isValid;
-    const emailInput = document.getElementById('reg_email');
-    emailInput.setCustomValidity(email && !emailValid ? 'Please enter a valid email address (e.g. name@domain.de)' : '');
-    if (email && !emailValid) emailInput.reportValidity();
+}
+
+function validateRegistrationForm(){
+    const {name,email,pw,pwConfirm,privacy} = getRegValues();
+    updatePasswordHint(document.getElementById('pw_match_hint'),pw,pwConfirm);
+    const emailValid = validateEmailFormat(email);
+    const pwHasSpaces = setPasswordValidity(pw);
+    setEmailValidity(email,emailValid);
+    const isValid = name && email && emailValid && pw && pw===pwConfirm && privacy && !pwHasSpaces;
+    updateSubmitState(isValid);
 }
 
 function validateEmailFormat(email) {
@@ -130,6 +152,10 @@ async function register() {
     const name = document.getElementById('reg_name').value.trim();
     const email = document.getElementById('reg_email').value.trim();
     const password = document.getElementById('reg_passwort').value;
+    if (/\s/.test(password)) {
+        showNotification('Passwörter dürfen keine Leerzeichen enthalten.', true);
+        return;
+    }
     if (!validateEmailFormat(email)) {
         showNotification('Please enter a valid email address (e.g. name@domain.de)', true);
         return;

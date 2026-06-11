@@ -29,7 +29,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) scale(2);
-    animation: logoAnimation 1.5s forwards ease-in-out;
+    animation: logoAnimation 0.8s forwards ease-in-out;
 }
 
 .login-logo-animated img {
@@ -87,7 +87,7 @@
     justify-content: space-between;
     height: 100vh;
     opacity: 0;
-    animation: showContent 0.8s forwards 1.3s;
+    animation: showContent 0.3s forwards 0.8s;
 }
 
 .login-topbar {
