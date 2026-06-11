@@ -65,14 +65,27 @@ async function login() {
 
     const users = await loadUsers();
     const user = users.find(u => u.email === email && u.password === password);
-
+    const loginErrorEl = document.getElementById('login_error');
     if (!user) {
-        showNotification('Invalid email address or password.', true);
+        if (loginErrorEl) {
+            loginErrorEl.textContent = 'Invalid email address or password.';
+            loginErrorEl.style.display = 'block';
+        } else {
+            showNotification('Invalid email address or password.', true);
+        }
         return;
     }
 
     sessionStorage.setItem('currentUser', JSON.stringify({ id: user.id, name: user.name, email: user.email }));
+    if (loginErrorEl) { loginErrorEl.textContent = ''; loginErrorEl.style.display = 'none'; }
     window.location.href = './html/summary.html';
+}
+
+function clearLoginError(){
+    const el = document.getElementById('login_error');
+    if(!el) return;
+    el.textContent = '';
+    el.style.display = 'none';
 }
 
 function updatePasswordHint(hint, pw, pwConfirm) {

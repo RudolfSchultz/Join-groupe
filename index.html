@@ -36,14 +36,15 @@
                     <form class="login-form" onsubmit="login(); return false;">
                         <div class="input-container">
                             <input type="email" id="login_email" class="input-field" placeholder="E-Mail"
-                                autocomplete="email" required>
+                                autocomplete="email" required oninput="clearLoginError()">
                             <img src="./assets/icons/mail.svg" class="input-field-icon" alt="Mail-Icon">
                         </div>
                         <div class="input-container">
                             <input type="password" id="login_passwort" class="input-field" placeholder="Password"
-                                autocomplete="current-password" required>
+                                autocomplete="current-password" required oninput="clearLoginError()">
                             <img src="./assets/icons/lock.svg" class="input-field-icon" alt="Lock-Icon">
                         </div>
+                        <div id="login_error" class="login-error" aria-live="polite"></div>
                         <div class="login-buttons">
                             <button type="submit" class="btn btn-primary">Log in</button>
                             <button type="button" class="btn btn-secondary" onclick="guestLogin()">
