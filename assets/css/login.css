@@ -13,6 +13,11 @@
 .login-page {
     font-family: 'Inter', sans-serif;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    max-width: 1440px;
+    margin: 0 auto;
+    position: relative; /* contain absolutely positioned logo */
     animation: backgroundMobileAnimation 2s forwards ease-in-out;
 }
 
@@ -24,7 +29,7 @@
 }
 
 .login-logo-animated {
-    position: fixed;
+    position: absolute;
     z-index: 100;
     top: 50%;
     left: 50%;
