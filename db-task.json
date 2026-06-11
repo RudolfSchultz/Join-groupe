@@ -1,0 +1,115 @@
+[
+  null,
+  {
+    "assignedTo": [
+      {
+        "color": "#A6032D",
+        "id": "5",
+        "initials": "AS",
+        "name": "Anja Schulz"
+      },
+      {
+        "color": "#6AA80E",
+        "id": "8",
+        "initials": "BZ",
+        "name": "Benedikt Ziegler"
+      }
+    ],
+    "category": "User Story",
+    "description": "Build start page with recipe recommendation...",
+    "dueDate": "2026-06-15",
+    "id": 1,
+    "priority": "urgent",
+    "status": "todo",
+    "subtasks": [
+      {
+        "done": true,
+        "title": "Build Html"
+      },
+      {
+        "done": false,
+        "title": "Build CSS"
+      }
+    ],
+    "title": "Kochwelt Page & Recipe Recommender"
+  },
+  {
+    "assignedTo": [
+      {
+        "color": "#A6032D",
+        "id": "5",
+        "initials": "KK",
+        "name": "Katrin Krause"
+      },
+      {
+        "color": "#6AA80E",
+        "id": "8",
+        "initials": "NL",
+        "name": "Nico Lange"
+      }
+    ],
+    "category": "Technical Task",
+    "description": "Create reusable HTML base templates...",
+    "dueDate": "2026-06-05",
+    "id": 2,
+    "priority": "medium",
+    "status": "awaitFeedback",
+    "title": "HTML Base Template Creation"
+  },
+  {
+    "assignedTo": [
+      {
+        "color": "#A6032D",
+        "id": "5",
+        "initials": "KK",
+        "name": "Katrin Krause"
+      },
+      {
+        "color": "#6AA80E",
+        "id": "8",
+        "initials": "NL",
+        "name": "Nico Lange"
+      }
+    ],
+    "category": "Technical Task",
+    "description": "Define CSS naming conventions and structure...",
+    "dueDate": "2026-06-10",
+    "id": 3,
+    "priority": "urgent",
+    "status": "done",
+    "subtasks": [
+      {
+        "done": true,
+        "title": "Class change"
+      },
+      {
+        "done": true,
+        "title": "ID Change"
+      }
+    ],
+    "title": "CSS Architecture Planning"
+  },
+  {
+    "assignedTo": [
+      {
+        "color": "#A6032D",
+        "id": "5",
+        "initials": "KK",
+        "name": "Katrin Krause"
+      },
+      {
+        "color": "#6AA80E",
+        "id": "8",
+        "initials": "NL",
+        "name": "Nico Lange"
+      }
+    ],
+    "category": "User Story",
+    "description": "Implement daily recipe and portion calculator....",
+    "dueDate": "2026-06-14",
+    "id": 4,
+    "priority": "urgent",
+    "status": "awaitFeedback",
+    "title": "Daily Kochwelt Recipe"
+  }
+]

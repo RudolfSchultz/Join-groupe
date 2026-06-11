@@ -304,7 +304,23 @@ function validateModalTask(task) {
 async function saveModalTask(task) {
     if (checkIsGuest()) {
         const guestTasks = getGuestTasks();
-        task.id = guestTasks.length ? Math.max(...guestTasks.map(t => Number(t.id) || 0)) + 1 : 1;
+        try {
+            const res = await fetch('../db-task.json');
+            const fileTasks = [];
+            if (res && res.ok) {
+                const data = await res.json();
+                const raw = data?.tasks || data;
+                if (raw) {
+                    const arr = Array.isArray(raw) ? raw : Object.keys(raw).map(k => ({ ...raw[k], id: k }));
+                    fileTasks.push(...arr.filter(Boolean));
+                }
+            }
+            const maxFileId = fileTasks.length ? Math.max(...fileTasks.map(t => Number(t.id) || 0)) : 0;
+            const maxLocalId = guestTasks.length ? Math.max(...guestTasks.map(t => Number(t.id) || 0)) : 0;
+            task.id = Math.max(maxFileId, maxLocalId) + 1;
+        } catch (e) {
+            task.id = guestTasks.length ? Math.max(...guestTasks.map(t => Number(t.id) || 0)) + 1 : 1;
+        }
         guestTasks.push(task);
         saveGuestTasks(guestTasks);
         return;

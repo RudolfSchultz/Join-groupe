@@ -25,7 +25,7 @@ async function initTasks() {
 }
 
 async function loadBoardTasks() {
-    if (checkIsGuest()) return getGuestTasks();
+    if (checkIsGuest()) return await loadGuestTasks();
     try {
         const response = await fetch(`${BOARD_BASE_URL}/tasks.json`);
         const data = await response.json();
@@ -34,6 +34,38 @@ async function loadBoardTasks() {
     } catch (error) {
         console.error('Error loading tasks:', error);
         return [];
+    }
+}
+
+async function loadGuestTasks() {
+    try {
+        const res = await fetch('../db-task.json');
+        const fileTasks = [];
+        if (res && res.ok) {
+            const data = await res.json();
+            const raw = data?.tasks || data;
+            if (raw) {
+                const arr = Array.isArray(raw) ? raw : Object.keys(raw).map(k => ({ ...raw[k], id: k }));
+                fileTasks.push(...arr.filter(Boolean));
+            }
+        }
+
+        // merge with any tasks the guest already created in sessionStorage
+        const local = getGuestTasks() || [];
+
+        // prefer local (session) tasks when IDs conflict
+        const mergedMap = new Map();
+        fileTasks.forEach(t => mergedMap.set(String(t.id), t));
+        local.forEach(t => mergedMap.set(String(t.id), t));
+
+        const merged = Array.from(mergedMap.values());
+        // ensure tasks are in a stable order (by numeric id if possible)
+        merged.sort((a, b) => (Number(a.id) || 0) - (Number(b.id) || 0));
+        return merged;
+    } catch (e) {
+        console.error('Error loading guest tasks:', e);
+        // fallback to session-stored tasks
+        return getGuestTasks();
     }
 }
 
