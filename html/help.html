@@ -14,7 +14,87 @@
 </head>
 
 <body onload="initMain()">
-    <div data-import="../html/nav_template.html"></div>
+    <!-- <div data-import="../html/nav_template.html"></div> -->
+    <div class="header-background">
+        <header class="header">
+            <span class="header-titel">Kanban Projekt Management Tool</span>
+            <img src="../assets/img/logo_big.svg" class="header-logo-mobil" alt="Join">
+
+            <div class="header-account">
+                <a href="../html/help.html" class="help-icon-link" title="Hilfe">
+                    <img src="../assets/icons/help.svg" alt="View help" class="help-icon">
+                </a>
+
+                <div class="avatar-wrapper" id="user-avatar-wrapper" onclick="toggleAvatarMenu()">
+                    <div class="user-avatar" id="user-avatar"></div>
+                    <div class="avatar-dropdown d-none" id="avatar-menu">
+                        <button class="avatar-menu-btn"
+                            onclick="window.location.href='privacy_policy.html'; event.stopPropagation()">Privacy
+                            Policy</button>
+                        <button class="avatar-menu-btn"
+                            onclick="window.location.href='legal_notice.html'; event.stopPropagation()">Legal
+                            Notice</button>
+                        <button class="avatar-menu-btn" onclick="logout(); event.stopPropagation()">Log out</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+    </div>
+
+    <nav class="sidebar">
+        <a href="../html/summary.html" class="sidebar-logo-link">
+            <img src="../assets/img/logo_white.svg" alt="Join Logo" class="sidebar-logo">
+        </a>
+
+        <div class="navigation-links-group">
+            <a href="../html/summary.html" class="nav-link" id="nav_overview">
+                <img src="../assets/icons/summary.svg" alt="" class="nav-icon">
+                <span>Summary</Summary></span>
+            </a>
+            <a href="../html/add_task.html" class="nav-link" id="nav_addtask">
+                <img src="../assets/icons/add_task.svg" alt="" class="nav-icon">
+                <span>Add Task</span>
+            </a>
+            <a href="../html/board.html" class="nav-link" id="nav_board">
+                <img src="../assets/icons/board.svg" alt="" class="nav-icon">
+                <span>Board</span>
+            </a>
+            <a href="../html/contacts.html" class="nav-link" id="nav_contacts">
+                <img src="../assets/icons/contacts.svg" alt="" class="nav-icon">
+                <span>Contacts</span>
+            </a>
+        </div>
+
+        <div class="nav-bottom-left">
+            <a href="../html/privacy_policy.html" class="nav-link">Privacy Policy</a>
+            <a href="../html/legal_notice.html" class="nav-link">Legal Notice</a>
+        </div>
+    </nav>
+
+    <nav class="mobil-navigation">
+        <a href="../html/summary.html" class="mobil-nav-link">
+            <img src="../assets/icons/summary.svg" alt="" class="mobil-nav-icon">
+            <span>Summary</span>
+        </a>
+        <a href="../html/add_task.html" class="mobil-nav-link">
+            <img src="../assets/icons/add_task.svg" alt="" class="mobil-nav-icon">
+            <span>Add Task</span>
+        </a>
+        <a href="../html/board.html" class="mobil-nav-link">
+            <img src="../assets/icons/board.svg" alt="" class="mobil-nav-icon">
+            <span>Board</span>
+        </a>
+        <a href="../html/contacts.html" class="mobil-nav-link">
+            <img src="../assets/icons/contacts.svg" alt="" class="mobil-nav-icon">
+            <span>Contacts</span>
+        </a>
+    </nav>
+
+    <div class="landscape-warning">
+        <img src="../assets/img/logo_big.svg" alt="Join">
+        <p>Please turn your device to portrait mode.</p>
+    </div>
+
     <main>
 
         <div class="legal-content">
@@ -107,10 +187,13 @@
                             card will permanently remove it from the board. Please exercise caution when deleting cards,
                             as this action is irreversible.<br /><br />
 
-                            Remember that using <span class="legal-accent">Join</span> effectively requires consistent updates from you and your team to
+                            Remember that using <span class="legal-accent">Join</span> effectively requires consistent
+                            updates from you and your team to
                             ensure the board reflects the current state of your project.<br /><br />
 
-                            Have more questions about <span class="legal-accent">Join</span>? Feel free to contact us at <span class="legal-accent"><a href="mailto:support@join.com">support@join.com</a></span>. We're here
+                            Have more questions about <span class="legal-accent">Join</span>? Feel free to contact us at
+                            <span class="legal-accent"><a href="mailto:support@join.com">support@join.com</a></span>.
+                            We're here
                             to help you!
                         </span>
                     </li>

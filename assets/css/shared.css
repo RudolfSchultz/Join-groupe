@@ -3,8 +3,8 @@ body.app-page {
   flex-direction: row;
   align-items: stretch;
   background: #F6F7F8;
-  overflow: hidden;
-  max-width: 1920px;
+  overflow: auto;
+  max-width: 1440px;
 }
 
 /* ──────────────── Sidebar ──────────────── */

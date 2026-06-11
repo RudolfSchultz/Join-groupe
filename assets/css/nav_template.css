@@ -10,6 +10,16 @@
     align-items: center;
     height: 96px;
     padding: 0 0 0 328px;
+    max-width: 1440px;
+}
+
+.header-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 96px;
+    padding: 0 0 0 328px;
     background-color: var(--white);
     box-shadow: 0 2px 8px var(--shadow-2);
 }
