@@ -17,7 +17,8 @@
     flex-direction: column;
     max-width: 1440px;
     margin: 0 auto;
-    position: relative; /* contain absolutely positioned logo */
+    position: relative;
+    /* contain absolutely positioned logo */
     animation: backgroundMobileAnimation 2s forwards ease-in-out;
 }
 
@@ -259,7 +260,11 @@
     }
 
     .login-topbar {
-        padding-right: 60px;
+        padding-right: 20px;
+    }
+
+    .login-logo-animated img {
+        height: 80px;
     }
 }
 
