@@ -42,7 +42,6 @@
     height: 120px;
     width: auto;
     display: block;
-    cursor: pointer;
 }
 
 @keyframes logoColorChange {

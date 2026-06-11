@@ -7,9 +7,55 @@ const FIREBASE_BASE = 'https://remotestorage-c0469-default-rtdb.europe-west1.fir
 const USERS_URL = `${FIREBASE_BASE}/users.json`;
 
 function switchForm(currentForm, targetForm) {
-    document.getElementById(currentForm).classList.add('d-none');
-    document.getElementById(targetForm).classList.remove('d-none');
+    const cur = document.getElementById(currentForm);
+    const tgt = document.getElementById(targetForm);
+    if (cur) cur.classList.add('d-none');
+    if (tgt) tgt.classList.remove('d-none');
+    // If we are hiding the registration form, clear its fields
+    if (currentForm === 'registration_section') clearRegistrationForm();
+    // If we are hiding the login form, clear its fields
+    if (currentForm === 'login_section') clearLoginForm();
     updateSignupButton(targetForm);
+}
+
+function clearRegistrationForm() {
+    const fields = ['reg_name', 'reg_email', 'reg_passwort', 'reg_password_confirm'];
+    fields.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.value = '';
+        if (el.tagName === 'INPUT') el.removeAttribute('data-touched');
+        if (typeof el.setCustomValidity === 'function') el.setCustomValidity('');
+    });
+
+    const checkbox = document.getElementById('reg_datenschutz');
+    if (checkbox) checkbox.checked = false;
+
+    const hints = ['pw_space_hint', 'email_format_hint', 'pw_match_hint'];
+    hints.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+    });
+
+    const submitBtn = document.getElementById('reg_submit_btn');
+    if (submitBtn) submitBtn.disabled = true;
+}
+
+function clearLoginForm() {
+    const fields = ['login_email', 'login_passwort'];
+    fields.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.value = '';
+        if (el.tagName === 'INPUT') el.removeAttribute('data-touched');
+        if (typeof el.setCustomValidity === 'function') el.setCustomValidity('');
+    });
+
+    const loginError = document.getElementById('login_error');
+    if (loginError) {
+        loginError.textContent = '';
+        loginError.style.display = 'none';
+    }
 }
 
 function updateSignupButton(activeForm) {
@@ -187,3 +233,20 @@ async function register() {
     const { newUser, newContact } = buildNewUserAndContact(newId, name, email, password);
     await saveRegistration(newId, newUser, newContact);
 }
+
+// Clear registration fields when navigating away or when page is restored from bfcache
+window.addEventListener('beforeunload', function () {
+    try { clearRegistrationForm(); clearLoginForm(); } catch (e) { }
+});
+
+// Browser Back / history navigation
+window.addEventListener('popstate', function () {
+    try { clearRegistrationForm(); clearLoginForm(); } catch (e) { }
+});
+
+// When page is restored from bfcache (e.persisted === true) clear inputs
+window.addEventListener('pageshow', function (e) {
+    if (e && e.persisted) {
+        try { clearRegistrationForm(); clearLoginForm(); } catch (err) { }
+    }
+});
