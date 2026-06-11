@@ -26,9 +26,9 @@ function showNotification(message, isError = false) {
     const notif = document.getElementById('notification');
     if (!notif) return;
     notif.textContent = message;
-    notif.style.backgroundColor = isError ? 'var(--red)' : 'var(--primaryColor)';
+    notif.style.backgroundColor = isError ? 'var(--primaryColor)' : 'var(--primaryColor)';
     notif.classList.remove('d-none');
-    setTimeout(() => notif.classList.add('d-none'), 3000);
+    setTimeout(() => notif.classList.add('d-none'), 5000);
 }
 
 async function loadUsers() {
