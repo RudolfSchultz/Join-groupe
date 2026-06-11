@@ -69,7 +69,7 @@
                         </div>
                         <div class="input-container">
                             <input type="email" id="reg_email" class="input-field" placeholder="E-Mail"
-                                autocomplete="email" oninput="validateRegistrationForm()" required>
+                                autocomplete="email" oninput="validateRegistrationForm()" onblur="markTouched('reg_email'); validateRegistrationForm();" required>
                             <img src="./assets/icons/mail.svg" class="input-field-icon" alt="">
                         </div>
                         <span id="email_format_hint"
@@ -86,7 +86,7 @@
                         <div class="input-container">
                             <input type="password" id="reg_password_confirm" class="input-field"
                                 placeholder="Confirm Password" autocomplete="new-password"
-                                oninput="validateRegistrationForm()" required>
+                                oninput="validateRegistrationForm()" onblur="markTouched('reg_password_confirm'); validateRegistrationForm();" required>
                             <img src="./assets/icons/lock.svg" class="input-field-icon" alt="">
                         </div>
                         <span id="pw_match_hint"

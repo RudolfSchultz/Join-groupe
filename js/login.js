@@ -77,9 +77,17 @@ async function login() {
 
 function updatePasswordHint(hint, pw, pwConfirm) {
     if (!hint) return;
-    const mismatch = pwConfirm.length > 0 && pw !== pwConfirm;
+    const pwConfirmInput = document.getElementById('reg_password_confirm');
+    const touched = pwConfirmInput && pwConfirmInput.dataset && pwConfirmInput.dataset.touched === 'true';
+    const mismatch = pwConfirm.length > 0 && pw !== pwConfirm && touched;
     hint.textContent = mismatch ? 'Passwords don\'t match' : '';
     hint.style.display = mismatch ? 'block' : 'none';
+}
+
+function markTouched(id){
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.dataset.touched = 'true';
 }
 
 function getRegValues(){
@@ -101,8 +109,9 @@ function setPasswordValidity(pw){
 
 function setEmailValidity(email,emailValid){
     const emailInput=document.getElementById('reg_email'),hint=document.getElementById('email_format_hint');
+    const touched = emailInput && emailInput.dataset && emailInput.dataset.touched === 'true';
     emailInput.setCustomValidity(email && !emailValid? 'Please enter a valid email address (e.g. name@domain.de)' : '');
-    if(hint) hint.style.display = (email && !emailValid)? 'block':'none';
+    if(hint) hint.style.display = (email && !emailValid && touched)? 'block':'none';
 }
 
 function updateSubmitState(isValid){
