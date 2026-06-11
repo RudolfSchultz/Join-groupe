@@ -69,7 +69,7 @@ function buildProgressBar(subtasks, taskId) {
 }
 
 function buildAvatars(assignedTo) {
-    return assignedTo.slice(0, 5)
+    return assignedTo.slice(0, 6)
         .map(a => `<span class="card-avatar" style="background:${a.color || '#ccc'}">${a.initials || '?'}</span>`)
         .join('');
 }

@@ -312,6 +312,15 @@ function toggleEditPerson(id) {
     if (editAssignedIds.includes(sid)) {
         editAssignedIds = editAssignedIds.filter(x => x !== sid);
     } else {
+        // enforce maximum of 6 assigned persons
+        if (editAssignedIds.length >= 6) {
+            if (typeof showNotification === 'function') {
+                showNotification('Maximal 6 Personen können zugewiesen werden.', true);
+            } else {
+                alert('Maximal 6 Personen können zugewiesen werden.');
+            }
+            return;
+        }
         editAssignedIds.push(sid);
     }
     renderEditAssignOptions();
