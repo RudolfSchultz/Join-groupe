@@ -23,7 +23,16 @@ async function initSummary() {
  */
 async function loadTasks() {
     if (typeof checkIsGuest === 'function' && checkIsGuest()) {
-        try { return JSON.parse(sessionStorage.getItem('guestTasks')) || []; } catch (e) { return []; }
+        try {
+            const fileTasks = await safeFetchFileTasks('../db-task.json');
+            const local = JSON.parse(sessionStorage.getItem('guestTasks')) || [];
+            const map = new Map();
+            (fileTasks || []).forEach(t => map.set(String(t.id), t));
+            (local || []).forEach(t => map.set(String(t.id), t));
+            const merged = Array.from(map.values());
+            merged.sort((a, b) => (Number(a.id) || 0) - (Number(b.id) || 0));
+            return merged;
+        } catch (e) { try { return JSON.parse(sessionStorage.getItem('guestTasks')) || []; } catch (e) { return []; } }
     }
     try {
         const response = await fetch(SUMMARY_TASKS_URL);
@@ -151,4 +160,18 @@ function getDaytimeGreeting() {
 function setText(id, value) {
     const element = document.getElementById(id);
     if (element) element.textContent = value;
+}
+
+// Helper: safely fetch tasks from a local JSON file (used for guest view)
+async function safeFetchFileTasks(path) {
+    try {
+        const res = await fetch(path);
+        if (!res || !res.ok) return [];
+        const data = await res.json();
+        const raw = data?.tasks || data;
+        if (!raw) return [];
+        return Array.isArray(raw) ? raw.filter(Boolean) : Object.keys(raw).map(k => ({ ...raw[k], id: k }));
+    } catch (e) {
+        return [];
+    }
 }
