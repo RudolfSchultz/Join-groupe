@@ -39,7 +39,7 @@ async function loadBoardTasks() {
 
 async function loadGuestTasks() {
     try {
-        const res = await fetch('../db-task.json');
+        const res = await fetch('../demo-task.json');
         const fileTasks = [];
         if (res && res.ok) {
             const data = await res.json();

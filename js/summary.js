@@ -24,7 +24,7 @@ async function initSummary() {
 async function loadTasks() {
     if (typeof checkIsGuest === 'function' && checkIsGuest()) {
         try {
-            const fileTasks = await safeFetchFileTasks('../db-task.json');
+            const fileTasks = await safeFetchFileTasks('../demo-task.json');
             const local = JSON.parse(sessionStorage.getItem('guestTasks')) || [];
             const map = new Map();
             (fileTasks || []).forEach(t => map.set(String(t.id), t));

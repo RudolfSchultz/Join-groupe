@@ -153,10 +153,10 @@ async function createTask() {
  */
 async function saveTask(task) {
     if (checkIsGuest()) {
-        // ensure new guest task id doesn't collide with ids from db-task.json
+        // ensure new guest task id doesn't collide with ids from demo-task.json
         const guestTasks = JSON.parse(sessionStorage.getItem('guestTasks') || '[]');
         try {
-            const res = await fetch('../db-task.json');
+            const res = await fetch('../demo-task.json');
             const fileTasks = [];
             if (res && res.ok) {
                 const data = await res.json();
