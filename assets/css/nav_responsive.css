@@ -35,12 +35,20 @@
         height: 60px;
     }
 
-/*     .help-icon-link {
+    /*     .help-icon-link {
         display: none;
     } */
 }
 
 @media (max-width: 480px) {
+    .header-background {
+        height: 64px;
+    }
+
+    .header {
+        padding: 0 0 0 12;
+        height: 64px;
+    }
 
     h1 {
         font-size: 36px;
@@ -85,10 +93,6 @@
 
     .header {
         padding: 0 0 0 12;
-        height: 64px;
-    }
-
-    .header-background {
         height: 64px;
     }
 
