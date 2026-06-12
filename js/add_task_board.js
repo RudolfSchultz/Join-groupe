@@ -11,7 +11,12 @@ let modalDefaultStatus = 'todo';
 async function openAddTaskModal(status = 'todo') {
     modalDefaultStatus = status || 'todo';
     const overlay = document.getElementById('add-task-overlay');
-    overlay.classList.remove('d-none');
+    // If the overlay is a <dialog>, use showModal(), otherwise fallback to class toggle
+    if (overlay && typeof overlay.showModal === 'function') {
+        try { overlay.showModal(); } catch (e) { /* ignore if already open */ }
+    } else if (overlay) {
+        overlay.classList.remove('d-none');
+    }
     
     if (modalContacts.length === 0) {
         modalContacts = await loadAssignContacts();
@@ -21,13 +26,27 @@ async function openAddTaskModal(status = 'todo') {
     setMinModalDueDate();
     
     document.addEventListener('click', handleModalOutsideClick);
+    // Prevent background scrolling while dialog is open
+    try { document.body.classList.add('dialog-open'); } catch (e) { /* ignore */ }
+    // If using dialog, listen for the built-in cancel event (Escape key)
+    if (overlay && typeof overlay.addEventListener === 'function' && typeof overlay.showModal === 'function') {
+        overlay.addEventListener('cancel', closeAddTaskModal);
+    }
 }
 
 function closeAddTaskModal(event) {
     if (event && event.target.id !== 'add-task-overlay') return;
     
     const overlay = document.getElementById('add-task-overlay');
-    overlay.classList.add('d-none');
+    // If overlay is a <dialog>, close it using the dialog API
+    if (overlay && typeof overlay.close === 'function') {
+        try { overlay.close(); } catch (e) { /* ignore */ }
+        try { overlay.removeEventListener('cancel', closeAddTaskModal); } catch (e) { /* ignore */ }
+        try { document.body.classList.remove('dialog-open'); } catch (e) { /* ignore */ }
+    } else if (overlay) {
+        overlay.classList.add('d-none');
+        try { document.body.classList.remove('dialog-open'); } catch (e) { /* ignore */ }
+    }
     clearModalTaskForm();
     
     document.removeEventListener('click', handleModalOutsideClick);
