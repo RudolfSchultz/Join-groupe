@@ -18,7 +18,7 @@ function switchForm(currentForm, targetForm) {
     updateSignupButton(targetForm);
 }
 
-function clearRegistrationForm() {
+function clearRegFields() {
     const fields = ['reg_name', 'reg_email', 'reg_passwort', 'reg_password_confirm'];
     fields.forEach(id => {
         const el = document.getElementById(id);
@@ -27,16 +27,21 @@ function clearRegistrationForm() {
         if (el.tagName === 'INPUT') el.removeAttribute('data-touched');
         if (typeof el.setCustomValidity === 'function') el.setCustomValidity('');
     });
+}
 
-    const checkbox = document.getElementById('reg_datenschutz');
-    if (checkbox) checkbox.checked = false;
-
-    const hints = ['pw_space_hint', 'email_format_hint', 'pw_match_hint'];
+function clearRegHints() {
+    const hints = ['pw_space_hint', 'pw_length_hint', 'email_format_hint', 'pw_match_hint'];
     hints.forEach(id => {
         const el = document.getElementById(id);
         if (el) el.style.display = 'none';
     });
+}
 
+function clearRegistrationForm() {
+    clearRegFields();
+    const checkbox = document.getElementById('reg_datenschutz');
+    if (checkbox) checkbox.checked = false;
+    clearRegHints();
     const submitBtn = document.getElementById('reg_submit_btn');
     if (submitBtn) submitBtn.disabled = true;
 }
@@ -84,7 +89,7 @@ async function loadUsers() {
         if (!data) return [];
         return Array.isArray(data) ? data.filter(Boolean) : Object.values(data).filter(Boolean);
     } catch (e) {
-        console.error('Fehler beim Laden der User:', e);
+        console.error('Error loading users:', e);
         return [];
     }
 }
@@ -105,24 +110,27 @@ async function saveContactToFirebase(id, contact) {
     });
 }
 
+function showLoginError(loginErrorEl) {
+    if (loginErrorEl) {
+        loginErrorEl.textContent = 'Invalid email address or password.';
+        loginErrorEl.style.display = 'block';
+    } else {
+        showNotification('Invalid email address or password.', true);
+    }
+}
+
+function saveUserSession(user) {
+    sessionStorage.setItem('currentUser', JSON.stringify({ id: user.id, name: user.name, email: user.email }));
+}
+
 async function login() {
     const email = document.getElementById('login_email').value.trim();
     const password = document.getElementById('login_passwort').value;
-
     const users = await loadUsers();
     const user = users.find(u => u.email === email && u.password === password);
     const loginErrorEl = document.getElementById('login_error');
-    if (!user) {
-        if (loginErrorEl) {
-            loginErrorEl.textContent = 'Invalid email address or password.';
-            loginErrorEl.style.display = 'block';
-        } else {
-            showNotification('Invalid email address or password.', true);
-        }
-        return;
-    }
-
-    sessionStorage.setItem('currentUser', JSON.stringify({ id: user.id, name: user.name, email: user.email }));
+    if (!user) { showLoginError(loginErrorEl); return; }
+    saveUserSession(user);
     if (loginErrorEl) { loginErrorEl.textContent = ''; loginErrorEl.style.display = 'none'; }
     window.location.href = './html/summary.html';
 }
@@ -159,11 +167,24 @@ function getRegValues(){
     };
 }
 
+function showPasswordLengthHint(pw) {
+    const hint = document.getElementById('pw_length_hint');
+    const pwInput = document.getElementById('reg_passwort');
+    const touched = pwInput && pwInput.dataset && pwInput.dataset.touched === 'true';
+    const tooShort = pw.length > 0 && pw.length < 8 && touched;
+    if (hint) hint.style.display = tooShort ? 'block' : 'none';
+    return pw.length > 0 && pw.length < 8;
+}
+
 function setPasswordValidity(pw){
-    const pwInput=document.getElementById('reg_passwort'),hasSpaces=/\s/.test(pw),hint=document.getElementById('pw_space_hint');
-    pwInput.setCustomValidity(hasSpaces? 'Passwörter dürfen keine Leerzeichen enthalten.' : '');
+    const pwInput = document.getElementById('reg_passwort');
+    const hasSpaces = /\s/.test(pw);
+    const tooShort = showPasswordLengthHint(pw);
+    const hint = document.getElementById('pw_space_hint');
+    const invalid = hasSpaces ? 'Passwords must not contain spaces.' : tooShort ? 'Password must be at least 8 characters.' : '';
+    pwInput.setCustomValidity(invalid);
     if(hint) hint.style.display = (pw && hasSpaces)? 'block' : 'none';
-    return hasSpaces;
+    return hasSpaces || tooShort;
 }
 
 function setEmailValidity(email,emailValid){
@@ -183,7 +204,7 @@ function validateRegistrationForm(){
     const emailValid = validateEmailFormat(email);
     const pwHasSpaces = setPasswordValidity(pw);
     setEmailValidity(email,emailValid);
-    const isValid = name && email && emailValid && pw && pw===pwConfirm && privacy && !pwHasSpaces;
+    const isValid = name && email && emailValid && pw && pw.length >= 8 && pw===pwConfirm && privacy && !pwHasSpaces;
     updateSubmitState(isValid);
 }
 
@@ -216,18 +237,27 @@ async function saveRegistration(newId, newUser, newContact) {
     }
 }
 
+function validateRegisterInput(password, email) {
+    if (/\s/.test(password)) {
+        showNotification('Passwords must not contain spaces.', true);
+        return false;
+    }
+    if (password.length < 8) {
+        showNotification('Password must be at least 8 characters.', true);
+        return false;
+    }
+    if (!validateEmailFormat(email)) {
+        showNotification('Please enter a valid email address (e.g. name@domain.de)', true);
+        return false;
+    }
+    return true;
+}
+
 async function register() {
     const name = document.getElementById('reg_name').value.trim();
     const email = document.getElementById('reg_email').value.trim();
     const password = document.getElementById('reg_passwort').value;
-    if (/\s/.test(password)) {
-        showNotification('Passwörter dürfen keine Leerzeichen enthalten.', true);
-        return;
-    }
-    if (!validateEmailFormat(email)) {
-        showNotification('Please enter a valid email address (e.g. name@domain.de)', true);
-        return;
-    }
+    if (!validateRegisterInput(password, email)) return;
     const newId = await getNextUserId(email);
     if (!newId) { showNotification('This email address is already registered.', true); return; }
     const { newUser, newContact } = buildNewUserAndContact(newId, name, email, password);
