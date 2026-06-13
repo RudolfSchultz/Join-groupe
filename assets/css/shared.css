@@ -110,6 +110,13 @@ body.app-page {
   color: #ffffff;
 }
 
+@media (max-width: 1024px) {
+  .main-wrapper {
+    margin-left: 200px;
+  }
+}
+
+
 /* ── Tablet: Icon-only Sidebar ── */
 @media (max-width: 768px) {
   .sidebar {

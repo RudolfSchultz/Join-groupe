@@ -101,7 +101,7 @@ function editContact(id) {
 function fillEditForm(contact) {
     const avatarBox = dialog.querySelector('.profile-placeholder');
     if (avatarBox) {
-        avatarBox.innerHTML = `<div class="avatar big" style="background-color: ${contact.color};">${contact.avatar}</div>`;
+        avatarBox.innerHTML = `<div class="big-avatar" style="background-color: ${contact.color};">${contact.avatar}</div>`;
     }
     dialog.querySelector('input[type="text"]').value = contact.name;
     dialog.querySelector('input[type="email"]').value = contact.email;
