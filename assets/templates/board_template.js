@@ -105,7 +105,7 @@ function buildDetailHeader(task) {
     return `
         <div class="detail-header">
             <span class="task-card-category ${categoryColorClass(task.category)}">${escapeHtml(task.category || '')}</span>
-            <button class="detail-close-btn" onclick="closeOverlay()">&#x2715;</button>
+            <button class="detail-close-btn" onmousedown="event.stopPropagation(); event.preventDefault();" onclick="closeOverlay(); event.stopPropagation();">&#x2715;</button>
         </div>
         <h2 class="detail-title">${escapeHtml(task.title || '')}</h2>
         ${task.description ? `<p class="detail-desc">${escapeHtml(task.description)}</p>` : ''}`;
@@ -167,7 +167,7 @@ function buildEditHeader() {
     return `
         <div class="detail-header">
             <span class="detail-title">Edit Task</span>
-            <button class="detail-close-btn" onclick="closeOverlay()">&#x2715;</button>
+            <button class="detail-close-btn" onmousedown="event.stopPropagation(); event.preventDefault();" onclick="closeOverlay(); event.stopPropagation();">&#x2715;</button>
         </div>`;
 }
 
@@ -288,7 +288,7 @@ function renderAddTaskModal() {
     return `
     <dialog class="board-overlay" id="add-task-overlay" onclick="closeAddTaskModal(event)">
         <div class="add-task-modal" onclick="event.stopPropagation()">
-            <button class="modal-close-btn" onclick="closeAddTaskModal()">&times;</button>
+            <button class="modal-close-btn" onmousedown="event.stopPropagation(); event.preventDefault();" onclick="closeAddTaskModal()">&times;</button>
             <h2 class="modal-title">Add Task</h2>
 
             <form method="dialog" class="task-form" id="modal-task-form" onsubmit="createTaskFromModal(event)">
