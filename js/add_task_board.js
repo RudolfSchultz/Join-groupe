@@ -8,6 +8,47 @@ let modalSubtasks = [];
 let modalContacts = [];
 let modalDefaultStatus = 'todo';
 
+/**
+ * Loads and normalizes all contacts used in the assignment dropdown.
+ * @returns {Promise<Object[]>} Normalized contacts (empty if unreachable).
+ */
+async function loadAssignContacts() {
+    try {
+        if (typeof checkIsGuest === 'function' && checkIsGuest()) {
+            const response = await fetch('../db.json');
+            const raw = await response.json();
+            const contactsObj = raw.contacts || {};
+            const contacts = Object.entries(contactsObj).map(([key, c]) => ({ ...c, id: key }));
+            return normalizeContacts(contacts);
+        }
+        const response = await fetch(ADDTASK_CONTACTS_URL);
+        const raw = await response.json();
+        if (!raw) return [];
+        return normalizeContacts(Array.isArray(raw) ? raw : Object.values(raw));
+    } catch (error) {
+        console.error('Error loading contacts:', error);
+        return [];
+    }
+}
+
+
+/**
+ * Maps raw contact entries into a consistent shape with id, name, color, avatar.
+ * @param {Object[]} raw - Raw contacts from Firebase.
+ * @returns {Object[]} Normalized, name-sorted contacts.
+ */
+function normalizeContacts(raw) {
+    return raw
+        .filter(Boolean)
+        .map(contact => ({
+            id: String(contact.id),
+            name: contact.name,
+            color: contact.color || (typeof getRandomColor === 'function' ? getRandomColor() : '#ccc'),
+            avatar: contact.avatar || (typeof initialsFromName === 'function' ? initialsFromName(contact.name) : '?')
+        }))
+        .sort((a, b) => a.name.localeCompare(b.name));
+}
+
 async function openAddTaskModal(status = 'todo') {
     modalDefaultStatus = status || 'todo';
     const overlay = document.getElementById('add-task-overlay');
@@ -25,7 +66,8 @@ async function openAddTaskModal(status = 'todo') {
     clearModalTaskForm();
     setMinModalDueDate();
     
-    document.addEventListener('click', handleModalOutsideClick);
+    // Use capture phase so outside-clicks are detected before other handlers
+    document.addEventListener('click', handleModalOutsideClick, true);
     // Prevent background scrolling while dialog is open
     try { document.body.classList.add('dialog-open'); } catch (e) { /* ignore */ }
     // If using dialog, listen for the built-in cancel event (Escape key)
@@ -49,7 +91,7 @@ function closeAddTaskModal(event) {
     }
     clearModalTaskForm();
     
-    document.removeEventListener('click', handleModalOutsideClick);
+    try { document.removeEventListener('click', handleModalOutsideClick, true); } catch (e) { /* ignore */ }
 }
 
 function handleModalOutsideClick(event) {

@@ -527,14 +527,15 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   margin-top: 4px;
   left: 0;
   right: 0;
+  height: fit-content;
+  max-height: 220px;
   background: #ffffff;
   border: 1px solid #D1D1D1;
   border-radius: 10px;
-  height: 220px;
   overflow: auto;
   z-index: 50;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-}
+} 
 
 .select-option,
 .assign-option {

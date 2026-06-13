@@ -156,6 +156,7 @@ function closeOverlay() {
     document.getElementById('board-edit-box').innerHTML = '';
     document.getElementById('board-edit-box').classList.add('d-none');
     document.getElementById('board-detail-box').classList.remove('d-none');
+    try { document.removeEventListener('click', handleEditOutsideClick, true); } catch (e) { /* ignore */ }
 }
 
 function handleOverlayClick(event) {
@@ -254,6 +255,8 @@ async function openEditModal(id) {
     renderEditAssignOptions();
     renderEditAssignedAvatars();
     renderEditSubtasks();
+    // close edit assign options when clicking outside the edit assign area
+    document.addEventListener('click', handleEditOutsideClick, true);
 }
 
 async function loadBoardContacts() {
@@ -419,4 +422,11 @@ function resetEditState() {
     editSelectedPrio = null;
     editAssignedIds = [];
     editSubtasks = [];
+}
+
+function handleEditOutsideClick(event) {
+    if (!event.target.closest('#edit-assign-wrapper')) {
+        const opts = document.getElementById('edit-assign-options');
+        if (opts) opts.classList.add('d-none');
+    }
 }
