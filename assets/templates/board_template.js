@@ -38,9 +38,6 @@ function taskCardTemplate(task) {
     return `
         <div class="task-card" data-task-id="${task.id}" draggable="true"
             ondragstart="startDragging(${task.id})"
-            ontouchstart="touchDragStart(event, ${task.id})"
-            ontouchmove="touchDragMove(event)"
-            ontouchend="touchDragEnd(event)"
             onclick="openTaskDetail(${task.id})">
             <span class="task-card-category ${categoryColorClass(task.category)}">${escapeHtml(task.category || '')}</span>
             <div class="task-card-title">${escapeHtml(task.title || '')}</div>

@@ -15,6 +15,20 @@ let editAssignedIds = [];
 let editSubtasks = [];
 let boardContacts = [];
 
+function attachTouchListenersToCard(card, id) {
+    if (!card) return;
+    try {
+        card.addEventListener('touchstart', function (e) { touchDragStart(e, id); }, { passive: true });
+        card.addEventListener('touchmove', touchDragMove, { passive: false });
+        card.addEventListener('touchend', touchDragEnd, { passive: true });
+    } catch (e) {
+        // older browsers may not support options object
+        card.addEventListener('touchstart', function (e) { touchDragStart(e, id); });
+        card.addEventListener('touchmove', touchDragMove);
+        card.addEventListener('touchend', touchDragEnd);
+    }
+}
+
 function init() {
     initMain();
 }
@@ -83,6 +97,8 @@ function renderTaskCard(task) {
     const col = document.getElementById(task.status);
     if (!col) return;
     col.insertAdjacentHTML('beforeend', taskCardTemplate(task));
+    const card = col.querySelector(`.task-card[data-task-id="${task.id}"]`);
+    attachTouchListenersToCard(card, task.id);
 }
 
 function showEmptyPlaceholders() {
@@ -233,6 +249,8 @@ function refreshTaskCard(taskId) {
     const card = document.querySelector(`.task-card[data-task-id="${taskId}"]`);
     if (!card) return;
     card.outerHTML = taskCardTemplate(task);
+    const newCard = document.querySelector(`.task-card[data-task-id="${taskId}"]`);
+    attachTouchListenersToCard(newCard, taskId);
 }
 
 function refreshSubtaskChecks(task) {
