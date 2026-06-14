@@ -1,6 +1,6 @@
 @media (max-width: 1024px) {
   .board-main {
-    padding: 206px 20px 0px 260px;
+    padding: 180px 20px 0px 260px;
     height: auto;
     overflow-y: auto;
   }
