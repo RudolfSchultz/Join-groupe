@@ -5,15 +5,18 @@ function escapeHtml(str) {
     return div.innerHTML;
 }
 
+
 function truncate(str, len) {
     if (!str) return '';
     return str.length > len ? str.substring(0, len) + '…' : str;
 }
 
+
 function initialsFromName(name) {
     const parts = (name || '').trim().split(' ');
     return ((parts[0]?.charAt(0) || '') + (parts[1]?.charAt(0) || '')).toUpperCase() || '?';
 }
+
 
 function categoryColorClass(category) {
     if (!category) return '';
@@ -23,6 +26,7 @@ function categoryColorClass(category) {
     return '';
 }
 
+
 function prioSvg(prio) {
     if (!prio) return '';
     const p = prio.toLowerCase();
@@ -31,6 +35,7 @@ function prioSvg(prio) {
     if (p === 'low') return `<svg width="20" height="15" viewBox="0 0 20 14.51" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 0 L10 8.76 L20 0 L17.5 0 L10 6.26 L2.5 0 Z" fill="#7AE229"/><path d="M0 5.75 L10 14.51 L20 5.75 L17.5 5.75 L10 12.01 L2.5 5.75 Z" fill="#7AE229"/></svg>`;
     return '';
 }
+
 
 function taskCardTemplate(task) {
     const progress = buildProgressBar(task.subtasks || [], task.id);
@@ -50,6 +55,7 @@ function taskCardTemplate(task) {
         </div>`;
 }
 
+
 function buildProgressBar(subtasks, taskId) {
     const done = subtasks.filter(s => s.done).length;
     const total = subtasks.length;
@@ -65,11 +71,13 @@ function buildProgressBar(subtasks, taskId) {
         </div>` : '';
 }
 
+
 function buildAvatars(assignedTo) {
     return assignedTo.slice(0, 6)
         .map(a => `<span class="card-avatar" style="background:${a.color || '#ccc'}">${a.initials || '?'}</span>`)
         .join('');
 }
+
 
 function taskDetailTemplate(task) {
     const prioLabel = task.priority
@@ -79,6 +87,7 @@ function taskDetailTemplate(task) {
     return buildDetailHTML(task, prioLabel, assignees, subtaskList);
 }
 
+
 function buildDetailAssignees(assignedTo) {
     return assignedTo.map(a => `
         <div class="detail-assignee">
@@ -86,6 +95,7 @@ function buildDetailAssignees(assignedTo) {
             <span class="detail-assignee-name">${escapeHtml(a.name || '')}</span>
         </div>`).join('');
 }
+
 
 function buildDetailSubtasks(subtasks, taskId) {
     return subtasks.map((s, i) => `
@@ -96,10 +106,15 @@ function buildDetailSubtasks(subtasks, taskId) {
         </li>`).join('');
 }
 
+
 function buildDetailHTML(task, prioLabel, assignees, subtaskList) {
-    return buildDetailHeader(task) + buildDetailInfo(task, prioLabel) + 
-           buildDetailSections(task, assignees, subtaskList) + buildDetailActions(task.id);
+    return buildDetailHeader(task)
+        + buildDetailInfo(task, prioLabel)
+        + buildDetailAssignSection(task, assignees)
+        + buildDetailSubtaskSection(task, subtaskList)
+        + buildDetailActions(task.id);
 }
+
 
 function buildDetailHeader(task) {
     return `
@@ -111,6 +126,7 @@ function buildDetailHeader(task) {
         <h2 class="detail-title">${escapeHtml(task.title || '')}</h2>
         ${task.description ? `<p class="detail-desc">${escapeHtml(task.description)}</p>` : ''}`;
 }
+
 
 function buildDetailInfo(task, prioLabel) {
     return `
@@ -124,19 +140,26 @@ function buildDetailInfo(task, prioLabel) {
         </div>`;
 }
 
-function buildDetailSections(task, assignees, subtaskList) {
-    const assignSection = (task.assignedTo || []).length ? `
+
+function buildDetailAssignSection(task, assignees) {
+    if (!(task.assignedTo || []).length) return '';
+    return `
         <div class="detail-section">
             <span class="detail-label">Assigned To:</span>
             <div class="detail-assignees">${assignees}</div>
-        </div>` : '';
-    const subtaskSection = (task.subtasks || []).length ? `
+        </div>`;
+}
+
+
+function buildDetailSubtaskSection(task, subtaskList) {
+    if (!(task.subtasks || []).length) return '';
+    return `
         <div class="detail-section">
             <span class="detail-label">Subtasks</span>
             <ul class="detail-subtask-list">${subtaskList}</ul>
-        </div></div>` : '';
-    return assignSection + subtaskSection;
+        </div></div>`;
 }
+
 
 function buildDetailActions(taskId) {
     return `
@@ -151,10 +174,17 @@ function buildDetailActions(taskId) {
         </div>`;
 }
 
+
 function editTaskTemplate(task) {
     const prioButtons = buildPrioButtons(task.priority);
-    return buildEditHeader() + buildEditFields(task, prioButtons) + buildEditSaveButton(task.id);
+    return buildEditHeader()
+        + buildEditBasicFields(task)
+        + buildEditPrioField(prioButtons)
+        + buildEditAssignField()
+        + buildEditSubtaskField()
+        + buildEditSaveButton(task.id);
 }
+
 
 function buildPrioButtons(currentPrio) {
     return ['urgent', 'medium', 'low'].map(p => `
@@ -164,6 +194,7 @@ function buildPrioButtons(currentPrio) {
         </button>`).join('');
 }
 
+
 function buildEditHeader() {
     return `
         <div class="detail-header">
@@ -172,10 +203,6 @@ function buildEditHeader() {
         </div>`;
 }
 
-function buildEditFields(task, prioButtons) {
-    return buildEditBasicFields(task) + buildEditPrioField(prioButtons) + 
-           buildEditAssignField() + buildEditSubtaskField();
-}
 
 function buildEditBasicFields(task) {
     return `
@@ -194,6 +221,7 @@ function buildEditBasicFields(task) {
         </div>`;
 }
 
+
 function buildEditPrioField(prioButtons) {
     return `
         <div class="edit-form-group">
@@ -201,6 +229,7 @@ function buildEditPrioField(prioButtons) {
             <div class="edit-prio-group">${prioButtons}</div>
         </div>`;
 }
+
 
 function buildEditAssignField() {
     return `
@@ -217,6 +246,7 @@ function buildEditAssignField() {
         </div>`;
 }
 
+
 function buildEditSubtaskField() {
     return `
         <div class="edit-form-group">
@@ -231,6 +261,7 @@ function buildEditSubtaskField() {
         </div></div>`;
 }
 
+
 function buildEditSaveButton(taskId) {
     return `
         <div class="edit-save-row">
@@ -240,6 +271,7 @@ function buildEditSaveButton(taskId) {
             </button>
         </div>`;
 }
+
 
 function renderEditAssignOptionsHTML(boardContacts, editAssignedIds) {
     return boardContacts.map(c => {
@@ -255,12 +287,14 @@ function renderEditAssignOptionsHTML(boardContacts, editAssignedIds) {
     }).join('');
 }
 
+
 function renderEditAssignedAvatarsHTML(boardContacts, editAssignedIds) {
     const selected = boardContacts.filter(c => editAssignedIds.includes(String(c.id)));
     return selected.map(c =>
         `<span class="card-avatar" style="background:${c.color}" title="${escapeHtml(c.name)}">${c.initials}</span>`
     ).join('');
 }
+
 
 function renderEditSubtasksHTML(editSubtasks) {
     return editSubtasks.map((s, i) => `
@@ -274,6 +308,7 @@ function renderEditSubtasksHTML(editSubtasks) {
         </li>`).join('');
 }
 
+
 function renderEditSubtaskInputHTML(index, title) {
     return `
         <input id="edit-sub-input-${index}" class="edit-input edit-subtask-inline-input"
@@ -283,158 +318,4 @@ function renderEditSubtaskInputHTML(index, title) {
             <button type="button" class="subtask-icon-btn" onclick="saveEditSubtask(${index})"><img src="../assets/icons/checkbox-checked.svg" alt="Save"></button>
             <button type="button" class="subtask-icon-btn" onclick="deleteEditSubtask(${index})"><img src="../assets/icons/delete.svg" alt="Delete"></button>
         </div>`;
-}
-
-// Render the Add Task modal HTML as a string so it can be injected dynamically
-function renderAddTaskModal() {
-    return `
-    <dialog class="board-overlay" id="add-task-overlay" onclick="closeAddTaskModal(event)">
-        <div class="add-task-modal" onclick="event.stopPropagation()">
-            <button class="modal-close-btn" onmousedown="event.stopPropagation(); event.preventDefault();" onclick="closeAddTaskModal()">&times;</button>
-            <h2 class="modal-title">Add Task</h2>
-
-            <form method="dialog" class="task-form" id="modal-task-form" onsubmit="createTaskFromModal(event)">
-            <div class="task-form-detail">
-                <div class="form-columns">
-                    <div class="form-col">
-                        <div class="form-group">
-                            <label class="form-label" for="modal-task-title">Title <span
-                                    class="required">*</span></label>
-                            <input class="form-input" type="text" id="modal-task-title" placeholder="Enter a title"
-                                oninput="updateModalCreateButton()">
-                            <span class="field-error d-none" id="modal-error-title">This field is required</span>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" for="modal-task-desc">Description</label>
-                            <textarea class="form-input form-textarea" id="modal-task-desc"
-                                placeholder="Enter a description"></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" for="modal-task-due">Due date <span
-                                    class="required">*</span></label>
-                            <div class="form-input-icon">
-                                <input class="form-input" type="date" id="modal-task-due"
-                                    onchange="updateModalCreateButton()" oninput="updateModalCreateButton()">
-                            </div>
-                            <span class="field-error d-none" id="modal-error-due">This field is required</span>
-                        </div>
-                    </div>
-
-                    <div class="form-divider-vertical"></div>
-
-                    <div class="form-col">
-                        <div class="form-group">
-                            <label class="form-label">Priority</label>
-                            <div class="prio-buttons">
-                                <button type="button" class="prio-btn prio-urgent" data-prio="urgent"
-                                    onclick="setModalPriority(this)">
-                                    Urgent
-                                    <svg width="20" height="15" viewBox="0 0 20 14.51" fill="none">
-                                        <path d="M0 8.76 L10 0 L20 8.76 L17.5 8.76 L10 2.5 L2.5 8.76 Z" />
-                                        <path d="M0 14.51 L10 5.75 L20 14.51 L17.5 14.51 L10 8.25 L2.5 14.51 Z" />
-                                    </svg>
-                                </button>
-                                <button type="button" class="prio-btn prio-medium prio-active" data-prio="medium"
-                                    onclick="setModalPriority(this)">
-                                    Medium
-                                    <svg width="20" height="8" viewBox="0 0 20 8" fill="none">
-                                        <rect x="0" y="0" width="20" height="2.21" rx="1.1" />
-                                        <rect x="0" y="5.24" width="20" height="2.21" rx="1.1" />
-                                    </svg>
-                                </button>
-                                <button type="button" class="prio-btn prio-low" data-prio="low"
-                                    onclick="setModalPriority(this)">
-                                    Low
-                                    <svg width="20" height="15" viewBox="0 0 20 14.51" fill="none">
-                                        <path d="M0 0 L10 8.76 L20 0 L17.5 0 L10 6.26 L2.5 0 Z" />
-                                        <path d="M0 5.75 L10 14.51 L20 5.75 L17.5 5.75 L10 12.01 L2.5 5.75 Z" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Assigned to</label>
-                            <div class="custom-select" id="modal-assign-select">
-                                <div class="form-input select-toggle" id="modal-assign-toggle"
-                                    onclick="toggleModalAssignDropdown()">
-                                    <span>Select contacts to assign</span>
-                                    <span class="select-caret">&#9662;</span>
-                                </div>
-                                <div class="select-options d-none" id="modal-assign-options"></div>
-                            </div>
-                            <div class="assigned-avatars" id="modal-assigned-avatars"></div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Category <span class="required">*</span></label>
-                            <div class="custom-select" id="modal-category-select">
-                                <div class="form-input select-toggle" id="modal-category-toggle"
-                                    onclick="toggleModalCategoryDropdown()">
-                                    <span id="modal-category-selected" class="select-placeholder">Select task
-                                        category</span>
-                                    <span class="select-caret">&#9662;</span>
-                                </div>
-                                <div class="select-options d-none" id="modal-category-options">
-                                    <div class="select-option" onclick="selectModalCategory('Technical Task')">Technical
-                                        Task
-                                    </div>
-                                    <div class="select-option" onclick="selectModalCategory('User Story')">User Story
-                                    </div>
-                                </div>
-                            </div>
-                            <span class="field-error d-none" id="modal-error-category">This field is required</span>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" for="modal-task-subtask">Subtasks</label>
-                            <div class="subtask-input-wrapper">
-                                <input class="form-input" type="text" id="modal-task-subtask"
-                                    placeholder="Add new subtask" oninput="updateModalSubtaskActions()"
-                                    onkeydown="handleModalSubtaskKey(event)">
-                                <div class="subtask-actions">
-                                    <span class="subtask-edit-actions d-none" id="modal-subtask-edit-actions">
-                                        <button type="button" class="subtask-icon-btn" title="Clear"
-                                            onclick="clearModalSubtaskInput()">&#10005;</button>
-                                        <span class="subtask-action-divider"></span>
-                                        <button type="button" class="subtask-icon-btn" title="Add"
-                                            onclick="addModalSubtask()">&#10003;</button>
-                                    </span>
-                                </div>
-                            </div>
-                            <ul class="subtask-list" id="modal-subtask-list"></ul>
-                        </div>
-                    </div>
-                </div>
-     </div>
-     
-                <div class="form-footer">
-                    <span class="required-hint"><span class="required">*</span>This field is required</span>
-                    <div class="form-actions">
-                        <button type="button" class="btn-clear" onclick="clearModalTaskForm()">Clear <span
-                                class="btn-x">✕</span></button>
-                        <button type="submit" class="btn-create" id="modal-btn-create" disabled>
-                            Create Task
-                            <img src="../assets/icons/done.svg" alt="" class="btn-icon">
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </dialog>`;
-}
-
-// Inject the Add Task modal into the page when this template script loads
-try {
-    if (typeof document !== 'undefined' && document.body) {
-        document.body.insertAdjacentHTML('beforeend', renderAddTaskModal());
-    } else {
-        document.addEventListener('DOMContentLoaded', () => {
-            document.body.insertAdjacentHTML('beforeend', renderAddTaskModal());
-        });
-    }
-} catch (e) {
-    /* ignore injection errors in non-browser contexts */
 }
