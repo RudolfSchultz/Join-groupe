@@ -274,7 +274,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /* ── Einspaltig ≤1024px ── */
 @media (max-width: 1024px) {
   .add-task-main {
-    padding: 220px 40px 48px 24px;
+    padding: 180px 40px 48px 24px;
   }
 
   .form-columns {
@@ -705,7 +705,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /* ── Compact desktop (125% DPI / shorter viewports) — placed last to mirror Summary ── */
 @media (min-width: 769px) and (max-height: 900px) {
   .add-task-main {
-    padding: 206px 40px 48px 100px;
+    padding: 180px 40px 48px 100px;
   }
 
   .page-title {
