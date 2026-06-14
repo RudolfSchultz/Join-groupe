@@ -107,6 +107,7 @@ function buildDetailHeader(task) {
             <span class="task-card-category ${categoryColorClass(task.category)}">${escapeHtml(task.category || '')}</span>
             <button class="detail-close-btn" onmousedown="event.stopPropagation(); event.preventDefault();" onclick="closeOverlay(); event.stopPropagation();">&#x2715;</button>
         </div>
+        <div class="show-detail">
         <h2 class="detail-title">${escapeHtml(task.title || '')}</h2>
         ${task.description ? `<p class="detail-desc">${escapeHtml(task.description)}</p>` : ''}`;
 }
@@ -133,7 +134,7 @@ function buildDetailSections(task, assignees, subtaskList) {
         <div class="detail-section">
             <span class="detail-label">Subtasks</span>
             <ul class="detail-subtask-list">${subtaskList}</ul>
-        </div>` : '';
+        </div></div>` : '';
     return assignSection + subtaskSection;
 }
 
@@ -178,6 +179,7 @@ function buildEditFields(task, prioButtons) {
 
 function buildEditBasicFields(task) {
     return `
+    <div class="edit-box">
         <div class="edit-form-group">
             <label class="edit-label">Title <span class="required">*</span></label>
             <input id="edit-title" class="edit-input" type="text" value="${escapeHtml(task.title || '')}">
@@ -226,7 +228,7 @@ function buildEditSubtaskField() {
                 <button type="button" class="edit-subtask-add-btn" onclick="addEditSubtask()">&#43;</button>
             </div>
             <ul class="edit-subtask-list" id="edit-subtask-list"></ul>
-        </div>`;
+        </div></div>`;
 }
 
 function buildEditSaveButton(taskId) {

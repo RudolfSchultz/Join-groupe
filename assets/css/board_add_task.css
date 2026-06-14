@@ -170,8 +170,7 @@ dialog.board-overlay {
   padding: 40px;
   width: 100%;
   max-width: 500px;
-  /*   max-height: 90vh;
-  overflow: auto; */
+  max-height: 90vh;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -655,6 +654,24 @@ dialog[open].board-overlay>.add-task-modal {
 
 #add-task-overlay .btn-add-task:hover {
   background: var(--secondaryColor);
+}
+
+.task-form {
+    overflow: auto;
+    max-height: 500px;
+    scrollbar-width: none;
+}
+
+.edit-box {
+    overflow: auto;
+    max-height: 500px;
+    scrollbar-width: none;
+}
+
+.show-detail {
+    overflow: auto;
+    max-height: 500px;
+    scrollbar-width: none;
 }
 
 button.btn-add-task {

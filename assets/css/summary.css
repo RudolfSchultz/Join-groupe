@@ -76,7 +76,7 @@
   gap: 18px;
   padding: 38px 19px;
   cursor: pointer;
-  transition: box-shadow 0.1s, transform 0.1s;
+  transition: background 0.2s ease, box-shadow 0.15s, transform 0.15s;
   text-decoration: none;
 }
 
@@ -90,6 +90,14 @@
 .stat-card:hover .stat-number,
 .stat-card:hover .stat-label {
   color: #ffffff;
+}
+
+.stat-card:hover .stat-icon-circle {
+  background: #ffffff;
+}
+
+.stat-card:hover .stat-icon {
+  filter: brightness(0);
 }
 
 .stat-icon-circle {
@@ -141,7 +149,7 @@
   padding: 28px 48px;
   gap: 61px;
   cursor: pointer;
-  transition: box-shadow 0.1s, transform 0.1s;
+  transition: background 0.2s ease, box-shadow 0.15s, transform 0.15s;
   text-decoration: none;
 }
 
@@ -240,7 +248,7 @@
   padding: 25px 0px;
   gap: 13px;
   cursor: pointer;
-  transition: box-shadow 0.1s, transform 0.1s;
+  transition: background 0.2s ease, box-shadow 0.15s, transform 0.15s;
   text-decoration: none;
 }
 
