@@ -170,7 +170,6 @@ dialog.board-overlay {
   padding: 40px;
   width: 100%;
   max-width: 500px;
-  max-height: 90vh;
   display: flex;
   flex-direction: column;
   gap: 16px;
