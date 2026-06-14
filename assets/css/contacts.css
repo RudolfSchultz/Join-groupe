@@ -387,6 +387,12 @@
     margin-bottom: 30px;
 }
 
+.profile-placeholder img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+
 .input-group {
     width: 100%;
     position: relative;
@@ -560,6 +566,11 @@
         gap: 35px;
         border-radius: 10px;
         background: #ffffff;
+    }
+
+    .profile-placeholder img {
+        width: 90px;
+        height: 90px;
     }
 
     .avatar {
@@ -740,5 +751,19 @@
 
     .avatar {
         transform: translate(-70px, 0px);
+    }
+}
+
+@media (max-height: 800px) {
+    .profile-placeholder img {
+        width: 50px;
+        height: 50px;
+    }
+
+    .profile-placeholder {
+        top: -30px;
+        width: 60px;
+        height: 60px;
+
     }
 }

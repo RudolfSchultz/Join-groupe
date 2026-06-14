@@ -116,7 +116,7 @@ function openAddContactModal() {
     const avatarBox = dialog.querySelector('.profile-placeholder');
     if (avatarBox) {
         avatarBox.style.backgroundColor = '';
-        avatarBox.innerHTML = '<i class="fa-solid fa-user"></i>';
+        avatarBox.innerHTML = '<img class="big-avatar" src="../assets/icons/person.svg" alt="User Icon">';;
     }
     openDialog();
 }
