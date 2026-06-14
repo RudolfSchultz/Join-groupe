@@ -180,19 +180,19 @@
 }
 
 .brand-title {
-    font-weight: 800;
+    font-size: 61px;
     color: #000000;
     margin: 0;
-    letter-spacing: -0.5px;
 }
 
 .brand-divider {
-    width: 2px;
-    height: 30px;
+    width: 3px;
+    height: 59px;
     background-color: #3b91ff;
 }
 
 .brand-subtitle {
+    font-size: 27px;
     color: #2c3e50;
     font-weight: 400;
 }
