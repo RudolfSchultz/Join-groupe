@@ -2,21 +2,28 @@ let touchDragClone = null;
 let touchDragOffsetX = 0;
 let touchDragOffsetY = 0;
 
+const COLUMN_IDS = ['todo', 'inProgress', 'awaitFeedback', 'done'];
+
+
 function startDragging(id) {
     currentDraggedTaskId = id;
 }
+
 
 function allowDrop(ev) {
     ev.preventDefault();
 }
 
+
 function highlight(id) {
     document.getElementById(`drag-hl-${id}`)?.classList.add('drag-active');
 }
 
+
 function removeHighlight(id) {
     document.getElementById(`drag-hl-${id}`)?.classList.remove('drag-active');
 }
+
 
 async function moveTo(status) {
     if (currentDraggedTaskId === null) return;
@@ -28,6 +35,7 @@ async function moveTo(status) {
     currentDraggedTaskId = null;
 }
 
+
 async function updateTaskStatus(task) {
     if (checkIsGuest()) {
         saveGuestTasks(allTasks);
@@ -35,6 +43,7 @@ async function updateTaskStatus(task) {
         await updateTaskStatusRemote(task.id, task.status);
     }
 }
+
 
 async function updateTaskStatusRemote(taskId, status) {
     try {
@@ -48,16 +57,22 @@ async function updateTaskStatusRemote(taskId, status) {
     }
 }
 
+
+function setTouchDragOffset(touch, rect) {
+    touchDragOffsetX = touch.clientX - rect.left;
+    touchDragOffsetY = touch.clientY - rect.top;
+}
+
+
 function touchDragStart(event, id) {
     currentDraggedTaskId = id;
     const card = event.currentTarget;
     const rect = card.getBoundingClientRect();
-    const touch = event.touches[0];
-    touchDragOffsetX = touch.clientX - rect.left;
-    touchDragOffsetY = touch.clientY - rect.top;
+    setTouchDragOffset(event.touches[0], rect);
     createTouchClone(card, rect);
     card.style.opacity = '0.4';
 }
+
 
 function createTouchClone(card, rect) {
     touchDragClone = card.cloneNode(true);
@@ -75,28 +90,37 @@ function createTouchClone(card, rect) {
     document.body.appendChild(touchDragClone);
 }
 
+
+function moveTouchClone(touch) {
+    touchDragClone.style.left = (touch.clientX - touchDragOffsetX) + 'px';
+    touchDragClone.style.top = (touch.clientY - touchDragOffsetY) + 'px';
+}
+
+
 function touchDragMove(event) {
     if (!touchDragClone) return;
     event.preventDefault();
     const touch = event.touches[0];
-    touchDragClone.style.left = (touch.clientX - touchDragOffsetX) + 'px';
-    touchDragClone.style.top  = (touch.clientY - touchDragOffsetY) + 'px';
+    moveTouchClone(touch);
     updateColumnHighlights(touch);
 }
 
+
+function isTouchInsideColumn(touch, col) {
+    const r = col.getBoundingClientRect();
+    return touch.clientX >= r.left && touch.clientX <= r.right &&
+           touch.clientY >= r.top  && touch.clientY <= r.bottom;
+}
+
+
 function updateColumnHighlights(touch) {
-    ['todo', 'inProgress', 'awaitFeedback', 'done'].forEach(colId => {
+    COLUMN_IDS.forEach(colId => {
         const col = document.getElementById(colId);
         if (!col) return;
-        const r = col.getBoundingClientRect();
-        if (touch.clientX >= r.left && touch.clientX <= r.right &&
-            touch.clientY >= r.top  && touch.clientY <= r.bottom) {
-            highlight(colId);
-        } else {
-            removeHighlight(colId);
-        }
+        isTouchInsideColumn(touch, col) ? highlight(colId) : removeHighlight(colId);
     });
 }
+
 
 function touchDragEnd(event) {
     if (!touchDragClone) return;
@@ -104,6 +128,7 @@ function touchDragEnd(event) {
     cleanupTouchDrag(event.currentTarget);
     checkDropZone(touch);
 }
+
 
 function cleanupTouchDrag(card) {
     if (touchDragClone) {
@@ -113,15 +138,11 @@ function cleanupTouchDrag(card) {
     card.style.opacity = '';
 }
 
+
 function checkDropZone(touch) {
-    ['todo', 'inProgress', 'awaitFeedback', 'done'].forEach(colId => {
+    COLUMN_IDS.forEach(colId => {
         removeHighlight(colId);
         const col = document.getElementById(colId);
-        if (!col) return;
-        const r = col.getBoundingClientRect();
-        if (touch.clientX >= r.left && touch.clientX <= r.right &&
-            touch.clientY >= r.top  && touch.clientY <= r.bottom) {
-            moveTo(colId);
-        }
+        if (col && isTouchInsideColumn(touch, col)) moveTo(colId);
     });
 }
