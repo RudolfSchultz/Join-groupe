@@ -73,7 +73,8 @@ function renderDialogContact(title, submitAction, buttonHtml) {
             <button type="button" class="close-dialog dp-show-mobile" onclick="closeDialog()">×</button>
                 <div class="modal-logo for-mobile-hide"><img src="../assets/img/logo_white.svg" alt="join icon"></div>
                 <h2>${title}</h2>
-                <p class="modal-tagline">Tasks are better with a team!</p>
+                ${title.includes('Edit') ? '' : `<p class="modal-tagline">Tasks are better with a team!</p>`}
+                <div class="modal-divider"></div>
             </div>
 
             <form method="dialog" class="modal-right" onsubmit="${submitAction}">

@@ -5,6 +5,7 @@ const contactDetailsContainer = document.getElementById("contact-details-view");
 const CONTACTS_URL = 'https://remotestorage-c0469-default-rtdb.europe-west1.firebasedatabase.app/contacts.json';
 let loadedContacts = [];
 
+
 async function init() {
     initMain();
     loadedContacts = [];
@@ -12,6 +13,7 @@ async function init() {
     renderContacts();
 
 }
+
 
 async function loadAndPrepareContacts() {
     try {
@@ -25,6 +27,7 @@ async function loadAndPrepareContacts() {
         addContactsToLoaded(arr.filter(c => c && c.name));
     } catch (error) { console.error("Fehler beim Laden:", error); }
 }
+
 
 function addContactsToLoaded(contactsFromDB) {
     contactsFromDB.forEach(c => {
@@ -40,6 +43,7 @@ function addContactsToLoaded(contactsFromDB) {
     });
 }
 
+
 function groupContactsByLetter() {
     let groups = {};
     let sorted = [...loadedContacts].sort((a, b) => a.name.localeCompare(b.name));
@@ -52,10 +56,12 @@ function groupContactsByLetter() {
     return groups;
 }
 
+
 function renderLetterGroup([letter, contactsInGroup]) {
     let itemsHtml = contactsInGroup.map(renderContactlist).join('');
     return renderLetterGroupTemplate(letter, itemsHtml);
 }
+
 
 function renderContacts() {
     if (!contactListContainer) return;
@@ -66,13 +72,16 @@ function renderContacts() {
     contactListContainer.innerHTML = html;
 }
 
+
 function openDialog() {
     dialog.showModal();
 }
 
+
 function closeDialog() {
     dialog.close();
 }
+
 
 function showContactDetails(contactId) {
     const currentActive = document.querySelector('.contact-item.active');
@@ -87,6 +96,7 @@ function showContactDetails(contactId) {
     }
 }
 
+
 function editContact(id) {
     if (!dialog) return;
 
@@ -98,6 +108,7 @@ function editContact(id) {
     }
 }
 
+
 function fillEditForm(contact) {
     const avatarBox = dialog.querySelector('.profile-placeholder');
     if (avatarBox) {
@@ -107,6 +118,7 @@ function fillEditForm(contact) {
     dialog.querySelector('input[type="email"]').value = contact.email;
     dialog.querySelector('input[type="tel"]').value = contact.phone || '';
 }
+
 
 function openAddContactModal() {
     if (!dialog) return;
@@ -121,15 +133,18 @@ function openAddContactModal() {
     openDialog();
 }
 
+
 function renderAddContactTemplate() {
     const buttons = renderDialogCreateContactButton();
     return renderDialogContact('Add contact', 'createNewContact(event)', buttons);
 }
 
+
 function renderEditContactTemplate(contact) {
     const buttons = renderDialogContactEditButton(contact);
     return renderDialogContact('Edit contact', `updateContact(event, '${contact.id}')`, buttons);
 }
+
 
 function createNewContact(event) {
     event.preventDefault();
@@ -140,7 +155,9 @@ function createNewContact(event) {
         phone: formData.get('phone') || 'no phone number provided'
     };
     saveContactToDB(newContact);
+    showToastFeedback('Contact successfully created');
 }
+
 
 async function saveContactToDB(newContact) {
     const isGuest = checkIsGuest();
@@ -155,11 +172,13 @@ async function saveContactToDB(newContact) {
     }
 }
 
+
 function saveGuestContact(newContact) {
     loadedContacts.push(newContact);
     dialog.close();
     renderContacts();
 }
+
 
 async function saveUserContact(newContact) {
     try {
@@ -173,6 +192,7 @@ async function saveUserContact(newContact) {
         renderContacts();
     } catch (e) { console.error("Fehler beim Cloud-Speichern:", e); }
 }
+
 
 async function updateContact(event, id) {
     event.preventDefault();
@@ -188,6 +208,7 @@ async function updateContact(event, id) {
     if (checkIsGuest()) updateGuestContact(updated); else await updateUserContact(updated);
 }
 
+
 async function updateUserContact(updated) {
     try {
         await fetch(`${CONTACTS_URL.replace('.json', '')}/${updated.id}.json`, {
@@ -200,17 +221,20 @@ async function updateUserContact(updated) {
     } catch (e) { console.error('Update error:', e); }
 }
 
+
 function updateGuestContact(updated) {
     const idx = loadedContacts.findIndex(c => String(c.id) === String(updated.id));
     if (idx !== -1) loadedContacts[idx] = updated;
     finalizeUpdate(updated.id);
 }
 
+
 function finalizeUpdate(id) {
     dialog.close();
     renderContacts();
     showContactDetails(String(id));
 }
+
 
 async function deleteContact(id) {
     if (!id) return;
@@ -222,10 +246,12 @@ async function deleteContact(id) {
             loadedContacts = loadedContacts.filter(c => String(c.id) !== String(id));
             if (dialog?.open) dialog.close();
             renderContacts();
+            showToastFeedback('Contact successfully deleted');
         }
         if (contactDetailsContainer) contactDetailsContainer.innerHTML = '';
     } catch (error) { console.error("Fehler beim Löschen:", error); }
 }
+
 
 function checkIsGuest() {
     try {
@@ -236,6 +262,7 @@ function checkIsGuest() {
     }
 }
 
+
 function toggleMobileContactView(showDetails) {
     const left = document.querySelector('.contacts-split-left');
     const right = document.querySelector('.contacts-split-right');
@@ -245,6 +272,7 @@ function toggleMobileContactView(showDetails) {
     }
 }
 
+
 function resetMobileContactView() {
     toggleMobileContactView(false);
     const currentActive = document.querySelector('.contact-item.active');
@@ -252,6 +280,7 @@ function resetMobileContactView() {
         currentActive.classList.remove('active');
     }
 }
+
 
 function toggleMobileOptions(event) {
     event.stopPropagation();
@@ -264,6 +293,7 @@ function toggleMobileOptions(event) {
     }
 }
 
+
 function closeMobileOptionsOutside() {
     const menu = document.getElementById('mobile-options-menu');
     if (menu) {
@@ -271,6 +301,7 @@ function closeMobileOptionsOutside() {
     }
     document.removeEventListener('click', closeMobileOptionsOutside);
 }
+
 
 window.addEventListener('resize', function () {
     if (window.innerWidth > 768) {
@@ -283,4 +314,20 @@ window.addEventListener('resize', function () {
     }
 });
 
+
+function showToastFeedback(message) {
+    const toast = document.createElement('div');
+    toast.className = 'contact-success-toast';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => toast.classList.add('show'), 50);
+    setTimeout(() => removeToastFeedback(toast), 3000);
+}
+
+
+function removeToastFeedback(toast) {
+    toast.classList.remove('show');
+    setTimeout(() => toast.remove(), 400);
+}
 
