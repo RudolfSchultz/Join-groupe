@@ -331,7 +331,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /* ── Narrow phones/tablets 425-600px ── */
 @media (min-width: 425px) and (max-width: 600px) {
   .add-task-main {
-    padding: 140px 16px 96px;
+    padding: 108px 16px 96px;
   }
 
   .form-footer {
@@ -368,7 +368,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 @media (max-width: 424px) {
   .add-task-main {
     height: auto;
-    padding: 140px 16px 24px;
+    padding: 108px 16px 24px;
   }
 
   .page-title {

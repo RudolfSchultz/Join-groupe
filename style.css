@@ -1,8 +1,8 @@
+@import url(./assets/css/shared.css);
 @import url(./assets/css/fonts.css);
 @import url(./assets/css/color.css);
 @import url(./assets/css/nav_template.css);
 @import url(./assets/css/nav_responsive.css);
-@import url(./assets/css/shared.css);
 
 *,
 *::before,

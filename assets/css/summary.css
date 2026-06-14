@@ -415,7 +415,7 @@
 @media (max-width: 768px) {
   .summary-main {
     flex-direction: column;
-    padding: 140px 16px 24px;
+    padding: 108px 16px 24px;
     min-height: auto;
     gap: 20px;
   }
