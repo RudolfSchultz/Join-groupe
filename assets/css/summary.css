@@ -377,13 +377,13 @@
   .summary-main {
     display: flex;
     flex-direction: row;
-    padding: 206px 40px 0px 24px;
+    padding: 180px 40px 0px 24px;
 }
 
 .summary-main {
     display: flex;
     flex-direction: column;
-    padding: 206px 40px 0px 24px;
+    padding: 180px 40px 0px 24px;
 }
 
 .summary-heading {
@@ -659,7 +659,7 @@
 /* Fit the whole dashboard into shorter viewports so the bottom row stays visible */
 @media (min-width: 769px) and (max-height: 900px) {
   .summary-main {
-    padding: 206px 40px 0px 100px;
+    padding: 180px 40px 0px 100px;
   }
 
   .summary-heading {
