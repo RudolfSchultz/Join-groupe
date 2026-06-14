@@ -657,6 +657,12 @@ dialog[open].board-overlay>.add-task-modal {
   background: var(--secondaryColor);
 }
 
+.task-form {
+    overflow: auto;
+    max-height: 500px;
+    scrollbar-width: none;
+}
+
 button.btn-add-task {
   border: none;
   cursor: pointer;
