@@ -294,6 +294,7 @@ function renderAddTaskModal() {
             <h2 class="modal-title">Add Task</h2>
 
             <form method="dialog" class="task-form" id="modal-task-form" onsubmit="createTaskFromModal(event)">
+            <div class="task-form-detail">
                 <div class="form-columns">
                     <div class="form-col">
                         <div class="form-group">
@@ -407,7 +408,7 @@ function renderAddTaskModal() {
                         </div>
                     </div>
                 </div>
-
+</div>
                 <div class="form-footer">
                     <span class="required-hint"><span class="required">*</span>This field is required</span>
                     <div class="form-actions">
