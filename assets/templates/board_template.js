@@ -408,7 +408,8 @@ function renderAddTaskModal() {
                         </div>
                     </div>
                 </div>
-</div>
+     </div>
+     
                 <div class="form-footer">
                     <span class="required-hint"><span class="required">*</span>This field is required</span>
                     <div class="form-actions">
