@@ -1,77 +1,100 @@
+const FIREBASE_BASE = 'https://remotestorage-c0469-default-rtdb.europe-west1.firebasedatabase.app';
+const USERS_URL = `${FIREBASE_BASE}/users.json`;
+
+
+// ── Guest ──────────────────────────────────────────────────────────────────────
+
 function guestLogin() {
     const guestUser = { id: 'guest', name: 'Gast', email: '', isGuest: true };
     sessionStorage.setItem('currentUser', JSON.stringify(guestUser));
     window.location.href = './html/summary.html';
 }
-const FIREBASE_BASE = 'https://remotestorage-c0469-default-rtdb.europe-west1.firebasedatabase.app';
-const USERS_URL = `${FIREBASE_BASE}/users.json`;
+
+
+// ── Form Switch ────────────────────────────────────────────────────────────────
 
 function switchForm(currentForm, targetForm) {
-    const cur = document.getElementById(currentForm);
-    const tgt = document.getElementById(targetForm);
-    if (cur) cur.classList.add('d-none');
-    if (tgt) tgt.classList.remove('d-none');
-    // If we are hiding the registration form, clear its fields
+    hideForm(currentForm);
+    showForm(targetForm);
     if (currentForm === 'registration_section') clearRegistrationForm();
-    // If we are hiding the login form, clear its fields
     if (currentForm === 'login_section') clearLoginForm();
     updateSignupButton(targetForm);
 }
 
-function clearRegFields() {
-    const fields = ['reg_name', 'reg_email', 'reg_passwort', 'reg_password_confirm'];
-    fields.forEach(id => {
-        const el = document.getElementById(id);
-        if (!el) return;
-        el.value = '';
-        if (el.tagName === 'INPUT') el.removeAttribute('data-touched');
-        if (typeof el.setCustomValidity === 'function') el.setCustomValidity('');
-    });
+
+function hideForm(formId) {
+    const el = document.getElementById(formId);
+    if (el) el.classList.add('d-none');
 }
 
+
+function showForm(formId) {
+    const el = document.getElementById(formId);
+    if (el) el.classList.remove('d-none');
+}
+
+
+function updateSignupButton(activeForm) {
+    const signupBtn = document.getElementById('signup_btn');
+    if (!signupBtn) return;
+    signupBtn.classList.toggle('d-none', activeForm !== 'login_section');
+}
+
+
+// ── Clear Forms ────────────────────────────────────────────────────────────────
+
+function clearFieldValue(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.value = '';
+    if (el.tagName === 'INPUT') el.removeAttribute('data-touched');
+    if (typeof el.setCustomValidity === 'function') el.setCustomValidity('');
+}
+
+
+function clearRegFields() {
+    ['reg_name', 'reg_email', 'reg_passwort', 'reg_password_confirm'].forEach(clearFieldValue);
+}
+
+
 function clearRegHints() {
-    const hints = ['pw_space_hint', 'pw_length_hint', 'email_format_hint', 'pw_match_hint'];
-    hints.forEach(id => {
+    ['pw_space_hint', 'pw_length_hint', 'email_format_hint', 'pw_match_hint'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.style.display = 'none';
     });
 }
 
+
 function clearRegistrationForm() {
     clearRegFields();
+    clearRegHints();
     const checkbox = document.getElementById('reg_datenschutz');
     if (checkbox) checkbox.checked = false;
-    clearRegHints();
     const submitBtn = document.getElementById('reg_submit_btn');
     if (submitBtn) submitBtn.disabled = true;
 }
 
+
+function clearLoginFields() {
+    ['login_email', 'login_passwort'].forEach(clearFieldValue);
+}
+
+
+function clearLoginError() {
+    const el = document.getElementById('login_error');
+    if (!el) return;
+    el.textContent = '';
+    el.style.display = 'none';
+}
+
+
 function clearLoginForm() {
-    const fields = ['login_email', 'login_passwort'];
-    fields.forEach(id => {
-        const el = document.getElementById(id);
-        if (!el) return;
-        el.value = '';
-        if (el.tagName === 'INPUT') el.removeAttribute('data-touched');
-        if (typeof el.setCustomValidity === 'function') el.setCustomValidity('');
-    });
-
-    const loginError = document.getElementById('login_error');
-    if (loginError) {
-        loginError.textContent = '';
-        loginError.style.display = 'none';
-    }
+    clearLoginFields();
+    clearLoginError();
 }
 
-function updateSignupButton(activeForm) {
-    const signupBtn = document.getElementById('signup_btn');
-    if (!signupBtn) return;
-    if (activeForm === 'login_section') {
-        signupBtn.classList.remove('d-none');
-    } else {
-        signupBtn.classList.add('d-none');
-    }
-}
+
+// ── Notification ───────────────────────────────────────────────────────────────
 
 function showNotification(message, isError = false) {
     const notif = document.getElementById('notification');
@@ -81,6 +104,9 @@ function showNotification(message, isError = false) {
     notif.classList.remove('d-none');
     setTimeout(() => notif.classList.add('d-none'), 5000);
 }
+
+
+// ── Firebase ───────────────────────────────────────────────────────────────────
 
 async function loadUsers() {
     try {
@@ -94,21 +120,23 @@ async function loadUsers() {
     }
 }
 
-async function saveUserToFirebase(id, user) {
-    await fetch(`${FIREBASE_BASE}/users/${id}.json`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(user)
-    });
+
+function buildPutOptions(body) {
+    return { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) };
 }
 
-async function saveContactToFirebase(id, contact) {
-    await fetch(`${FIREBASE_BASE}/contacts/${id}.json`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(contact)
-    });
+
+async function saveUserToFirebase(id, user) {
+    await fetch(`${FIREBASE_BASE}/users/${id}.json`, buildPutOptions(user));
 }
+
+
+async function saveContactToFirebase(id, contact) {
+    await fetch(`${FIREBASE_BASE}/contacts/${id}.json`, buildPutOptions(contact));
+}
+
+
+// ── Login ──────────────────────────────────────────────────────────────────────
 
 function showLoginError(loginErrorEl) {
     if (loginErrorEl) {
@@ -119,98 +147,133 @@ function showLoginError(loginErrorEl) {
     }
 }
 
+
 function saveUserSession(user) {
     sessionStorage.setItem('currentUser', JSON.stringify({ id: user.id, name: user.name, email: user.email }));
 }
 
+
+function getLoginCredentials() {
+    return {
+        email: document.getElementById('login_email').value.trim(),
+        password: document.getElementById('login_passwort').value
+    };
+}
+
+
 async function login() {
-    const email = document.getElementById('login_email').value.trim();
-    const password = document.getElementById('login_passwort').value;
+    const { email, password } = getLoginCredentials();
     const users = await loadUsers();
     const user = users.find(u => u.email === email && u.password === password);
     const loginErrorEl = document.getElementById('login_error');
     if (!user) { showLoginError(loginErrorEl); return; }
     saveUserSession(user);
-    if (loginErrorEl) { loginErrorEl.textContent = ''; loginErrorEl.style.display = 'none'; }
+    clearLoginError();
     window.location.href = './html/summary.html';
 }
 
-function clearLoginError(){
-    const el = document.getElementById('login_error');
-    if(!el) return;
-    el.textContent = '';
-    el.style.display = 'none';
-}
 
-function updatePasswordHint(hint, pw, pwConfirm) {
-    if (!hint) return;
-    const pwConfirmInput = document.getElementById('reg_password_confirm');
-    const touched = pwConfirmInput && pwConfirmInput.dataset && pwConfirmInput.dataset.touched === 'true';
-    const mismatch = pwConfirm.length > 0 && pw !== pwConfirm && touched;
-    hint.textContent = mismatch ? 'Passwords don\'t match' : '';
-    hint.style.display = mismatch ? 'block' : 'none';
-}
-
-function markTouched(id){
-    const el = document.getElementById(id);
-    if(!el) return;
-    el.dataset.touched = 'true';
-}
-
-function getRegValues(){
-    return {
-        name:document.getElementById('reg_name').value.trim(),
-        email:document.getElementById('reg_email').value.trim(),
-        pw:document.getElementById('reg_passwort').value,
-        pwConfirm:document.getElementById('reg_password_confirm').value,
-        privacy:document.getElementById('reg_datenschutz').checked
-    };
-}
-
-function showPasswordLengthHint(pw) {
-    const hint = document.getElementById('pw_length_hint');
-    const pwInput = document.getElementById('reg_passwort');
-    const touched = pwInput && pwInput.dataset && pwInput.dataset.touched === 'true';
-    const tooShort = pw.length > 0 && pw.length < 8 && touched;
-    if (hint) hint.style.display = tooShort ? 'block' : 'none';
-    return pw.length > 0 && pw.length < 8;
-}
-
-function setPasswordValidity(pw){
-    const pwInput = document.getElementById('reg_passwort');
-    const hasSpaces = /\s/.test(pw);
-    const tooShort = showPasswordLengthHint(pw);
-    const hint = document.getElementById('pw_space_hint');
-    const invalid = hasSpaces ? 'Passwords must not contain spaces.' : tooShort ? 'Password must be at least 8 characters.' : '';
-    pwInput.setCustomValidity(invalid);
-    if(hint) hint.style.display = (pw && hasSpaces)? 'block' : 'none';
-    return hasSpaces || tooShort;
-}
-
-function setEmailValidity(email,emailValid){
-    const emailInput=document.getElementById('reg_email'),hint=document.getElementById('email_format_hint');
-    const touched = emailInput && emailInput.dataset && emailInput.dataset.touched === 'true';
-    emailInput.setCustomValidity(email && !emailValid? 'Please enter a valid email address (e.g. name@domain.de)' : '');
-    if(hint) hint.style.display = (email && !emailValid && touched)? 'block':'none';
-}
-
-function updateSubmitState(isValid){
-    document.getElementById('reg_submit_btn').disabled = !isValid;
-}
-
-function validateRegistrationForm(){
-    const {name,email,pw,pwConfirm,privacy} = getRegValues();
-    updatePasswordHint(document.getElementById('pw_match_hint'),pw,pwConfirm);
-    const emailValid = validateEmailFormat(email);
-    const pwHasSpaces = setPasswordValidity(pw);
-    setEmailValidity(email,emailValid);
-    const isValid = name && email && emailValid && pw && pw.length >= 8 && pw===pwConfirm && privacy && !pwHasSpaces;
-    updateSubmitState(isValid);
-}
+// ── Registration Validation ────────────────────────────────────────────────────
 
 function validateEmailFormat(email) {
     return /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(email);
 }
+
+
+function markTouched(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.dataset.touched = 'true';
+}
+
+
+function getRegValues() {
+    return {
+        name: document.getElementById('reg_name').value.trim(),
+        email: document.getElementById('reg_email').value.trim(),
+        pw: document.getElementById('reg_passwort').value,
+        pwConfirm: document.getElementById('reg_password_confirm').value,
+        privacy: document.getElementById('reg_datenschutz').checked
+    };
+}
+
+
+function isFieldTouched(id) {
+    const el = document.getElementById(id);
+    return el && el.dataset && el.dataset.touched === 'true';
+}
+
+
+function updatePasswordHint(hint, pw, pwConfirm) {
+    if (!hint) return;
+    const mismatch = pwConfirm.length > 0 && pw !== pwConfirm && isFieldTouched('reg_password_confirm');
+    hint.textContent = mismatch ? 'Passwords don\'t match' : '';
+    hint.style.display = mismatch ? 'block' : 'none';
+}
+
+
+function showPasswordLengthHint(pw) {
+    const hint = document.getElementById('pw_length_hint');
+    const tooShort = pw.length > 0 && pw.length < 8 && isFieldTouched('reg_passwort');
+    if (hint) hint.style.display = tooShort ? 'block' : 'none';
+    return pw.length > 0 && pw.length < 8;
+}
+
+
+function setPasswordValidity(pw) {
+    const pwInput = document.getElementById('reg_passwort');
+    const hint = document.getElementById('pw_space_hint');
+    const hasSpaces = /\s/.test(pw);
+    const tooShort = showPasswordLengthHint(pw);
+    const invalid = hasSpaces ? 'Passwords must not contain spaces.' : tooShort ? 'Password must be at least 8 characters.' : '';
+    pwInput.setCustomValidity(invalid);
+    if (hint) hint.style.display = (pw && hasSpaces) ? 'block' : 'none';
+    return hasSpaces || tooShort;
+}
+
+
+function setEmailValidity(email, emailValid) {
+    const emailInput = document.getElementById('reg_email');
+    const hint = document.getElementById('email_format_hint');
+    emailInput.setCustomValidity(email && !emailValid ? 'Please enter a valid email address (e.g. name@domain.de)' : '');
+    if (hint) hint.style.display = (email && !emailValid && isFieldTouched('reg_email')) ? 'block' : 'none';
+}
+
+
+function updateSubmitState(isValid) {
+    document.getElementById('reg_submit_btn').disabled = !isValid;
+}
+
+
+function validateRegistrationForm() {
+    const { name, email, pw, pwConfirm, privacy } = getRegValues();
+    updatePasswordHint(document.getElementById('pw_match_hint'), pw, pwConfirm);
+    const emailValid = validateEmailFormat(email);
+    const pwHasSpaces = setPasswordValidity(pw);
+    setEmailValidity(email, emailValid);
+    const isValid = name && email && emailValid && pw && pw.length >= 8 && pw === pwConfirm && privacy && !pwHasSpaces;
+    updateSubmitState(isValid);
+}
+
+
+// ── Register ───────────────────────────────────────────────────────────────────
+
+function validatePasswordFormat(password) {
+    if (/\s/.test(password)) { showNotification('Passwords must not contain spaces.', true); return false; }
+    if (password.length < 8) { showNotification('Password must be at least 8 characters.', true); return false; }
+    return true;
+}
+
+
+function validateRegisterInput(password, email) {
+    if (!validatePasswordFormat(password)) return false;
+    if (!validateEmailFormat(email)) {
+        showNotification('Please enter a valid email address (e.g. name@domain.de)', true);
+        return false;
+    }
+    return true;
+}
+
 
 async function getNextUserId(email) {
     const users = await loadUsers();
@@ -218,12 +281,14 @@ async function getNextUserId(email) {
     return users.reduce((max, u) => Math.max(max, Number(u.id) || 0), 0) + 1;
 }
 
+
 function buildNewUserAndContact(id, name, email, password) {
     return {
         newUser: { id, name, email, password },
         newContact: { id, name, email, phone: 'no phone number provided', color: getRandomColor(), avatar: getInitials(name) }
     };
 }
+
 
 async function saveRegistration(newId, newUser, newContact) {
     try {
@@ -237,26 +302,18 @@ async function saveRegistration(newId, newUser, newContact) {
     }
 }
 
-function validateRegisterInput(password, email) {
-    if (/\s/.test(password)) {
-        showNotification('Passwords must not contain spaces.', true);
-        return false;
-    }
-    if (password.length < 8) {
-        showNotification('Password must be at least 8 characters.', true);
-        return false;
-    }
-    if (!validateEmailFormat(email)) {
-        showNotification('Please enter a valid email address (e.g. name@domain.de)', true);
-        return false;
-    }
-    return true;
+
+function getRegFormValues() {
+    return {
+        name: document.getElementById('reg_name').value.trim(),
+        email: document.getElementById('reg_email').value.trim(),
+        password: document.getElementById('reg_passwort').value
+    };
 }
 
+
 async function register() {
-    const name = document.getElementById('reg_name').value.trim();
-    const email = document.getElementById('reg_email').value.trim();
-    const password = document.getElementById('reg_passwort').value;
+    const { name, email, password } = getRegFormValues();
     if (!validateRegisterInput(password, email)) return;
     const newId = await getNextUserId(email);
     if (!newId) { showNotification('This email address is already registered.', true); return; }
@@ -264,19 +321,14 @@ async function register() {
     await saveRegistration(newId, newUser, newContact);
 }
 
-// Clear registration fields when navigating away or when page is restored from bfcache
-window.addEventListener('beforeunload', function () {
-    try { clearRegistrationForm(); clearLoginForm(); } catch (e) { }
-});
 
-// Browser Back / history navigation
-window.addEventListener('popstate', function () {
-    try { clearRegistrationForm(); clearLoginForm(); } catch (e) { }
-});
+// ── Page Lifecycle ─────────────────────────────────────────────────────────────
 
-// When page is restored from bfcache (e.persisted === true) clear inputs
-window.addEventListener('pageshow', function (e) {
-    if (e && e.persisted) {
-        try { clearRegistrationForm(); clearLoginForm(); } catch (err) { }
-    }
-});
+function clearAllForms() {
+    try { clearRegistrationForm(); clearLoginForm(); } catch (e) { /* ignore */ }
+}
+
+
+window.addEventListener('beforeunload', clearAllForms);
+window.addEventListener('popstate', clearAllForms);
+window.addEventListener('pageshow', e => { if (e && e.persisted) clearAllForms(); });
