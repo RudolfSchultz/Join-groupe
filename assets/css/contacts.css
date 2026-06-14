@@ -161,7 +161,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    margin-top: 20px;
+    margin-top: 110px;
     flex: 2;
     margin-left: 40px;
 }
@@ -176,7 +176,6 @@
     position: relative;
     gap: 15px;
     margin-bottom: 20px;
-    margin-top: 40px;
 }
 
 .brand-title {
@@ -506,6 +505,10 @@
         background: #ffffff;
         box-shadow: 4px 0px 6px rgba(0, 0, 0, 0.08);
         padding-left: 0;
+    }
+
+    .contacts-split-left::-webkit-scrollbar {
+        display: none;
     }
 
     .contacts-split-right {
