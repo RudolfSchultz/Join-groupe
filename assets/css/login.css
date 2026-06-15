@@ -290,6 +290,14 @@
     }
 }
 
+@media (max-width: 468px) {
+    .login-logo-animated .logo-dark {
+        margin-top: -20px;
+        margin-left: -50px;
+        height: 60px;
+    }
+}
+
 @media (max-width: 425px) {
     .login-fullscreen {
         justify-content: flex-start;

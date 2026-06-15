@@ -219,7 +219,7 @@ function hideNoResultsMessage() {
 // ── Outside Click ──────────────────────────────────────────────────────────────
 
 function handleEditOutsideClick(event) {
-    if (!event.target.closest('#edit-assign-wrapper')) {
+    if (!event.target.closest('.edit-assign-wrapper')) {
         const opts = document.getElementById('edit-assign-options');
         if (opts) opts.classList.add('d-none');
     }
