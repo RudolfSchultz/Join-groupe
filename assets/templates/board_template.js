@@ -277,7 +277,7 @@ function renderEditAssignOptionsHTML(boardContacts, editAssignedIds) {
     return boardContacts.map(c => {
         const selected = editAssignedIds.includes(String(c.id));
         return `<div class="assign-option ${selected ? 'assign-option--active' : ''}"
-                    onclick="toggleEditPerson('${c.id}')">
+                    onclick="toggleEditPerson('${c.id}'); event.stopPropagation();">
                     <span class="assign-option-left">
                         <span class="card-avatar" style="background:${c.color}">${c.initials}</span>
                         <span class="assign-option-name">${escapeHtml(c.name)}</span>

@@ -73,10 +73,28 @@ function togglePerson(id) {
     if (assignedIds.includes(id)) {
         assignedIds = assignedIds.filter(assignedId => assignedId !== id);
     } else {
+        if (!canAssignMorePersons()) return;
         assignedIds.push(id);
     }
     renderAssignOptions();
     renderAssignedAvatars();
+}
+
+
+/**
+ * Enforces a maximum of 6 assigned persons and shows a notification.
+ * @returns {boolean} True when another person can be assigned.
+ */
+function canAssignMorePersons() {
+    if (assignedIds.length >= 6) {
+        if (typeof showNotification === 'function') {
+            showNotification('Maximal 6 Personen können zugewiesen werden.', true);
+        } else {
+            alert('Maximal 6 Personen können zugewiesen werden.');
+        }
+        return false;
+    }
+    return true;
 }
 
 

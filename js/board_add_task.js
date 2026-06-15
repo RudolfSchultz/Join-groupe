@@ -109,7 +109,7 @@ function renderModalAssignOptions() {
 
 function modalAssignOptionTemplate(contact, isSelected) {
     return `
-        <div class="assign-option ${isSelected ? 'assign-option--active' : ''}" onclick="toggleModalPerson('${contact.id}')">
+        <div class="assign-option ${isSelected ? 'assign-option--active' : ''}" onclick="toggleModalPerson('${contact.id}'); event.stopPropagation();">
             <span class="assign-option-left">
                 <span class="avatar-chip" style="background-color:${contact.color}">${contact.avatar}</span>
                 <span class="assign-option-name">${escapeHtml(contact.name)}</span>
@@ -123,10 +123,24 @@ function toggleModalPerson(id) {
     if (modalAssignedIds.includes(id)) {
         modalAssignedIds = modalAssignedIds.filter(assignedId => assignedId !== id);
     } else {
+        if (!canAssignMoreModalPersons()) return;
         modalAssignedIds.push(id);
     }
     renderModalAssignOptions();
     renderModalAssignedAvatars();
+}
+
+
+function canAssignMoreModalPersons() {
+    if (modalAssignedIds.length >= 6) {
+        if (typeof showNotification === 'function') {
+            showNotification('Maximal 6 Personen können zugewiesen werden.', true);
+        } else {
+            alert('Maximal 6 Personen können zugewiesen werden.');
+        }
+        return false;
+    }
+    return true;
 }
 
 
