@@ -1,13 +1,10 @@
-/* ──────────────── Summary main layout ──────────────── */
 .summary-main {
   display: flex;
   flex-direction: row;
   padding: 180px 40px 0px 100px;
 }
 
-.summary-left {
-  flex: 0 0 auto;
-}
+.summary-left { flex: 0 0 auto; }
 
 .summary-right {
   flex: 1;
@@ -16,7 +13,6 @@
   justify-content: center;
 }
 
-/* ──────────────── Heading ──────────────── */
 .summary-heading {
   display: flex;
   justify-content: center;
@@ -25,45 +21,14 @@
   margin-bottom: 56px;
 }
 
-.summary-title {
-  font-size: 61px;
-  font-weight: 700;
-  color: #000000;
-  line-height: 1.2;
-}
+.summary-title { font-size: 61px; font-weight: 700; color: #000000; line-height: 1.2; }
+.summary-heading-divider { width: 3px; height: 59px; background: #29ABE2; flex-shrink: 0; }
+.summary-subtitle { font-size: 27px; font-weight: 400; color: #2A3647; line-height: 1.2; }
 
-.summary-heading-divider {
-  width: 3px;
-  height: 59px;
-  background: #29ABE2;
-  flex-shrink: 0;
-}
+.summary-cards { display: flex; flex-direction: column; gap: 28px; }
+.cards-row { display: flex; gap: 32px; }
+.cards-row-sm { display: flex; gap: 28px; }
 
-.summary-subtitle {
-  font-size: 27px;
-  font-weight: 400;
-  color: #2A3647;
-  line-height: 1.2;
-}
-
-/* ──────────────── Cards container ──────────────── */
-.summary-cards {
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
-}
-
-.cards-row {
-  display: flex;
-  gap: 32px;
-}
-
-.cards-row-sm {
-  display: flex;
-  gap: 28px;
-}
-
-/* ──────────────── Large stat card (264×168) ──────────────── */
 .stat-card {
   width: 264px;
   height: 168px;
@@ -84,21 +49,12 @@
   background: var(--primaryColor);
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
   transform: scale(1.03);
-  cursor: pointer;
 }
 
 .stat-card:hover .stat-number,
-.stat-card:hover .stat-label {
-  color: #ffffff;
-}
-
-.stat-card:hover .stat-icon-circle {
-  background: #ffffff;
-}
-
-.stat-card:hover .stat-icon {
-  filter: brightness(0);
-}
+.stat-card:hover .stat-label { color: #ffffff; }
+.stat-card:hover .stat-icon-circle { background: #ffffff; }
+.stat-card:hover .stat-icon { filter: brightness(0); }
 
 .stat-icon-circle {
   width: 69px;
@@ -111,33 +67,11 @@
   flex-shrink: 0;
 }
 
-.stat-icon {
-  width: 32px;
-  height: 32px;
-  filter: brightness(0) invert(1);
-}
+.stat-icon { width: 32px; height: 32px; filter: brightness(0) invert(1); }
+.stat-info { display: flex; flex-direction: column; gap: 4px; }
+.stat-number { font-size: 64px; font-weight: 600; line-height: 1.2; color: #000000; }
+.stat-label { font-size: 20px; font-weight: 400; color: #2A3647; line-height: 1.2; }
 
-.stat-info {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.stat-number {
-  font-size: 64px;
-  font-weight: 600;
-  line-height: 1.2;
-  color: #000000;
-}
-
-.stat-label {
-  font-size: 20px;
-  font-weight: 400;
-  color: #2A3647;
-  line-height: 1.2;
-}
-
-/* ──────────────── Urgency card (560×168) ──────────────── */
 .urgency-card {
   width: 560px;
   height: 168px;
@@ -162,19 +96,10 @@
 .urgency-card:hover .urgency-number,
 .urgency-card:hover .urgency-count-label,
 .urgency-card:hover .urgency-date,
-.urgency-card:hover .urgency-date-label {
-  color: #ffffff;
-}
+.urgency-card:hover .urgency-date-label { color: #ffffff; }
+.urgency-card:hover .urgency-divider-vertical { background: rgba(255, 255, 255, 0.3); }
 
-.urgency-card:hover .urgency-divider-vertical {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-.urgency-left {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-}
+.urgency-left { display: flex; align-items: center; gap: 18px; }
 
 .urgency-icon-circle {
   width: 60px;
@@ -187,54 +112,14 @@
   flex-shrink: 0;
 }
 
-.urgency-info {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
+.urgency-info { display: flex; flex-direction: column; gap: 4px; }
+.urgency-number { font-size: 64px; font-weight: 600; color: #000000; line-height: 1.2; }
+.urgency-count-label { font-size: 16px; font-weight: 400; color: #2A3647; line-height: 1.2; }
+.urgency-divider-vertical { width: 2px; height: 102px; background: #D1D1D1; flex-shrink: 0; }
+.urgency-right { display: flex; flex-direction: column; gap: 13px; }
+.urgency-date { font-size: 21px; font-weight: 700; color: #2A3647; line-height: 1.2; }
+.urgency-date-label { font-size: 16px; font-weight: 400; color: #2A3647; line-height: 1.2; }
 
-.urgency-number {
-  font-size: 64px;
-  font-weight: 600;
-  color: #000000;
-  line-height: 1.2;
-}
-
-.urgency-count-label {
-  font-size: 16px;
-  font-weight: 400;
-  color: #2A3647;
-  line-height: 1.2;
-}
-
-.urgency-divider-vertical {
-  width: 2px;
-  height: 102px;
-  background: #D1D1D1;
-  flex-shrink: 0;
-}
-
-.urgency-right {
-  display: flex;
-  flex-direction: column;
-  gap: 13px;
-}
-
-.urgency-date {
-  font-size: 21px;
-  font-weight: 700;
-  color: #2A3647;
-  line-height: 1.2;
-}
-
-.urgency-date-label {
-  font-size: 16px;
-  font-weight: 400;
-  color: #2A3647;
-  line-height: 1.2;
-}
-
-/* ──────────────── Small stat card (168×168) ──────────────── */
 .stat-card-sm {
   width: 168px;
   height: 168px;
@@ -259,178 +144,33 @@
 }
 
 .stat-card-sm:hover .stat-number,
-.stat-card-sm:hover .stat-label {
-  color: #ffffff;
-}
+.stat-card-sm:hover .stat-label { color: #ffffff; }
+.stat-card-sm .stat-number { font-size: 64px; font-weight: 600; color: #000000; line-height: 1; }
+.stat-card-sm .stat-label { font-size: 20px; font-weight: 400; color: #2A3647; text-align: center; padding: 0 8px; }
 
-.stat-card-sm .stat-number {
-  font-size: 64px;
-  font-weight: 600;
-  color: #000000;
-  line-height: 1;
-}
-
-.stat-card-sm .stat-label {
-  font-size: 20px;
-  font-weight: 400;
-  color: #2A3647;
-  text-align: center;
-  padding: 0 8px;
-}
-
-/* ──────────────── Greeting ──────────────── */
-.greeting {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
+.greeting { display: flex; flex-direction: column; gap: 3px; }
 
 @media (min-width: 769px) {
-  .greeting {
-    top: 547.5px;
-    left: 968px;
-    width: 385px;
-    height: 136px;
-  }
-
-  .greeting-name {
-    white-space: nowrap;
-    font-size: 40px;
-  }
+  .greeting { top: 547.5px; left: 968px; width: 385px; height: 136px; }
+  .greeting-name { white-space: nowrap; font-size: 40px; }
 }
 
-.greeting-time {
-  font-size: 47px;
-  font-weight: 500;
-  color: #2A3647;
-  line-height: 1.2;
-}
-
-.greeting-name {
-  font-size: 64px;
-  font-weight: 700;
-  color: var(--secondaryColor);
-  line-height: 1.2;
-}
-
-/* ── Tablet ── */
-@media (max-width: 768px) {
-  .summary-main {
-    padding: 48px 32px 48px 48px;
-    gap: 32px;
-  }
-
-  .cards-row-sm {
-    justify-content: unset;
-  }
-
-  .summary-title {
-    font-size: 42px;
-  }
-
-  .summary-subtitle {
-    font-size: 18px;
-  }
-
-  .summary-heading {
-    margin-bottom: 32px;
-    gap: 16px;
-  }
-
-  .stat-card {
-    width: auto;
-    flex: 1;
-    min-width: 0;
-  }
-
-  .urgency-card {
-    width: auto;
-  }
-
-  .stat-card-sm {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .stat-number {
-    font-size: 48px;
-  }
-
-  .stat-card-sm .stat-number {
-    font-size: 48px;
-  }
-
-  .urgency-number {
-    font-size: 48px;
-  }
-
-  .greeting-time {
-    font-size: 32px;
-  }
-
-  .greeting-name {
-    font-size: 48px;
-  }
-}
+.greeting-time { font-size: 47px; font-weight: 500; color: #2A3647; line-height: 1.2; }
+.greeting-name { font-size: 64px; font-weight: 700; color: var(--secondaryColor); line-height: 1.2; }
 
 @media (max-width: 1024px) {
-  .summary-main {
-    display: flex;
-    flex-direction: row;
-    padding: 180px 40px 0px 24px;
+  .summary-main { flex-direction: column; padding: 180px 40px 0px 24px; }
+  .summary-heading { justify-content: flex-start; }
+  .summary-right { justify-content: flex-start; margin-top: 30px; }
 }
 
-.summary-main {
-    display: flex;
-    flex-direction: column;
-    padding: 180px 40px 0px 24px;
+@keyframes greetingFadeOut {
+  to { opacity: 0; visibility: hidden; }
 }
 
-.summary-heading {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 30px;
-    margin-bottom: 56px;
-}
-
-.greeting {
-    top: 547.5px;
-    left: 968px;
-    width: 385px;
-    height: 136px;
-}
-
-.summary-right {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    margin-top: 30px;
-}
-
-}
-
-/* ── Mobile ── */
 @media (max-width: 768px) {
-  .summary-main {
-    flex-direction: column;
-    padding: 108px 16px 24px;
-    min-height: auto;
-    gap: 20px;
-  }
-
-  .summary-left {
-    width: 100%;
-  }
-
-  @keyframes greetingFadeOut {
-    to {
-      opacity: 0;
-      visibility: hidden;
-    }
-  }
-
+  .summary-main { flex-direction: column; padding: 108px 16px 24px; min-height: auto; gap: 20px; }
+  .summary-left { width: 100%; }
   .summary-right {
     position: fixed;
     inset: 0;
@@ -442,14 +182,7 @@
     animation: greetingFadeOut 0.5s ease-in-out 2s forwards;
     pointer-events: none;
   }
-
-  .greeting {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3px;
-  }
-
+  .greeting { align-items: center; }
   .summary-heading {
     flex-direction: column;
     align-items: flex-start;
@@ -457,44 +190,11 @@
     margin-bottom: 40px;
     width: 223px;
   }
-
-  .summary-title {
-    font-family: 'Inter', sans-serif;
-    font-size: 47px;
-    font-weight: 700;
-    line-height: 120%;
-    color: #000000;
-    order: 0;
-  }
-
-  .summary-subtitle {
-    font-family: 'Inter', sans-serif;
-    font-size: 20px;
-    font-weight: 400;
-    line-height: 120%;
-    color: #2A3647;
-    order: 1;
-  }
-
-  .summary-heading-divider {
-    order: 2;
-    width: 90px;
-    height: 3px;
-    background: #29ABE2;
-    border: none;
-    margin-top: 8px;
-  }
-
-  .summary-cards {
-    gap: 18px;
-  }
-
-  /* Wide row: 2 stat-cards, flex:1 so they share space evenly */
-  .cards-row {
-    justify-content: unset;
-    gap: 24px;
-  }
-
+  .summary-title { font-size: 47px; order: 0; }
+  .summary-subtitle { font-size: 20px; order: 1; }
+  .summary-heading-divider { order: 2; width: 90px; height: 3px; border: none; margin-top: 8px; }
+  .summary-cards { gap: 18px; }
+  .cards-row { justify-content: unset; gap: 24px; }
   .stat-card {
     flex: 1;
     min-width: 0;
@@ -506,37 +206,11 @@
     align-items: center;
     justify-content: center;
   }
-
-  .stat-icon-circle {
-    width: 40px;
-    height: 40px;
-  }
-
-  .stat-icon {
-    width: 20px;
-    height: 20px;
-  }
-
-  .stat-info {
-    gap: 2px;
-  }
-
-  .stat-number {
-    font-family: 'Inter', sans-serif;
-    font-size: 47px;
-    font-weight: 600;
-    line-height: 120%;
-    text-align: center;
-  }
-
-  .stat-label {
-    font-family: 'Inter', sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 120%;
-  }
-
-  /* Urgency card: full width, 110px, centered content */
+  .stat-icon-circle { width: 40px; height: 40px; }
+  .stat-icon { width: 20px; height: 20px; }
+  .stat-info { gap: 2px; }
+  .stat-number { font-size: 47px; font-weight: 600; line-height: 120%; text-align: center; }
+  .stat-label { font-size: 16px; font-weight: 400; line-height: 120%; }
   .urgency-card {
     width: 100%;
     height: 110px;
@@ -546,127 +220,30 @@
     justify-content: space-around;
     align-items: center;
   }
-
-  .urgency-left {
-    gap: 18px;
-  }
-
-  .urgency-icon-circle {
-    width: 40px;
-    height: 40px;
-  }
-
-  .urgency-info {
-    gap: 2px;
-  }
-
-  .urgency-number {
-    font-family: 'Inter', sans-serif;
-    font-size: 47px;
-    font-weight: 600;
-    line-height: 120%;
-  }
-
-  .urgency-count-label {
-    font-family: 'Inter', sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-  }
-
-  .urgency-divider-vertical {
-    width: 2px;
-    height: 68px;
-    background: #D1D1D1;
-  }
-
-  .urgency-right {
-    gap: 8px;
-  }
-
-  .urgency-date {
-    font-family: 'Inter', sans-serif;
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 120%;
-  }
-
-  .urgency-date-label {
-    font-family: 'Inter', sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 120%;
-  }
-
-  /* Small row: 3 cards, flex:1 so they share space evenly */
-  .cards-row-sm {
-    justify-content: unset;
-    gap: 24px;
-  }
-
-  .stat-card-sm {
-    flex: 1;
-    min-width: 0;
-    height: 116px;
-    padding: 25px 0;
-    gap: 13px;
-    border-radius: 20px;
-  }
-
-  .stat-card-sm .stat-number {
-    font-family: 'Inter', sans-serif;
-    font-size: 47px;
-    font-weight: 600;
-    line-height: 120%;
-  }
-
-  .stat-card-sm .stat-label {
-    font-family: 'Inter', sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 120%;
-    text-align: center;
-    padding: 0 6px;
-  }
-
-  /* Middle card: smaller label for longer "Tasks In Progress" text */
-  .cards-row-sm .stat-card-sm:nth-child(2) .stat-label {
-    font-size: 14px;
-  }
-
-  .greeting-time {
-    font-size: 36px;
-    font-weight: 400;
-    color: #2A3647;
-    text-align: center;
-    line-height: 1.2;
-  }
-
-  .greeting-name {
-    font-size: 47px;
-    font-weight: 700;
-    color: #29ABE2;
-    text-align: center;
-    line-height: 1.2;
-  }
+  .urgency-left { gap: 18px; }
+  .urgency-icon-circle { width: 40px; height: 40px; }
+  .urgency-info { gap: 2px; }
+  .urgency-number { font-size: 47px; font-weight: 600; line-height: 120%; }
+  .urgency-count-label { font-size: 16px; font-weight: 400; }
+  .urgency-divider-vertical { width: 2px; height: 68px; background: #D1D1D1; }
+  .urgency-right { gap: 8px; }
+  .urgency-date { font-size: 16px; font-weight: 700; line-height: 120%; }
+  .urgency-date-label { font-size: 16px; font-weight: 400; line-height: 120%; }
+  .cards-row-sm { justify-content: unset; gap: 24px; }
+  .stat-card-sm { flex: 1; min-width: 0; height: 116px; padding: 25px 0; gap: 13px; border-radius: 20px; }
+  .stat-card-sm .stat-number { font-size: 47px; font-weight: 600; line-height: 120%; }
+  .stat-card-sm .stat-label { font-size: 16px; font-weight: 400; line-height: 120%; text-align: center; padding: 0 6px; }
+  .cards-row-sm .stat-card-sm:nth-child(2) .stat-label { font-size: 14px; }
+  .greeting-time { font-size: 36px; font-weight: 400; text-align: center; line-height: 1.2; }
+  .greeting-name { font-size: 47px; font-weight: 700; color: #29ABE2; text-align: center; line-height: 1.2; }
 }
 
 @media (max-width: 320px) {
-  .stat-card-sm .stat-label {
-    font-size: 14px;
-  }
+  .stat-card-sm .stat-label { font-size: 14px; }
 }
 
-/* Fit the whole dashboard into shorter viewports so the bottom row stays visible */
 @media (min-width: 769px) and (max-height: 900px) {
-  .summary-main {
-    padding: 180px 40px 0px 100px;
-  }
-
-  .summary-heading {
-    margin-bottom: 10px;
-  }
-
-  .summary-cards {
-    gap: 10px;
-  }
+  .summary-main { padding: 180px 40px 0px 100px; }
+  .summary-heading { margin-bottom: 10px; }
+  .summary-cards { gap: 10px; }
 }
