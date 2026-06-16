@@ -41,6 +41,20 @@ function updateSignupButton(activeForm) {
 }
 
 
+// ── Hint helpers ───────────────────────────────────────────────────────────────
+// Nutzt visibility statt display → kein Layout-Shift
+
+function showHint(id) {
+    const el = document.getElementById(id);
+    if (el) el.classList.add('visible');
+}
+
+function hideHint(id) {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('visible');
+}
+
+
 // ── Clear Forms ────────────────────────────────────────────────────────────────
 
 function clearFieldValue(id) {
@@ -58,10 +72,7 @@ function clearRegFields() {
 
 
 function clearRegHints() {
-    ['pw_space_hint', 'pw_length_hint', 'email_format_hint', 'pw_match_hint'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.style.display = 'none';
-    });
+    ['pw_hint', 'email_format_hint', 'pw_match_hint'].forEach(hideHint);
 }
 
 
@@ -84,7 +95,7 @@ function clearLoginError() {
     const el = document.getElementById('login_error');
     if (!el) return;
     el.textContent = '';
-    el.style.display = 'none';
+    hideHint('login_error');
 }
 
 
@@ -100,7 +111,6 @@ function showNotification(message, isError = false) {
     const notif = document.getElementById('notification');
     if (!notif) return;
     notif.textContent = message;
-    notif.style.backgroundColor = isError ? 'var(--primaryColor)' : 'var(--primaryColor)';
     notif.classList.remove('d-none');
     setTimeout(() => notif.classList.add('d-none'), 5000);
 }
@@ -141,7 +151,7 @@ async function saveContactToFirebase(id, contact) {
 function showLoginError(loginErrorEl) {
     if (loginErrorEl) {
         loginErrorEl.textContent = 'Invalid email address or password.';
-        loginErrorEl.style.display = 'block';
+        showHint('login_error');
     } else {
         showNotification('Invalid email address or password.', true);
     }
@@ -207,36 +217,43 @@ function isFieldTouched(id) {
 function updatePasswordHint(hint, pw, pwConfirm) {
     if (!hint) return;
     const mismatch = pwConfirm.length > 0 && pw !== pwConfirm && isFieldTouched('reg_password_confirm');
-    hint.textContent = mismatch ? 'Passwords don\'t match' : '';
-    hint.style.display = mismatch ? 'block' : 'none';
-}
-
-
-function showPasswordLengthHint(pw) {
-    const hint = document.getElementById('pw_length_hint');
-    const tooShort = pw.length > 0 && pw.length < 8 && isFieldTouched('reg_passwort');
-    if (hint) hint.style.display = tooShort ? 'block' : 'none';
-    return pw.length > 0 && pw.length < 8;
+    hint.textContent = mismatch ? "Passwords don't match" : hint.textContent;
+    if (mismatch) {
+        showHint('pw_match_hint');
+    } else {
+        hideHint('pw_match_hint');
+    }
 }
 
 
 function setPasswordValidity(pw) {
-    const pwInput = document.getElementById('reg_passwort');
-    const hint = document.getElementById('pw_space_hint');
+    const hint = document.getElementById('pw_hint');
     const hasSpaces = /\s/.test(pw);
-    const tooShort = showPasswordLengthHint(pw);
-    const invalid = hasSpaces ? 'Passwords must not contain spaces.' : tooShort ? 'Password must be at least 8 characters.' : '';
-    pwInput.setCustomValidity(invalid);
-    if (hint) hint.style.display = (pw && hasSpaces) ? 'block' : 'none';
+    const tooShort = pw.length > 0 && pw.length < 8 && isFieldTouched('reg_passwort');
+
+    if (pw && hasSpaces) {
+        hint.textContent = 'Passwords must not contain spaces.';
+        showHint('pw_hint');
+    } else if (tooShort) {
+        hint.textContent = 'Password must be at least 8 characters.';
+        showHint('pw_hint');
+    } else {
+        hideHint('pw_hint');
+    }
+
     return hasSpaces || tooShort;
 }
 
 
+
+
 function setEmailValidity(email, emailValid) {
-    const emailInput = document.getElementById('reg_email');
-    const hint = document.getElementById('email_format_hint');
-    emailInput.setCustomValidity(email && !emailValid ? 'Please enter a valid email address (e.g. name@domain.de)' : '');
-    if (hint) hint.style.display = (email && !emailValid && isFieldTouched('reg_email')) ? 'block' : 'none';
+    const showError = email && !emailValid && isFieldTouched('reg_email');
+    if (showError) {
+        showHint('email_format_hint');
+    } else {
+        hideHint('email_format_hint');
+    }
 }
 
 

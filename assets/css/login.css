@@ -18,7 +18,6 @@
     max-width: 1440px;
     margin: 0 auto;
     position: relative;
-    /* contain absolutely positioned logo */
     animation: backgroundMobileAnimation 2s forwards ease-in-out;
 }
 
@@ -122,18 +121,43 @@
 }
 
 .login-card {
-    padding: 48px 115px;
+    padding: 25px 115px;
     background: var(--white);
     border-radius: 30px;
     box-shadow: 0px 0px 14px 3px rgba(0, 0, 0, 0.04);
 }
 
 .login-error {
-    display: none;
+    /* Immer im Flow — kein display:none, damit kein Layout-Shift */
+    display: block;
+    visibility: hidden;
     color: #ff4d4d;
     font-size: 13px;
     margin-top: -8px;
+    min-height: 1.2em;
 }
+
+.login-error.visible {
+    visibility: visible;
+}
+
+/* ── Validation Hints ──────────────────────────────────────────────────────── */
+/* visibility statt display:none → reserviert Platz, verhindert Layout-Shift   */
+
+.field-hint {
+    display: block;
+    visibility: hidden;
+    color: #ff4d4d;
+    font-size: 13px;
+    margin-top: -8px;
+    min-height: 1.2em;
+}
+
+.field-hint.visible {
+    visibility: visible;
+}
+
+/* ── Rest ──────────────────────────────────────────────────────────────────── */
 
 .login-card h2 {
     margin: 0;
@@ -178,8 +202,8 @@
 .login-form {
     display: flex;
     flex-direction: column;
-    gap: 24px;
-    margin-bottom: 24px;
+    gap: 16px;
+    margin-bottom: 16px;
 }
 
 .input-field {
@@ -442,6 +466,9 @@
 
     .login-topbar span {
         font-size: 16px;
-
     }
+}
+
+#reg_name {
+    margin-bottom: 16px;
 }
