@@ -472,3 +472,7 @@
 #reg_name {
     margin-bottom: 16px;
 }
+
+#reg_name img {
+    margin-top: -6px;
+}
