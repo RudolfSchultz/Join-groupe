@@ -230,8 +230,8 @@ function toggleEditPerson(id) {
 
 
 function canAssignMorePersons() {
-    if (editAssignedIds.length >= 6) {
-        notify('Maximal 6 Personen können zugewiesen werden.', true);
+    if (editAssignedIds.length >= 10) {
+        notify('Maximal 10 Personen können zugewiesen werden.', true);
         return false;
     }
     return true;

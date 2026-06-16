@@ -89,9 +89,14 @@ function buildProgressBar(subtasks, taskId) {
 
 
 function buildAvatars(assignedTo) {
-    return assignedTo.slice(0, 6)
-        .map(a => `<span class="card-avatar" style="background:${a.color || '#ccc'}">${a.initials || '?'}</span>`)
-        .join('');
+    const max = 5;
+    const visible = (assignedTo || []).slice(0, max);
+    let html = visible.map(a => `<span class="card-avatar" style="background:${a.color || '#ccc'}">${a.initials || '?'}</span>`).join('');
+    if ((assignedTo || []).length > max) {
+        const more = (assignedTo || []).length - max;
+        html += `<span class="card-avatar card-avatar-more">+${more}</span>`;
+    }
+    return html;
 }
 
 
@@ -105,11 +110,23 @@ function taskDetailTemplate(task) {
 
 
 function buildDetailAssignees(assignedTo) {
-    return assignedTo.map(a => `
+    if (!(assignedTo || []).length) return '';
+    const max = 5;
+    const visible = assignedTo.slice(0, max);
+    let html = visible.map(a => `
         <div class="detail-assignee">
             <span class="card-avatar" style="background:${a.color || '#ccc'}">${a.initials || '?'}</span>
             <span class="detail-assignee-name">${escapeHtml(a.name || '')}</span>
         </div>`).join('');
+    if (assignedTo.length > max) {
+        const more = assignedTo.length - max;
+        html += `
+        <div class="detail-assignee detail-more">
+            <span class="card-avatar card-avatar-more">+${more}</span>
+            <span class="detail-assignee-name">and ${more} more</span>
+        </div>`;
+    }
+    return html;
 }
 
 
@@ -313,9 +330,13 @@ function renderEditAssignOptionsHTML(boardContacts, editAssignedIds) {
 
 function renderEditAssignedAvatarsHTML(boardContacts, editAssignedIds) {
     const selected = boardContacts.filter(c => editAssignedIds.includes(String(c.id)));
-    return selected.map(c =>
-        `<span class="card-avatar" style="background:${c.color}" title="${escapeHtml(c.name)}">${c.initials}</span>`
-    ).join('');
+    const max = 5;
+    const visible = selected.slice(0, max);
+    let html = visible.map(c => `<span class="card-avatar" style="background:${c.color}" title="${escapeHtml(c.name)}">${c.initials}</span>`).join('');
+    if (selected.length > max) {
+        html += `<span class="card-avatar card-avatar-more" title="${selected.length - max} more">+${selected.length - max}</span>`;
+    }
+    return html;
 }
 
 
