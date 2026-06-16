@@ -8,7 +8,7 @@
     }
 }
 
-@media (max-width: 800px) {
+@media (max-width: 960px) {
     .header {
         padding-left: 20px;
     }
