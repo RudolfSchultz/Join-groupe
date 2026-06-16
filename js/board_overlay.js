@@ -125,16 +125,8 @@ async function openEditModal(id) {
     const task = allTasks.find(t => t.id == id);
     if (!task) return;
     initEditState(task);
-    // Render modal immediately. Load contacts asynchronously to avoid blocking UI (mobile hangs).
+    if (!boardContacts.length) boardContacts = await loadBoardContacts();
     renderEditModal(task);
-    if (!boardContacts.length) {
-        loadBoardContacts().then(contacts => {
-            boardContacts = contacts || [];
-            // update assign-options and avatars once contacts are available
-            renderEditAssignOptions();
-            renderEditAssignedAvatars();
-        }).catch(e => { console.error('Error loading board contacts:', e); });
-    }
  /*    document.addEventListener('click', handleEditOutsideClick, true); */
 }
 
@@ -238,8 +230,8 @@ function toggleEditPerson(id) {
 
 
 function canAssignMorePersons() {
-    if (editAssignedIds.length >= 10) {
-        notify('Maximal 10 Personen können zugewiesen werden.', true);
+    if (editAssignedIds.length >= 6) {
+        notify('Maximal 6 Personen können zugewiesen werden.', true);
         return false;
     }
     return true;
