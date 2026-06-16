@@ -723,6 +723,12 @@ button.btn-add-task:active {
   }
 }
 
+@media (max-width: 375px) {
+  .board-modal {
+    padding: 20px;
+  }
+}
+
 .subtask-list {
   list-style: none;
   margin: 8px 0 0;

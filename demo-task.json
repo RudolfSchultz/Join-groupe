@@ -31,7 +31,7 @@
         "title": "Build CSS"
       }
     ],
-    "title": "Demo: Landing Page & Recipe Recommender"
+    "title": "Landing Page & Recipe Recommender"
   },
   {
     "assignedTo": [
@@ -54,7 +54,7 @@
     "id": 2,
     "priority": "medium",
     "status": "awaitFeedback",
-    "title": "Demo: Reusable HTML Base Templates"
+    "title": "Reusable HTML Base Templates"
   },
   {
     "assignedTo": [
@@ -87,7 +87,7 @@
         "title": "ID Change"
       }
     ],
-    "title": "Demo: CSS Architecture & Naming"
+    "title": "CSS Architecture & Naming"
   },
   {
     "assignedTo": [
@@ -110,7 +110,7 @@
     "id": 4,
     "priority": "urgent",
     "status": "todo",
-    "title": "Demo: Daily Recipe & Portion Calculator"
+    "title": "Daily Recipe & Portion Calculator"
   },
   {
     "assignedTo": [
@@ -145,6 +145,6 @@
         "title": "Test"
       }
     ],
-    "title": "Demo: Integration Testing & QA"
+    "title": "Integration Testing & QA"
   }
 ]

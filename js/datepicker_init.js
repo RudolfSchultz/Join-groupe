@@ -8,18 +8,34 @@
         }catch(e){/* ignore */}
     }
 
+    let _scheduled = null;
+    function runAttach() {
+        _scheduled = null;
+        try {
+            document.querySelectorAll('input.date-picker').forEach(initFor);
+        } catch (e) {
+            console.error('attachDatepickers error', e);
+        }
+    }
+
+    function scheduleAttach(delay = 50) {
+        if (_scheduled) return;
+        const runner = () => runAttach();
+        if (typeof requestIdleCallback === 'function') {
+            _scheduled = requestIdleCallback(runner, { timeout: 200 });
+        } else {
+            _scheduled = setTimeout(runner, delay);
+        }
+    }
+
     function attachToExisting(){
-        document.querySelectorAll('input.date-picker').forEach(initFor);
+        // schedule a batched attach to avoid blocking click handlers
+        scheduleAttach();
     }
 
     const mo = new MutationObserver(muts => {
-        for(const m of muts){
-            for(const node of m.addedNodes){
-                if(!(node instanceof Element)) continue;
-                if(node.matches && node.matches('input.date-picker')) initFor(node);
-                node.querySelectorAll && node.querySelectorAll('input.date-picker').forEach(initFor);
-            }
-        }
+        // schedule a single batched attach when mutations occur
+        scheduleAttach(100);
     });
 
     function startObserverAndAttach(){

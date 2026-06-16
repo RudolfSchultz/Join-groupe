@@ -125,8 +125,16 @@ async function openEditModal(id) {
     const task = allTasks.find(t => t.id == id);
     if (!task) return;
     initEditState(task);
-    if (!boardContacts.length) boardContacts = await loadBoardContacts();
+    // Render modal immediately. Load contacts asynchronously to avoid blocking UI (mobile hangs).
     renderEditModal(task);
+    if (!boardContacts.length) {
+        loadBoardContacts().then(contacts => {
+            boardContacts = contacts || [];
+            // update assign-options and avatars once contacts are available
+            renderEditAssignOptions();
+            renderEditAssignedAvatars();
+        }).catch(e => { console.error('Error loading board contacts:', e); });
+    }
  /*    document.addEventListener('click', handleEditOutsideClick, true); */
 }
 
