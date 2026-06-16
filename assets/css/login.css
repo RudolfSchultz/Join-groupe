@@ -290,11 +290,27 @@
     }
 }
 
+@media (max-width: 600px) {
+    .login-logo-animated .logo-dark {
+        margin-top: -20px;
+        margin-left: -50px;
+        height: 60px;
+    }
+
+    .login-topbar span {
+        display: none;
+    }
+}
+
 @media (max-width: 468px) {
     .login-logo-animated .logo-dark {
         margin-top: -20px;
         margin-left: -50px;
         height: 60px;
+    }
+
+    .login-topbar span {
+        display: none;
     }
 }
 
