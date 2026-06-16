@@ -27,7 +27,7 @@ function renderAddTaskModal() {
                             <label class="form-label" for="modal-task-due">Due date <span
                                     class="required">*</span></label>
                             <div class="form-input-icon">
-                                <input class="form-input date-picker" type="text" id="modal-task-due"
+                                <input class="form-input" type="date" id="modal-task-due"
                                     onchange="updateModalCreateButton()" oninput="updateModalCreateButton()">
                             </div>
                             <span class="field-error d-none" id="modal-error-due">This field is required</span>
@@ -141,6 +141,8 @@ function renderAddTaskModal() {
 
 function injectAddTaskModal() {
     document.body.insertAdjacentHTML('beforeend', renderAddTaskModal());
+    // ensure datepickers attach to dynamically injected modal
+    setTimeout(() => { if (window.attachDatepickers) try { window.attachDatepickers(); } catch (e) {} }, 0);
 }
 
 

@@ -9,23 +9,34 @@
     }
 
     function attachToExisting(){
-        document.querySelectorAll('input[type="date"], input.date-picker').forEach(initFor);
+        document.querySelectorAll('input.date-picker').forEach(initFor);
     }
 
     const mo = new MutationObserver(muts => {
         for(const m of muts){
             for(const node of m.addedNodes){
                 if(!(node instanceof Element)) continue;
-                if(node.matches && (node.matches('input[type="date"]') || node.matches('input.date-picker'))) initFor(node);
-                node.querySelectorAll && node.querySelectorAll('input[type="date"], input.date-picker').forEach(initFor);
+                if(node.matches && node.matches('input.date-picker')) initFor(node);
+                node.querySelectorAll && node.querySelectorAll('input.date-picker').forEach(initFor);
             }
         }
     });
 
+    function startObserverAndAttach(){
+        attachToExisting();
+        mo.observe(document.body, { childList:true, subtree:true });
+    }
+
+    function waitForFlatpickrAndInit(retries = 50, delay = 100){
+        if (typeof flatpickr === 'function') { startObserverAndAttach(); return; }
+        if (retries <= 0) { startObserverAndAttach(); return; }
+        setTimeout(() => waitForFlatpickrAndInit(retries - 1, delay), delay);
+    }
+
     if(document.readyState === 'loading'){
-        document.addEventListener('DOMContentLoaded', () => { attachToExisting(); mo.observe(document.body, { childList:true, subtree:true }); });
+        document.addEventListener('DOMContentLoaded', () => { waitForFlatpickrAndInit(); });
     } else {
-        attachToExisting(); mo.observe(document.body, { childList:true, subtree:true });
+        waitForFlatpickrAndInit();
     }
 
     window.attachDatepickers = attachToExisting;
