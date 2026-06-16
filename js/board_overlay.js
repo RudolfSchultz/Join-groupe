@@ -8,7 +8,7 @@ function openOverlay() {
 function closeOverlay() {
     document.getElementById('board-overlay').classList.add('d-none');
     clearOverlayContent();
-    try { document.removeEventListener('click', handleEditOutsideClick, true); } catch (e) { /* ignore */ }
+    
 }
 
 
@@ -127,7 +127,7 @@ async function openEditModal(id) {
     initEditState(task);
     if (!boardContacts.length) boardContacts = await loadBoardContacts();
     renderEditModal(task);
-    document.addEventListener('click', handleEditOutsideClick, true);
+ /*    document.addEventListener('click', handleEditOutsideClick, true); */
 }
 
 
@@ -145,6 +145,19 @@ function renderEditModal(task) {
     renderEditAssignOptions();
     renderEditAssignedAvatars();
     renderEditSubtasks();
+}
+
+function handleEditOutsideClick(event) {
+    const editBox = document.getElementById('board-edit-box');
+    if (!editBox || editBox.classList.contains('d-none')) return;
+
+    // Alle Input-Interaktionen ignorieren (Datepicker feuert Klicks auf document)
+    if (event.target.tagName === 'INPUT' || event.target.tagName === 'SELECT') return;
+
+    // Klick innerhalb des Overlays → immer ignorieren
+    if (event.target.closest('#board-overlay')) return;
+
+    closeOverlay();
 }
 
 

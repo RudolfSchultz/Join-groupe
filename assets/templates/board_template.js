@@ -217,7 +217,8 @@ function buildEditBasicFields(task) {
         </div>
         <div class="edit-form-group">
             <label class="edit-label">Due Date</label>
-            <input id="edit-due" class="edit-input" type="date" value="${task.dueDate || ''}">
+            <input id="edit-due" class="edit-input" type="date" value="${task.dueDate || ''}"
+                onchange="this.blur()">
         </div>`;
 }
 
@@ -265,7 +266,9 @@ function buildEditSubtaskField() {
 function buildEditSaveButton(taskId) {
     return `
         <div class="edit-save-row">
-            <button class="btn-add-task" onclick="saveEditedTask(${taskId})">
+            <button type="button" class="btn-add-task" 
+                onmousedown="event.preventDefault(); event.stopPropagation();"
+                onclick="event.stopPropagation(); saveEditedTask(${taskId})">
                 OK
                 <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M1 6L6 11L15 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
