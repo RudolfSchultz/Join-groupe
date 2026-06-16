@@ -12,11 +12,17 @@
   }
 }
 
-@media (max-width: 960px) {
+@media (max-width: 940px) {
   .btn-add-task-text {
     display: none;
   }
 
+  .search-wrapper {
+    width: 220px;
+  }
+}
+
+@media (max-width: 768px) {
   .board-main {
     padding: 108px 16px 24px;
     height: auto;
