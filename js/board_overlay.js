@@ -8,7 +8,7 @@ function openOverlay() {
 function closeOverlay() {
     document.getElementById('board-overlay').classList.add('d-none');
     clearOverlayContent();
-    
+    document.removeEventListener('click', handleEditAssignOutsideClick, true);
 }
 
 
@@ -146,23 +146,31 @@ function renderEditModal(task) {
     renderEditAssignedAvatars();
     renderEditSubtasks();
 
-    // ← Neu: Datepicker direkt nach dem Rendern explizit initialisieren
     setTimeout(() => {
         if (window.attachDatepickers) window.attachDatepickers();
+    }, 0);
+
+    // Assign-Dropdown bei Klick außerhalb schließen
+    setTimeout(() => {
+        document.addEventListener('click', handleEditAssignOutsideClick, true);
     }, 0);
 }
 
 function handleEditOutsideClick(event) {
     const editBox = document.getElementById('board-edit-box');
     if (!editBox || editBox.classList.contains('d-none')) return;
-
-    // Alle Input-Interaktionen ignorieren (Datepicker feuert Klicks auf document)
     if (event.target.tagName === 'INPUT' || event.target.tagName === 'SELECT') return;
-
-    // Klick innerhalb des Overlays → immer ignorieren
     if (event.target.closest('#board-overlay')) return;
-
     closeOverlay();
+}
+
+function handleEditAssignOutsideClick(event) {
+    if (!event.target.closest('.edit-assign-wrapper')) {
+        const opts = document.getElementById('edit-assign-options');
+        if (opts && !opts.classList.contains('d-none')) {
+            opts.classList.add('d-none');
+        }
+    }
 }
 
 
