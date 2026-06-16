@@ -224,35 +224,6 @@ function canAssignMorePersons() {
     return true;
 }
 
-function notify(message, isError) {
-    if (typeof showNotification === 'function') {
-        showNotification(message, isError);
-        return;
-    }
-    // Fallback to in-page notification element like `showNotification` does
-    const notifEl = document.getElementById && document.getElementById('notification');
-    if (notifEl) {
-        notifEl.textContent = message;
-        notifEl.style.backgroundColor = isError ? 'var(--primaryColor)' : 'var(--primaryColor)';
-        notifEl.classList.remove('d-none');
-        setTimeout(() => notifEl.classList.add('d-none'), 5000);
-        return;
-    }
-    if (typeof Notification !== 'undefined') {
-        try {
-            if (Notification.permission === 'granted') {
-                new Notification(message);
-            } else if (Notification.permission !== 'denied') {
-                Notification.requestPermission().then(permission => {
-                    if (permission === 'granted') new Notification(message);
-                }).catch(() => { /* ignore */ });
-            }
-        } catch (e) {
-            // ignore notification errors silently
-        }
-    }
-}
-
 
 function renderEditAssignedAvatars() {
     const el = document.getElementById('edit-assigned-avatars');

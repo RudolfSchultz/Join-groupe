@@ -154,6 +154,31 @@ async function loadIncludeElement(element) {
     }
 }
 
+function notify(message, isError) {
+    // Ziel-Container ermitteln: wenn Add-Task-Dialog offen ist, Notification dorthin verschieben
+    const dialog = document.getElementById('add-task-overlay');
+    const dialogIsOpen = dialog && dialog.open;
+
+    const notifEl = document.getElementById('notification');
+    if (notifEl) {
+        // In den offenen Dialog verschieben, sonst zurück ans Body
+        if (dialogIsOpen) {
+            dialog.appendChild(notifEl);
+        } else {
+            document.body.appendChild(notifEl);
+        }
+        notifEl.textContent = message;
+        notifEl.classList.remove('d-none');
+        setTimeout(() => notifEl.classList.add('d-none'), 5000);
+        return;
+    }
+
+    // Fallback: showNotification falls vorhanden
+    if (typeof showNotification === 'function') {
+        showNotification(message, isError);
+    }
+}
+
 
 async function loadNavigation() {
     const includeElements = document.querySelectorAll('[data-import]');

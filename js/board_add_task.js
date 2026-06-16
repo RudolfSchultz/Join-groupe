@@ -139,32 +139,6 @@ function canAssignMoreModalPersons() {
     return true;
 }
 
-function notify(message, isError) {
-    if (typeof showNotification === 'function') {
-        showNotification(message, isError);
-        return;
-    }
-    const notifEl = document.getElementById && document.getElementById('notification');
-    if (notifEl) {
-        notifEl.textContent = message;
-        notifEl.style.backgroundColor = isError ? 'var(--primaryColor)' : 'var(--primaryColor)';
-        notifEl.classList.remove('d-none');
-        setTimeout(() => notifEl.classList.add('d-none'), 5000);
-        return;
-    }
-    if (typeof Notification !== 'undefined') {
-        try {
-            if (Notification.permission === 'granted') {
-                new Notification(message);
-            } else if (Notification.permission !== 'denied') {
-                Notification.requestPermission().then(permission => {
-                    if (permission === 'granted') new Notification(message);
-                }).catch(() => { /* ignore */ });
-            }
-        } catch (e) { /* ignore */ }
-    }
-}
-
 
 function renderModalAssignedAvatars() {
     const container = document.getElementById('modal-assigned-avatars');
