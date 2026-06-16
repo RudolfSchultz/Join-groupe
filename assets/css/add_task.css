@@ -352,8 +352,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .subtask-item:hover { background: #f6f7f8; }
 .subtask-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.subtask-item-actions { display: none; align-items: center; flex-shrink: 0; }
-.subtask-item:hover .subtask-item-actions { display: flex; }
+.subtask-item-actions { visibility: hidden; display: flex; align-items: center; flex-shrink: 0; }
+.subtask-item:hover .subtask-item-actions { visibility: visible; }
 
 .subtask-item--editing {
   background: #ffffff;
@@ -362,7 +362,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   padding: 4px 0 4px 12px;
 }
 
-.subtask-item--editing .subtask-item-actions { display: flex; }
+.subtask-item--editing .subtask-item-actions { visibility: visible; }
 
 .subtask-edit-input {
   flex: 1;
