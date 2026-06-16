@@ -1,8 +1,4 @@
 @media (max-width: 1024px) {
-    .sidebar {
-        width: 200px;
-    }
-
     .header {
         padding-left: 250px;
     }
