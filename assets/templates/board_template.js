@@ -6,6 +6,22 @@ function escapeHtml(str) {
 }
 
 
+function toIsoDate(value) {
+    if (!value) return '';
+    // already ISO
+    if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return value;
+    // European format dd.mm.yyyy
+    if (/^\d{2}\.\d{2}\.\d{4}$/.test(value)) {
+        const parts = value.split('.');
+        return `${parts[2]}-${parts[1]}-${parts[0]}`;
+    }
+    // try parseable date
+    const d = new Date(value);
+    if (!isNaN(d)) return d.toISOString().slice(0,10);
+    return '';
+}
+
+
 function truncate(str, len) {
     if (!str) return '';
     return str.length > len ? str.substring(0, len) + '…' : str;
@@ -217,8 +233,7 @@ function buildEditBasicFields(task) {
         </div>
         <div class="edit-form-group">
             <label class="edit-label">Due Date</label>
-            <input id="edit-due" class="edit-input" type="date" value="${task.dueDate || ''}"
-                onchange="this.blur()">
+            <input id="edit-due" class="edit-input date-picker" type="text" value="${escapeHtml(task.dueDate || '')}">
         </div>`;
 }
 
