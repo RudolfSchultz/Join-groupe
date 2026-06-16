@@ -8,7 +8,7 @@ function openOverlay() {
 function closeOverlay() {
     document.getElementById('board-overlay').classList.add('d-none');
     clearOverlayContent();
-    try { document.removeEventListener('click', handleEditOutsideClick, true); } catch (e) { /* ignore */ }
+    
 }
 
 
@@ -127,7 +127,7 @@ async function openEditModal(id) {
     initEditState(task);
     if (!boardContacts.length) boardContacts = await loadBoardContacts();
     renderEditModal(task);
-    document.addEventListener('click', handleEditOutsideClick, true);
+ /*    document.addEventListener('click', handleEditOutsideClick, true); */
 }
 
 
@@ -145,6 +145,19 @@ function renderEditModal(task) {
     renderEditAssignOptions();
     renderEditAssignedAvatars();
     renderEditSubtasks();
+}
+
+function handleEditOutsideClick(event) {
+    const editBox = document.getElementById('board-edit-box');
+    if (!editBox || editBox.classList.contains('d-none')) return;
+
+    // Alle Input-Interaktionen ignorieren (Datepicker feuert Klicks auf document)
+    if (event.target.tagName === 'INPUT' || event.target.tagName === 'SELECT') return;
+
+    // Klick innerhalb des Overlays → immer ignorieren
+    if (event.target.closest('#board-overlay')) return;
+
+    closeOverlay();
 }
 
 
@@ -218,11 +231,7 @@ function toggleEditPerson(id) {
 
 function canAssignMorePersons() {
     if (editAssignedIds.length >= 6) {
-        if (typeof showNotification === 'function') {
-            showNotification('Maximal 6 Personen können zugewiesen werden.', true);
-        } else {
-            alert('Maximal 6 Personen können zugewiesen werden.');
-        }
+        notify('Maximal 6 Personen können zugewiesen werden.', true);
         return false;
     }
     return true;
@@ -291,7 +300,7 @@ async function saveEditedTask(id) {
     const task = allTasks.find(t => t.id == id);
     if (!task) return;
     const title = document.getElementById('edit-title').value.trim();
-    if (!title) { alert('Title is required.'); return; }
+    if (!title) { notify('Title is required.', true); return; }
     const updates = buildTaskUpdates(title, task);
     Object.assign(task, updates);
     await saveTaskUpdates(id, updates);

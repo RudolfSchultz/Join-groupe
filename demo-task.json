@@ -5,19 +5,19 @@
       {
         "color": "#A6032D",
         "id": "5",
-        "initials": "AS",
-        "name": "Anja Schulz"
+        "initials": "BB",
+        "name": "Ben Bronner"
       },
       {
         "color": "#6AA80E",
         "id": "8",
-        "initials": "BZ",
-        "name": "Benedikt Ziegler"
+        "initials": "RH",
+        "name": "rudolf happy"
       }
     ],
     "category": "User Story",
-    "description": "Build start page with recipe recommendation...",
-    "dueDate": "2026-06-15",
+    "description": "Create a demo landing page that recommends recipes based on user preferences and seasonal ingredients, with sample interactions and placeholder data.",
+    "dueDate": "23.06.2026",
     "id": 1,
     "priority": "urgent",
     "status": "todo",
@@ -31,48 +31,48 @@
         "title": "Build CSS"
       }
     ],
-    "title": "Kochwelt Page & Recipe Recommender"
+    "title": "Landing Page & Recipe Recommender"
   },
   {
     "assignedTo": [
       {
         "color": "#A6032D",
         "id": "5",
-        "initials": "KK",
-        "name": "Katrin Krause"
+        "initials": "BB",
+        "name": "Ben Bronner"
       },
       {
         "color": "#6AA80E",
         "id": "8",
-        "initials": "NL",
-        "name": "Nico Lange"
+        "initials": "RH",
+        "name": "rudolf happy"
       }
     ],
     "category": "Technical Task",
-    "description": "Create reusable HTML base templates...",
+    "description": "Implement modular HTML base templates with example header, footer, and content components for rapid prototyping.",
     "dueDate": "2026-06-05",
     "id": 2,
     "priority": "medium",
     "status": "awaitFeedback",
-    "title": "HTML Base Template Creation"
+    "title": "Reusable HTML Base Templates"
   },
   {
     "assignedTo": [
       {
         "color": "#A6032D",
         "id": "5",
-        "initials": "KK",
-        "name": "Katrin Krause"
+        "initials": "BB",
+        "name": "Ben Bronner"
       },
       {
         "color": "#6AA80E",
         "id": "8",
-        "initials": "NL",
-        "name": "Nico Lange"
+        "initials": "RH",
+        "name": "rudolf happy"
       }
     ],
     "category": "Technical Task",
-    "description": "Define CSS naming conventions and structure...",
+    "description": "Design a demo CSS architecture with naming conventions (BEM-style), responsive breakpoints, and utility classes.",
     "dueDate": "2026-06-10",
     "id": 3,
     "priority": "urgent",
@@ -87,29 +87,64 @@
         "title": "ID Change"
       }
     ],
-    "title": "CSS Architecture Planning"
+    "title": "CSS Architecture & Naming"
   },
   {
     "assignedTo": [
       {
         "color": "#A6032D",
         "id": "5",
-        "initials": "KK",
-        "name": "Katrin Krause"
+        "initials": "BB",
+        "name": "Ben Bronner"
       },
       {
         "color": "#6AA80E",
         "id": "8",
-        "initials": "NL",
-        "name": "Nico Lange"
+        "initials": "RH",
+        "name": "rudolf happy"
       }
     ],
     "category": "User Story",
-    "description": "Implement daily recipe and portion calculator....",
+    "description": "Build a demo daily recipe generator and portion calculator with example inputs and exportable shopping list.",
     "dueDate": "2026-06-14",
     "id": 4,
     "priority": "urgent",
-    "status": "awaitFeedback",
-    "title": "Daily Kochwelt Recipe"
+    "status": "todo",
+    "title": "Daily Recipe & Portion Calculator"
+  },
+  {
+    "assignedTo": [
+      {
+        "color": "#B104FD",
+        "id": "9",
+        "initials": "AL",
+        "name": "Alex Lindt"
+      },
+      {
+        "color": "#A6032D",
+        "id": "5",
+        "initials": "BB",
+        "name": "Ben Bronner"
+      },
+      {
+        "color": "#6AA80E",
+        "id": "8",
+        "initials": "RH",
+        "name": "rudolf happy"
+      }
+    ],
+    "category": "Technical Task",
+    "description": "Set up demo integration checks, basic manual QA steps, and document findings for follow-up testing.",
+    "dueDate": "2026-06-07",
+    "id": 5,
+    "priority": "urgent",
+    "status": "inProgress",
+    "subtasks": [
+      {
+        "done": false,
+        "title": "Test"
+      }
+    ],
+    "title": "Integration Testing & QA"
   }
 ]

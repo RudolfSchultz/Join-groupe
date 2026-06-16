@@ -109,12 +109,15 @@ function renderModalAssignOptions() {
 
 function modalAssignOptionTemplate(contact, isSelected) {
     return `
-        <div class="assign-option ${isSelected ? 'assign-option--active' : ''}" onclick="toggleModalPerson('${contact.id}'); event.stopPropagation();">
+        <div class="assign-option ${isSelected ? 'assign-option--active' : ''}"
+             role="checkbox" tabindex="0" aria-checked="${isSelected}"
+             onclick="toggleModalPerson('${contact.id}'); event.stopPropagation();"
+             onkeydown="if(event.key==='Enter' || event.key===' '){event.preventDefault(); toggleModalPerson('${contact.id}');}">
             <span class="assign-option-left">
                 <span class="avatar-chip" style="background-color:${contact.color}">${contact.avatar}</span>
                 <span class="assign-option-name">${escapeHtml(contact.name)}</span>
             </span>
-            <span class="assign-checkbox">${isSelected ? '&#10003;' : ''}</span>
+            <span class="assign-checkbox" aria-hidden="true">${isSelected ? '&#x2611;' : '&#x2610;'}</span>
         </div>`;
 }
 
@@ -132,12 +135,8 @@ function toggleModalPerson(id) {
 
 
 function canAssignMoreModalPersons() {
-    if (modalAssignedIds.length >= 6) {
-        if (typeof showNotification === 'function') {
-            showNotification('Maximal 6 Personen können zugewiesen werden.', true);
-        } else {
-            alert('Maximal 6 Personen können zugewiesen werden.');
-        }
+    if (modalAssignedIds.length >= 10) {
+        notify('Maximal 10 Personen können zugewiesen werden.', true);
         return false;
     }
     return true;
@@ -147,9 +146,14 @@ function canAssignMoreModalPersons() {
 function renderModalAssignedAvatars() {
     const container = document.getElementById('modal-assigned-avatars');
     const selected = modalContacts.filter(contact => modalAssignedIds.includes(contact.id));
-    container.innerHTML = selected
-        .map(contact => `<span class="avatar-chip" style="background-color:${contact.color}">${contact.avatar}</span>`)
-        .join('');
+    const max = 5;
+    const visible = selected.slice(0, max);
+    let html = visible.map(contact => `<span class="avatar-chip" style="background-color:${contact.color}">${contact.avatar}</span>`).join('');
+    if (selected.length > max) {
+        const more = selected.length - max;
+        html += `<span class="avatar-chip avatar-chip-more">+${more}</span>`;
+    }
+    container.innerHTML = html;
 }
 
 

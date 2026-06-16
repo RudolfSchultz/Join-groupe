@@ -6,6 +6,22 @@ function escapeHtml(str) {
 }
 
 
+function toIsoDate(value) {
+    if (!value) return '';
+    // already ISO
+    if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return value;
+    // European format dd.mm.yyyy
+    if (/^\d{2}\.\d{2}\.\d{4}$/.test(value)) {
+        const parts = value.split('.');
+        return `${parts[2]}-${parts[1]}-${parts[0]}`;
+    }
+    // try parseable date
+    const d = new Date(value);
+    if (!isNaN(d)) return d.toISOString().slice(0,10);
+    return '';
+}
+
+
 function truncate(str, len) {
     if (!str) return '';
     return str.length > len ? str.substring(0, len) + '…' : str;
@@ -73,9 +89,14 @@ function buildProgressBar(subtasks, taskId) {
 
 
 function buildAvatars(assignedTo) {
-    return assignedTo.slice(0, 6)
-        .map(a => `<span class="card-avatar" style="background:${a.color || '#ccc'}">${a.initials || '?'}</span>`)
-        .join('');
+    const max = 5;
+    const visible = (assignedTo || []).slice(0, max);
+    let html = visible.map(a => `<span class="card-avatar" style="background:${a.color || '#ccc'}">${a.initials || '?'}</span>`).join('');
+    if ((assignedTo || []).length > max) {
+        const more = (assignedTo || []).length - max;
+        html += `<span class="card-avatar card-avatar-more">+${more}</span>`;
+    }
+    return html;
 }
 
 
@@ -89,11 +110,23 @@ function taskDetailTemplate(task) {
 
 
 function buildDetailAssignees(assignedTo) {
-    return assignedTo.map(a => `
+    if (!(assignedTo || []).length) return '';
+    const max = 5;
+    const visible = assignedTo.slice(0, max);
+    let html = visible.map(a => `
         <div class="detail-assignee">
             <span class="card-avatar" style="background:${a.color || '#ccc'}">${a.initials || '?'}</span>
             <span class="detail-assignee-name">${escapeHtml(a.name || '')}</span>
         </div>`).join('');
+    if (assignedTo.length > max) {
+        const more = assignedTo.length - max;
+        html += `
+        <div class="detail-assignee detail-more">
+            <span class="card-avatar card-avatar-more">+${more}</span>
+            <span class="detail-assignee-name">and ${more} more</span>
+        </div>`;
+    }
+    return html;
 }
 
 
@@ -217,7 +250,10 @@ function buildEditBasicFields(task) {
         </div>
         <div class="edit-form-group">
             <label class="edit-label">Due Date</label>
-            <input id="edit-due" class="edit-input" type="date" value="${task.dueDate || ''}">
+            <div class="form-input-icon">
+                <input id="edit-due" class="edit-input date-picker" type="text" value="${escapeHtml(task.dueDate || '')}">
+                <img src="../assets/icons/event.svg" class="input-icon" alt="calendar">
+            </div>
         </div>`;
 }
 
@@ -265,7 +301,9 @@ function buildEditSubtaskField() {
 function buildEditSaveButton(taskId) {
     return `
         <div class="edit-save-row">
-            <button class="btn-add-task" onclick="saveEditedTask(${taskId})">
+            <button type="button" class="btn-add-task" 
+                onmousedown="event.preventDefault(); event.stopPropagation();"
+                onclick="event.stopPropagation(); saveEditedTask(${taskId})">
                 OK
                 <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M1 6L6 11L15 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
@@ -277,12 +315,14 @@ function renderEditAssignOptionsHTML(boardContacts, editAssignedIds) {
     return boardContacts.map(c => {
         const selected = editAssignedIds.includes(String(c.id));
         return `<div class="assign-option ${selected ? 'assign-option--active' : ''}"
-                    onclick="toggleEditPerson('${c.id}'); event.stopPropagation();">
+                    role="checkbox" tabindex="0" aria-checked="${selected}"
+                    onclick="toggleEditPerson('${c.id}'); event.stopPropagation();"
+                    onkeydown="if(event.key==='Enter' || event.key===' '){event.preventDefault(); toggleEditPerson('${c.id}');}">
                     <span class="assign-option-left">
                         <span class="card-avatar" style="background:${c.color}">${c.initials}</span>
                         <span class="assign-option-name">${escapeHtml(c.name)}</span>
                     </span>
-                    <span class="assign-checkbox">${selected ? '&#10003;' : ''}</span>
+                    <span class="assign-checkbox" aria-hidden="true">${selected ? '&#x2611;' : '&#x2610;'}</span>
                 </div>`;
     }).join('');
 }
@@ -290,9 +330,13 @@ function renderEditAssignOptionsHTML(boardContacts, editAssignedIds) {
 
 function renderEditAssignedAvatarsHTML(boardContacts, editAssignedIds) {
     const selected = boardContacts.filter(c => editAssignedIds.includes(String(c.id)));
-    return selected.map(c =>
-        `<span class="card-avatar" style="background:${c.color}" title="${escapeHtml(c.name)}">${c.initials}</span>`
-    ).join('');
+    const max = 5;
+    const visible = selected.slice(0, max);
+    let html = visible.map(c => `<span class="card-avatar" style="background:${c.color}" title="${escapeHtml(c.name)}">${c.initials}</span>`).join('');
+    if (selected.length > max) {
+        html += `<span class="card-avatar card-avatar-more" title="${selected.length - max} more">+${selected.length - max}</span>`;
+    }
+    return html;
 }
 
 

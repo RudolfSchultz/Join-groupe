@@ -141,6 +141,8 @@ function renderAddTaskModal() {
 
 function injectAddTaskModal() {
     document.body.insertAdjacentHTML('beforeend', renderAddTaskModal());
+    // ensure datepickers attach to dynamically injected modal
+    setTimeout(() => { if (window.attachDatepickers) try { window.attachDatepickers(); } catch (e) {} }, 0);
 }
 
 
