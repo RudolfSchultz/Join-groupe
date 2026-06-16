@@ -258,7 +258,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   left: 0;
   right: 0;
   height: fit-content;
-  max-height: 220px;
+  max-height: 170px;
   background: #ffffff;
   border: 1px solid #D1D1D1;
   border-radius: 10px;
