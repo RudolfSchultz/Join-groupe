@@ -1,3 +1,5 @@
+html, body { overflow-x: hidden; }
+
 .add-task-main { padding: 180px 96px 0px 96px; }
 
 .page-title {
@@ -202,18 +204,18 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   .form-divider-vertical { display: none; }
   .form-col { gap: 12px; }
   .form-group { gap: 4px; }
-  .form-label { font-size: 14px; }
-  .form-input { height: 38px; font-size: 14px; padding: 8px 14px; }
-  .form-textarea { height: 72px; font-size: 14px; padding: 10px 14px; }
+  .form-label { font-size: 16px; }
+  .form-input { height: 38px; font-size: 16px; padding: 8px 14px; }
+  .form-textarea { height: 72px; font-size: 16px; padding: 10px 14px; }
   #task-title { padding: 8px 14px; }
   #task-due,
   #task-assigned,
   #task-category,
-  #task-subtask { height: 38px; padding: 8px 14px; font-size: 14px; }
+  #task-subtask { height: 38px; padding: 8px 14px; font-size: 16px; }
   .select-option,
-  .assign-option { font-size: 14px; padding: 8px 14px; }
+  .assign-option { font-size: 16px; padding: 8px 14px; }
   .prio-buttons { gap: 8px; }
-  .prio-btn { height: 41px; font-size: 14px; padding: 0 8px; }
+  .prio-btn { height: 41px; font-size: 16px; padding: 0 8px; }
   .form-footer {
     flex-direction: row;
     align-items: center;
@@ -230,11 +232,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     height: 40px;
     padding: 0 16px;
     justify-content: center;
-    font-size: 14px;
+    font-size: 16px;
   }
   .btn-create { font-weight: 700; }
-  .subtask-item { font-size: 14px; padding: 4px 8px; }
-  .field-error { font-size: 11px; }
+  .subtask-item { font-size: 16px; padding: 4px 8px; }
+  .field-error { font-size: 16px; }
 }
 
 .custom-select { position: relative; }
@@ -335,6 +337,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  max-height: 128px;
+  overflow-y: auto;
 }
 
 .subtask-item {
@@ -350,8 +354,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .subtask-item:hover { background: #f6f7f8; }
 .subtask-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.subtask-item-actions { display: none; align-items: center; flex-shrink: 0; }
-.subtask-item:hover .subtask-item-actions { display: flex; }
+.subtask-item-actions { visibility: hidden; display: flex; align-items: center; flex-shrink: 0; }
+.subtask-item:hover .subtask-item-actions { visibility: visible; }
 
 .subtask-item--editing {
   background: #ffffff;
@@ -360,7 +364,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   padding: 4px 0 4px 12px;
 }
 
-.subtask-item--editing .subtask-item-actions { display: flex; }
+.subtask-item--editing .subtask-item-actions { visibility: visible; }
 
 .subtask-edit-input {
   flex: 1;
@@ -381,4 +385,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   .form-col { gap: 16px; }
   .prio-btn { font-size: 20px; }
   .form-footer { margin-top: 16px; padding-top: 16px; }
+}
+
+.main-wrapper {
+  height: auto;
+  min-height: 100vh;
+  overflow-y: visible;
+  overflow-x: hidden;
 }
