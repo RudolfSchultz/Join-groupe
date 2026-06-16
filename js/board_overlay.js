@@ -218,14 +218,39 @@ function toggleEditPerson(id) {
 
 function canAssignMorePersons() {
     if (editAssignedIds.length >= 6) {
-        if (typeof showNotification === 'function') {
-            showNotification('Maximal 6 Personen können zugewiesen werden.', true);
-        } else {
-            alert('Maximal 6 Personen können zugewiesen werden.');
-        }
+        notify('Maximal 6 Personen können zugewiesen werden.', true);
         return false;
     }
     return true;
+}
+
+function notify(message, isError) {
+    if (typeof showNotification === 'function') {
+        showNotification(message, isError);
+        return;
+    }
+    // Fallback to in-page notification element like `showNotification` does
+    const notifEl = document.getElementById && document.getElementById('notification');
+    if (notifEl) {
+        notifEl.textContent = message;
+        notifEl.style.backgroundColor = isError ? 'var(--primaryColor)' : 'var(--primaryColor)';
+        notifEl.classList.remove('d-none');
+        setTimeout(() => notifEl.classList.add('d-none'), 5000);
+        return;
+    }
+    if (typeof Notification !== 'undefined') {
+        try {
+            if (Notification.permission === 'granted') {
+                new Notification(message);
+            } else if (Notification.permission !== 'denied') {
+                Notification.requestPermission().then(permission => {
+                    if (permission === 'granted') new Notification(message);
+                }).catch(() => { /* ignore */ });
+            }
+        } catch (e) {
+            // ignore notification errors silently
+        }
+    }
 }
 
 
@@ -291,7 +316,7 @@ async function saveEditedTask(id) {
     const task = allTasks.find(t => t.id == id);
     if (!task) return;
     const title = document.getElementById('edit-title').value.trim();
-    if (!title) { alert('Title is required.'); return; }
+    if (!title) { notify('Title is required.', true); return; }
     const updates = buildTaskUpdates(title, task);
     Object.assign(task, updates);
     await saveTaskUpdates(id, updates);

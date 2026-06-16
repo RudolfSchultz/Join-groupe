@@ -144,7 +144,6 @@ dialog[open].board-overlay {
   align-items: center;
   justify-content: center !important;
   padding: 16px;
-  z-index: 200;
   min-height: 100vh;
 }
 
