@@ -321,8 +321,21 @@
         height: 60px;
     }
 
-    .login-topbar span {
-        display: none;
+    .login-topbar {
+        order: 2;
+        justify-content: center;
+        padding: 16px 0 0 0;
+    }
+
+    .login-content {
+        order: 1;
+        margin-top: 100px;
+        padding: 0;
+    }
+
+    .login-footer {
+        order: 3;
+        padding: 16px 0;
     }
 }
 
@@ -332,33 +345,12 @@
         margin-left: -50px;
         height: 60px;
     }
-
-    .login-topbar span {
-        display: none;
-    }
 }
 
 @media (max-width: 425px) {
     .login-fullscreen {
         justify-content: flex-start;
         margin: 0 16px;
-    }
-
-    .login-topbar {
-        order: 2;
-        justify-content: center;
-        padding: 16px 0 0 0;
-    }
-
-    .login-content {
-        order: 1;
-        margin-top: 188px;
-        padding: 0;
-    }
-
-    .login-footer {
-        order: 3;
-        padding: 16px 0;
     }
 
     .login-topbar>div {
