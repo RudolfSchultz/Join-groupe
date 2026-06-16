@@ -298,12 +298,14 @@ function renderEditAssignOptionsHTML(boardContacts, editAssignedIds) {
     return boardContacts.map(c => {
         const selected = editAssignedIds.includes(String(c.id));
         return `<div class="assign-option ${selected ? 'assign-option--active' : ''}"
-                    onclick="toggleEditPerson('${c.id}'); event.stopPropagation();">
+                    role="checkbox" tabindex="0" aria-checked="${selected}"
+                    onclick="toggleEditPerson('${c.id}'); event.stopPropagation();"
+                    onkeydown="if(event.key==='Enter' || event.key===' '){event.preventDefault(); toggleEditPerson('${c.id}');}">
                     <span class="assign-option-left">
                         <span class="card-avatar" style="background:${c.color}">${c.initials}</span>
                         <span class="assign-option-name">${escapeHtml(c.name)}</span>
                     </span>
-                    <span class="assign-checkbox">${selected ? '&#10003;' : ''}</span>
+                    <span class="assign-checkbox" aria-hidden="true">${selected ? '&#x2611;' : '&#x2610;'}</span>
                 </div>`;
     }).join('');
 }

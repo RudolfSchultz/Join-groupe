@@ -109,12 +109,15 @@ function renderModalAssignOptions() {
 
 function modalAssignOptionTemplate(contact, isSelected) {
     return `
-        <div class="assign-option ${isSelected ? 'assign-option--active' : ''}" onclick="toggleModalPerson('${contact.id}'); event.stopPropagation();">
+        <div class="assign-option ${isSelected ? 'assign-option--active' : ''}"
+             role="checkbox" tabindex="0" aria-checked="${isSelected}"
+             onclick="toggleModalPerson('${contact.id}'); event.stopPropagation();"
+             onkeydown="if(event.key==='Enter' || event.key===' '){event.preventDefault(); toggleModalPerson('${contact.id}');}">
             <span class="assign-option-left">
                 <span class="avatar-chip" style="background-color:${contact.color}">${contact.avatar}</span>
                 <span class="assign-option-name">${escapeHtml(contact.name)}</span>
             </span>
-            <span class="assign-checkbox">${isSelected ? '&#10003;' : ''}</span>
+            <span class="assign-checkbox" aria-hidden="true">${isSelected ? '&#x2611;' : '&#x2610;'}</span>
         </div>`;
 }
 

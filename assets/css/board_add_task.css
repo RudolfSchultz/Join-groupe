@@ -655,21 +655,21 @@ dialog[open].board-overlay>.add-task-modal {
 }
 
 .task-form-detail {
-    overflow: auto;
-    max-height: 500px;
-    scrollbar-width: none;
+  overflow: auto;
+  max-height: 500px;
+  scrollbar-width: none;
 }
 
 .edit-box {
-    overflow: auto;
-    max-height: 500px;
-    scrollbar-width: none;
+  overflow: auto;
+  max-height: 500px;
+  scrollbar-width: none;
 }
 
 .show-detail {
-    overflow: auto;
-    max-height: 500px;
-    scrollbar-width: none;
+  overflow: auto;
+  max-height: 500px;
+  scrollbar-width: none;
 }
 
 button.btn-add-task {
@@ -713,14 +713,19 @@ button.btn-add-task:active {
 }
 
 .subtask-list {
-    list-style: none;
-    margin: 8px 0 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    max-height: 50px;
-    overflow: auto;
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 50px;
+  overflow: auto;
+}
+
+.assign-checkbox {
+  font-weight: 700;
+  font-size: 28px;
 }
 
 #notification {
