@@ -337,6 +337,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  max-height: 128px;
+  overflow-y: auto;
 }
 
 .subtask-item {
