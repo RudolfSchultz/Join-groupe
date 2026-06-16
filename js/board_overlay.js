@@ -145,6 +145,11 @@ function renderEditModal(task) {
     renderEditAssignOptions();
     renderEditAssignedAvatars();
     renderEditSubtasks();
+
+    // ← Neu: Datepicker direkt nach dem Rendern explizit initialisieren
+    setTimeout(() => {
+        if (window.attachDatepickers) window.attachDatepickers();
+    }, 0);
 }
 
 function handleEditOutsideClick(event) {

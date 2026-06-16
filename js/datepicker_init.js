@@ -3,14 +3,17 @@
         if(!el || el._flatpickr) return;
         try{
             if(typeof flatpickr === 'function'){
-                flatpickr(el, { allowInput:true, dateFormat: 'd.m.Y', clickOpens:true });
+                flatpickr(el, {
+                    allowInput: true,
+                    dateFormat: 'd.m.Y',
+                    clickOpens: true,
+                    disableMobile: true   // ← verhindert natives Mobile-Datepicker-Overlay
+                });
             }
         }catch(e){/* ignore */}
     }
 
-    let _scheduled = null;
     function runAttach() {
-        _scheduled = null;
         try {
             document.querySelectorAll('input.date-picker').forEach(initFor);
         } catch (e) {
@@ -18,29 +21,16 @@
         }
     }
 
+    // ← Lock entfernt: jeder MutationObserver-Aufruf darf schedulen
     function scheduleAttach(delay = 50) {
-        if (_scheduled) return;
-        const runner = () => runAttach();
-        if (typeof requestIdleCallback === 'function') {
-            _scheduled = requestIdleCallback(runner, { timeout: 200 });
-        } else {
-            _scheduled = setTimeout(runner, delay);
-        }
+        setTimeout(runAttach, delay);
     }
 
-    function attachToExisting(){
-        // schedule a batched attach to avoid blocking click handlers
-        scheduleAttach();
-    }
-
-    const mo = new MutationObserver(muts => {
-        // schedule a single batched attach when mutations occur
-        scheduleAttach(100);
-    });
+    const mo = new MutationObserver(() => scheduleAttach(100));
 
     function startObserverAndAttach(){
-        attachToExisting();
-        mo.observe(document.body, { childList:true, subtree:true });
+        runAttach();
+        mo.observe(document.body, { childList: true, subtree: true });
     }
 
     function waitForFlatpickrAndInit(retries = 50, delay = 100){
@@ -50,10 +40,10 @@
     }
 
     if(document.readyState === 'loading'){
-        document.addEventListener('DOMContentLoaded', () => { waitForFlatpickrAndInit(); });
+        document.addEventListener('DOMContentLoaded', () => waitForFlatpickrAndInit());
     } else {
         waitForFlatpickrAndInit();
     }
 
-    window.attachDatepickers = attachToExisting;
+    window.attachDatepickers = runAttach;
 })();
