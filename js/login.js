@@ -285,7 +285,7 @@ function validatePasswordFormat(password) {
 function validateRegisterInput(password, email) {
     if (!validatePasswordFormat(password)) return false;
     if (!validateEmailFormat(email)) {
-        showNotification('Please enter a valid email address (e.g. name@domain.de)', true);
+        showNotification('Please enter a valid email address', true);
         return false;
     }
     return true;

@@ -409,6 +409,24 @@
         margin-left: -50px;
         height: 60px;
     }
+
+    .field-hint {
+        display: block;
+        /* visibility: hidden; */
+        color: #ff4d4d;
+        font-size: 13px;
+        margin-top: -8px;
+        min-height: 1em;
+    }
+
+    .login-form {
+        gap: 12px;
+        margin-bottom: 0px;
+    }
+
+    #reg_name {
+        margin-bottom: 12px;
+    }
 }
 
 @media (max-width: 375px) {
@@ -443,6 +461,10 @@
 
     .login-topbar span {
         font-size: 16px;
+    }
+
+    .login-card h2 {
+        font-size: 2rem;
     }
 }
 
