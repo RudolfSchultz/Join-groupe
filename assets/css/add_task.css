@@ -282,7 +282,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .assign-option:hover { background: var(--light-gray-4); }
 .assign-option--active { background: var(--primaryColor); color: #ffffff; }
 .assign-option-left { display: flex; align-items: center; gap: 12px; }
-.assign-checkbox { font-weight: 700; }
+
+.assign-checkbox {
+    font-size: 28px;
+}
 
 .avatar-chip {
   display: inline-flex;
@@ -296,6 +299,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   font-weight: 600;
   border: 1px solid #ffffff;
   flex-shrink: 0;
+}
+
+.avatar-chip-more {
+  background: #ff0000;
+  color: #ffffff;
+  font-weight: 700;
 }
 
 .assigned-avatars { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }

@@ -11,7 +11,7 @@ function assignOptionTemplate(contact, isSelected) {
                 <span class="avatar-chip" style="background-color:${contact.color}">${contact.avatar}</span>
                 <span class="assign-option-name">${escapeHtml(contact.name)}</span>
             </span>
-            <span class="assign-checkbox">${isSelected ? '&#10003;' : ''}</span>
+            <span class="assign-checkbox" aria-hidden="true">${isSelected ? '&#x2611;' : '&#x2610;'}</span>
         </div>`;
 }
 

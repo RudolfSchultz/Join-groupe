@@ -86,12 +86,8 @@ function togglePerson(id) {
  * @returns {boolean} True when another person can be assigned.
  */
 function canAssignMorePersons() {
-    if (assignedIds.length >= 6) {
-        if (typeof showNotification === 'function') {
-            showNotification('Maximal 6 Personen können zugewiesen werden.', true);
-        } else {
-            alert('Maximal 6 Personen können zugewiesen werden.');
-        }
+    if (assignedIds.length >= 10) {
+        notify('Maximal 10 Personen können zugewiesen werden.', true);
         return false;
     }
     return true;
@@ -105,8 +101,16 @@ function canAssignMorePersons() {
 function renderAssignedAvatars() {
     const container = document.getElementById('assigned-avatars');
     const selected = addTaskContacts.filter(contact => assignedIds.includes(contact.id));
-    container.innerHTML = selected.map(avatarChipTemplate).join('');
+    const max = 5;
+    const visible = selected.slice(0, max);
+    let html = visible.map(contact => `<span class="avatar-chip" style="background-color:${contact.color}">${contact.avatar}</span>`).join('');
+    if (selected.length > max) {
+        const more = selected.length - max;
+        html += `<span class="avatar-chip avatar-chip-more">+${more}</span>`;
+    }
+    container.innerHTML = html;
 }
+
 
 
 /**
