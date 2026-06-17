@@ -344,6 +344,10 @@
         order: 3;
         padding: 16px 0;
     }
+
+    .login-card h2 {
+        font-size: 3rem;
+    }
 }
 
 @media (max-width: 425px) {
@@ -362,10 +366,6 @@
     .login-card {
         border-radius: 30px;
         padding: 32px 0;
-    }
-
-    .login-card h2 {
-        font-size: 37px;
     }
 
     .login-back-arrow {
@@ -430,10 +430,6 @@
         align-items: center;
         width: 280px;
         gap: 16px;
-    }
-
-    .login-card h2 {
-        font-size: 28px;
     }
 
     .login-divider {
