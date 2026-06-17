@@ -175,7 +175,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group" style="position: relative;">
                             <label class="form-label">Assigned to</label>
                             <div class="custom-select" id="assign-select">
                                 <div class="form-input select-toggle" id="assign-toggle"
@@ -185,11 +185,12 @@
                                 </div>
                                 <div class="select-options d-none" id="assign-options"></div>
                             </div>
-                            <div class="assigned-avatars" id="assigned-avatars"></div>
+                            <div class="assigned-avatars" id="assigned-avatars"
+                                style="position: absolute; top: 100%; left: 0; z-index: 1;"></div>
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label">Category <span class="required">*</span></label>
+                            <label class="form-label" style="margin-top: 30px;">Category <span class="required">*</span></label>
                             <div class="custom-select" id="category-select">
                                 <div class="form-input select-toggle" id="category-toggle"
                                     onclick="toggleCategoryDropdown()">

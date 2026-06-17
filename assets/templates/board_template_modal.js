@@ -67,7 +67,7 @@ function renderAddTaskModal() {
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group" style="position: relative;">
                             <label class="form-label">Assigned to</label>
                             <div class="custom-select" id="modal-assign-select">
                                 <div class="form-input select-toggle" id="modal-assign-toggle"
@@ -77,11 +77,12 @@ function renderAddTaskModal() {
                                 </div>
                                 <div class="select-options d-none" id="modal-assign-options"></div>
                             </div>
-                            <div class="assigned-avatars" id="modal-assigned-avatars"></div>
+                            <div class="assigned-avatars" id="modal-assigned-avatars"
+                                style="position: absolute; top: 100%; left: 0; z-index: 1;"></div>
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label">Category <span class="required">*</span></label>
+                            <label class="form-label" style="margin-top: 30px;">Category <span class="required">*</span></label>
                             <div class="custom-select" id="modal-category-select">
                                 <div class="form-input select-toggle" id="modal-category-toggle"
                                     onclick="toggleModalCategoryDropdown()">
