@@ -345,10 +345,17 @@
 }
 
 .modal-tagline {
-    border-bottom: 2px solid #3b91ff;
     display: inline-block;
     padding-bottom: 5px;
     color: #cbd5e1;
+}
+
+.modal-divider {
+    width: 40px;
+    height: 2px;
+    background-color: #3b91ff; 
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .modal-right {
