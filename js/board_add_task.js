@@ -146,7 +146,7 @@ function canAssignMoreModalPersons() {
 function renderModalAssignedAvatars() {
     const container = document.getElementById('modal-assigned-avatars');
     const selected = modalContacts.filter(contact => modalAssignedIds.includes(contact.id));
-    const max = 5;
+    const max = 6;
     const visible = selected.slice(0, max);
     let html = visible.map(contact => `<span class="avatar-chip" style="background-color:${contact.color}">${contact.avatar}</span>`).join('');
     if (selected.length > max) {

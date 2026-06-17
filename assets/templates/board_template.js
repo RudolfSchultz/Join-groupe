@@ -89,7 +89,7 @@ function buildProgressBar(subtasks, taskId) {
 
 
 function buildAvatars(assignedTo) {
-    const max = 5;
+    const max = 6;
     const visible = (assignedTo || []).slice(0, max);
     let html = visible.map(a => `<span class="card-avatar" style="background:${a.color || '#ccc'}">${a.initials || '?'}</span>`).join('');
     if ((assignedTo || []).length > max) {
@@ -111,7 +111,7 @@ function taskDetailTemplate(task) {
 
 function buildDetailAssignees(assignedTo) {
     if (!(assignedTo || []).length) return '';
-    const max = 5;
+    const max = 6;
     const visible = assignedTo.slice(0, max);
     let html = visible.map(a => `
         <div class="detail-assignee">
@@ -330,7 +330,7 @@ function renderEditAssignOptionsHTML(boardContacts, editAssignedIds) {
 
 function renderEditAssignedAvatarsHTML(boardContacts, editAssignedIds) {
     const selected = boardContacts.filter(c => editAssignedIds.includes(String(c.id)));
-    const max = 5;
+    const max = 6;
     const visible = selected.slice(0, max);
     let html = visible.map(c => `<span class="card-avatar" style="background:${c.color}" title="${escapeHtml(c.name)}">${c.initials}</span>`).join('');
     if (selected.length > max) {
