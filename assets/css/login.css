@@ -298,6 +298,12 @@
     }
 }
 
+@media (max-width: 900px) {
+    .login-card {
+        padding: 28px 50px;
+    }
+}
+
 @media (max-width: 768px) {
     .login-fullscreen {
         margin: 0 16px;
@@ -315,10 +321,11 @@
 }
 
 @media (max-width: 600px) {
-    .login-logo-animated .logo-dark {
-        margin-top: -20px;
-        margin-left: -50px;
-        height: 60px;
+    .login-fullscreen {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
     }
 
     .login-topbar {
@@ -339,19 +346,7 @@
     }
 }
 
-@media (max-width: 468px) {
-    .login-logo-animated .logo-dark {
-        margin-top: -20px;
-        margin-left: -50px;
-        height: 60px;
-    }
-}
-
 @media (max-width: 425px) {
-    .login-fullscreen {
-        justify-content: flex-start;
-        margin: 0 16px;
-    }
 
     .login-topbar>div {
         flex-direction: row;
@@ -448,12 +443,6 @@
     .login-buttons .btn {
         width: 140px !important;
         font-size: 16px !important;
-    }
-
-    .login-logo-animated .logo-dark {
-        margin-top: -20px;
-        margin-left: -50px;
-        height: 50px;
     }
 
     .login-topbar span {
