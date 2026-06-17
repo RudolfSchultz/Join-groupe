@@ -1,10 +1,17 @@
+html, body { overflow-x: hidden; }
+body.app-page { max-width: none; overflow-x: hidden; }
+
 .summary-main {
   display: flex;
+  flex: 1;
+  min-width: 0;
   flex-direction: row;
-  padding: 180px 40px 0px 100px;
+  padding: 180px 40px 0px 322px;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
-.summary-left { flex: 0 0 auto; }
+.summary-left { flex: 0 0 auto; align-self: flex-start; }
 
 .summary-right {
   flex: 1;
@@ -21,17 +28,17 @@
   margin-bottom: 56px;
 }
 
-.summary-title { font-size: 61px; font-weight: 700; color: #000000; line-height: 1.2; }
+.summary-title { font-size: 61px; font-weight: 700; color: #000000; line-height: 1.2; white-space: nowrap; }
 .summary-heading-divider { width: 3px; height: 59px; background: #29ABE2; flex-shrink: 0; }
-.summary-subtitle { font-size: 27px; font-weight: 400; color: #2A3647; line-height: 1.2; }
+.summary-subtitle { font-size: 27px; font-weight: 400; color: #2A3647; line-height: 1.2; white-space: nowrap; }
 
-.summary-cards { display: flex; flex-direction: column; gap: 28px; }
+.summary-cards { display: flex; flex-direction: column; gap: 28px; width: fit-content; }
 .cards-row { display: flex; gap: 32px; }
 .cards-row-sm { display: flex; gap: 28px; }
 
 .stat-card {
   width: 264px;
-  height: 168px;
+  height: 140px;
   background: #ffffff;
   border-radius: 30px;
   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
@@ -57,8 +64,8 @@
 .stat-card:hover .stat-icon { filter: brightness(0); }
 
 .stat-icon-circle {
-  width: 69px;
-  height: 69px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   background: var(--primaryColor);
   display: flex;
@@ -67,21 +74,22 @@
   flex-shrink: 0;
 }
 
-.stat-icon { width: 32px; height: 32px; filter: brightness(0) invert(1); }
+.stat-icon { width: 26px; height: 26px; filter: brightness(0) invert(1); }
 .stat-info { display: flex; flex-direction: column; gap: 4px; }
-.stat-number { font-size: 64px; font-weight: 600; line-height: 1.2; color: #000000; }
+.stat-number { font-size: 52px; font-weight: 600; line-height: 1.2; color: #000000; }
 .stat-label { font-size: 20px; font-weight: 400; color: #2A3647; line-height: 1.2; }
 
 .urgency-card {
-  width: 560px;
-  height: 168px;
+  width: 100%;
+  height: 140px;
   background: #ffffff;
   border-radius: 30px;
   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
   padding: 28px 48px;
-  gap: 61px;
+  gap: 24px;
+  justify-content: space-between;
   cursor: pointer;
   transition: background 0.2s ease, box-shadow 0.15s, transform 0.15s;
   text-decoration: none;
@@ -113,16 +121,16 @@
 }
 
 .urgency-info { display: flex; flex-direction: column; gap: 4px; }
-.urgency-number { font-size: 64px; font-weight: 600; color: #000000; line-height: 1.2; }
+.urgency-number { font-size: 52px; font-weight: 600; color: #000000; line-height: 1.2; }
 .urgency-count-label { font-size: 16px; font-weight: 400; color: #2A3647; line-height: 1.2; }
-.urgency-divider-vertical { width: 2px; height: 102px; background: #D1D1D1; flex-shrink: 0; }
+.urgency-divider-vertical { width: 2px; height: 84px; background: #D1D1D1; flex-shrink: 0; }
 .urgency-right { display: flex; flex-direction: column; gap: 13px; }
 .urgency-date { font-size: 21px; font-weight: 700; color: #2A3647; line-height: 1.2; }
 .urgency-date-label { font-size: 16px; font-weight: 400; color: #2A3647; line-height: 1.2; }
 
 .stat-card-sm {
   width: 168px;
-  height: 168px;
+  height: 140px;
   background: #ffffff;
   border-radius: 30px;
   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
@@ -145,14 +153,15 @@
 
 .stat-card-sm:hover .stat-number,
 .stat-card-sm:hover .stat-label { color: #ffffff; }
-.stat-card-sm .stat-number { font-size: 64px; font-weight: 600; color: #000000; line-height: 1; }
-.stat-card-sm .stat-label { font-size: 20px; font-weight: 400; color: #2A3647; text-align: center; padding: 0 8px; }
+.stat-card-sm .stat-number { font-size: 52px; font-weight: 600; color: #000000; line-height: 1; }
+.stat-card-sm .stat-label { font-size: 20px; font-weight: 400; color: #2A3647; text-align: center; padding: 0 8px; max-width: 5.5em; min-height: 2.4em; }
 
 .greeting { display: flex; flex-direction: column; gap: 3px; }
 
 @media (min-width: 769px) {
   .greeting { top: 547.5px; left: 968px; width: 385px; height: 136px; }
-  .greeting-name { white-space: nowrap; font-size: 40px; }
+  .greeting-name { white-space: nowrap; font-size: 64px; }
+  .greeting-time { font-size: 47px; }
 }
 
 .greeting-time { font-size: 47px; font-weight: 500; color: #2A3647; line-height: 1.2; }
@@ -162,6 +171,7 @@
   .summary-main { flex-direction: column; padding: 180px 40px 0px 24px; }
   .summary-heading { justify-content: flex-start; }
   .summary-right { justify-content: flex-start; margin-top: 30px; }
+  .urgency-card { max-width: 100%; }
 }
 
 @keyframes greetingFadeOut {
@@ -169,7 +179,7 @@
 }
 
 @media (max-width: 768px) {
-  .summary-main { flex-direction: column; padding: 108px 16px 24px; min-height: auto; gap: 20px; }
+  .summary-main { flex-direction: column; padding: 108px 16px 96px; min-height: auto; gap: 20px; }
   .summary-left { width: 100%; }
   .summary-right {
     position: fixed;
@@ -188,17 +198,17 @@
     align-items: flex-start;
     gap: 8px;
     margin-bottom: 40px;
-    width: 223px;
+    width: auto;
   }
   .summary-title { font-size: 47px; order: 0; }
   .summary-subtitle { font-size: 20px; order: 1; }
   .summary-heading-divider { order: 2; width: 90px; height: 3px; border: none; margin-top: 8px; }
-  .summary-cards { gap: 18px; }
+  .summary-cards { gap: 18px; width: auto; }
   .cards-row { justify-content: unset; gap: 24px; }
   .stat-card {
     flex: 1;
     min-width: 0;
-    height: 110px;
+    height: 116px;
     border-radius: 20px;
     padding: 0 19px;
     gap: 10px;
@@ -215,12 +225,13 @@
   .cards-row .stat-label { white-space: nowrap !important; hyphens: none !important; word-break: keep-all; overflow-wrap: normal; }
   .urgency-card {
     width: 100%;
-    height: 110px;
+    height: 116px;
     padding: 28px 0px;
     gap: 20px;
     border-radius: 20px;
     justify-content: center;
     align-items: center;
+    margin-top: 12px;
   }
   .urgency-left { gap: 18px; }
   .urgency-icon-circle { width: 40px; height: 40px; }
@@ -234,21 +245,21 @@
   .cards-row-sm { justify-content: unset; gap: 24px; }
   .stat-card-sm { flex: 1; min-width: 0; height: 116px; padding: 25px 0; gap: 13px; border-radius: 20px; }
   .stat-card-sm .stat-number { font-size: 47px; font-weight: 600; line-height: 120%; }
-  .stat-card-sm .stat-label { font-size: 16px; font-weight: 400; line-height: 120%; text-align: center; padding: 0 6px; }
+  .stat-card-sm .stat-label { font-size: 16px; font-weight: 400; line-height: 120%; text-align: center; padding: 0 6px; max-width: none; min-height: auto; }
   .cards-row-sm .stat-card-sm:nth-child(2) .stat-label { font-size: 16px; }
   .greeting-time { font-size: 36px; font-weight: 400; text-align: center; line-height: 1.2; }
   .greeting-name { font-size: 47px; font-weight: 700; color: #29ABE2; text-align: center; line-height: 1.2; }
 }
 
 @media (max-width: 320px) {
-  .stat-card-sm .stat-label { font-size: 16px; }
+  .summary-heading { margin-bottom: 28px; }
+  .stat-card, .urgency-card, .stat-card-sm { height: 120px; }
   .cards-row { gap: 8px; }
-  .stat-card { padding: 0 8px; height: 96px; }
-  .stat-card-sm { height: 142px; }
+  .stat-card { padding: 0 8px; }
 }
 
 @media (min-width: 769px) and (max-height: 900px) {
-  .summary-main { padding: 180px 40px 0px 100px; }
+  .summary-main { padding: 180px 40px 0px 322px; }
   .summary-heading { margin-bottom: 10px; }
   .summary-cards { gap: 10px; }
 }
