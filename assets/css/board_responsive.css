@@ -38,6 +38,10 @@
     padding-bottom: 16px;
   }
 
+  .task-card {
+    max-width: 280px;
+  }
+
   .board-header {
     position: relative;
     flex-direction: column;
@@ -127,6 +131,10 @@
     gap: 16px;
     min-height: 100px;
     padding-bottom: 16px;
+  }
+
+  .task-card {
+    max-width: 100%;
   }
 
   .board-controls {
