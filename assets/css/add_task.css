@@ -199,7 +199,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     margin-top: 24px;
   }
   .required-hint { display: none; }
-  .form-actions { gap: 32px; justify-content: flex-end; }
+  .form-actions { gap: 15px; justify-content: flex-end; }
   .btn-clear, .btn-create { flex: none; height: 56px; }
   .subtask-item { font-size: 16px; padding: 4px 8px; }
   .field-error { font-size: 16px; }
