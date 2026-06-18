@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function initMain() {
     setHeaderAvatar();
-    loadNavigation();
 }
 
 
@@ -143,17 +142,6 @@ function updateHeaderForUser(user) {
 }
 
 
-async function loadIncludeElement(element) {
-    const filePath = element.getAttribute('data-import');
-    try {
-        const answer = await fetch(filePath);
-        element.innerHTML = answer.ok ? await answer.text() : '<p>Navigation could not be loaded</p>';
-        if (answer.ok) setHeaderAvatar();
-    } catch (error) {
-        console.error('Error loading navigation:', error);
-    }
-}
-
 function notify(message, isError) {
     // Ziel-Container ermitteln: wenn Add-Task-Dialog offen ist, Notification dorthin verschieben
     const dialog = document.getElementById('add-task-overlay');
@@ -177,18 +165,6 @@ function notify(message, isError) {
     if (typeof showNotification === 'function') {
         showNotification(message, isError);
     }
-}
-
-
-async function loadNavigation() {
-    const includeElements = document.querySelectorAll('[data-import]');
-    for (let element of includeElements) {
-        await loadIncludeElement(element);
-    }
-    const user = getCurrentUser();
-    updateNavigationForUser(user);
-    updateHeaderForUser(user);
-    setActiveNavLink();
 }
 
 
