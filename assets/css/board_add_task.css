@@ -341,6 +341,7 @@ dialog.board-overlay {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  margin-bottom: 20px;
 }
 
 .edit-label {
@@ -509,7 +510,7 @@ dialog.board-overlay {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 6px 8px;
+  padding: 0px 8px;
   border-radius: 8px;
   font-size: 16px;
   color: #2A3647;

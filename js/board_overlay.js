@@ -38,7 +38,6 @@ function openTaskDetail(id) {
 // ── Delete Task ────────────────────────────────────────────────────────────────
 
 async function deleteTask(id) {
-    if (!confirm('Task wirklich löschen?')) return;
     allTasks = allTasks.filter(t => t.id != id);
     if (checkIsGuest()) {
         deleteTaskGuest();
@@ -52,6 +51,7 @@ function deleteTaskGuest() {
     saveGuestTasks(allTasks);
     closeOverlay();
     displayTasks(allTasks);
+    notify('Der Task wurde gelöscht.');
 }
 
 
@@ -60,6 +60,7 @@ async function deleteTaskRemote(id) {
         await fetch(`${BOARD_BASE_URL}/tasks/${id}.json`, { method: 'DELETE' });
         closeOverlay();
         displayTasks(allTasks);
+        notify('Der Task wurde gelöscht.');
     } catch (e) {
         console.error('Error deleting task:', e);
     }
