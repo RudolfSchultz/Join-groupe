@@ -157,7 +157,6 @@ function injectAddTaskModal() {
         const modalContainer = document.querySelector('.add-task-modal');
         if (modalDue && window.flatpickr) {
             flatpickr(modalDue, {
-                locale: 'de',
                 dateFormat: 'd.m.Y',
                 minDate: 'today',
                 allowInput: false,
