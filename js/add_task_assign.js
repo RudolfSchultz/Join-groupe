@@ -101,7 +101,7 @@ function canAssignMorePersons() {
 function renderAssignedAvatars() {
     const container = document.getElementById('assigned-avatars');
     const selected = addTaskContacts.filter(contact => assignedIds.includes(contact.id));
-    const max = 6;
+    const max = 5;
     const visible = selected.slice(0, max);
     let html = visible.map(contact => `<span class="avatar-chip" style="background-color:${contact.color}">${contact.avatar}</span>`).join('');
     if (selected.length > max) {
