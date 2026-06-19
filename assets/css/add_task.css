@@ -205,6 +205,27 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   .field-error { font-size: 16px; }
 }
 
+@media (max-width: 375px) {
+  .board-modal {
+    padding: 20px;
+  }
+
+  .btn-clear, .btn-create {
+    flex: none;
+    height: 56px;
+    padding: 0 14px;
+    width: fit-content;
+    font-size: 16px;
+  }
+
+  .form-footer {
+    flex-direction: row;
+    justify-content: space-around;
+    gap: 32px;
+    margin-top: 24px;
+  }
+}
+
 @media (max-width: 350px) {
   .prio-buttons { flex-direction: row; gap: 8px; }
   .prio-btn { padding: 0 4px; gap: 4px; font-size: 14px; }
@@ -213,7 +234,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 @media (max-width: 320px) {
   .add-task-main { padding: 100px 16px 96px; }
   .page-title { font-size: 40px; }
-  .form-footer { flex-direction: row; justify-content: flex-end; gap: 12px; }
   .btn-clear, .btn-create { flex: none; height: 56px; padding: 0 14px; }
 }
 
