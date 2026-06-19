@@ -668,7 +668,7 @@ dialog[open].board-overlay>.add-task-modal {
 
 .task-form-detail {
   overflow: auto;
-  max-height: 500px;
+  max-height: 550px;
   scrollbar-width: none;
 }
 

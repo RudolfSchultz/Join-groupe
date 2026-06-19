@@ -251,7 +251,9 @@ function buildEditBasicFields(task) {
         <div class="edit-form-group">
             <label class="edit-label">Due Date</label>
             <div class="form-input-icon">
-                <input id="edit-due" class="edit-input date-picker" type="text" value="${escapeHtml(task.dueDate || '')}">
+                <input id="edit-due" class="edit-input date-picker flatpickr-edit" type="text"
+                    placeholder="TT.MM.JJJJ"
+                    value="${escapeHtml(task.dueDate || '')}" readonly style="cursor:pointer;">
                 <img src="../assets/icons/event.svg" class="input-icon" alt="calendar">
             </div>
         </div>`;

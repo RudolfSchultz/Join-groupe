@@ -6,6 +6,7 @@
                 flatpickr(el, {
                     allowInput: true,
                     dateFormat: 'd.m.Y',
+                    minDate: 'today',
                     clickOpens: true,
                     disableMobile: true   // ← verhindert natives Mobile-Datepicker-Overlay
                 });
