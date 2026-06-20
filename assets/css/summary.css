@@ -256,7 +256,7 @@ body.app-page { max-width: none; overflow-x: hidden; }
 
 @media (max-width: 769px) {
   .summary-right { display: none; }
-  .summary-main { padding: 108px 40px 0px 24px; }
+  .summary-main { padding: 108px 40px 96px 24px; }   /* 96px = Platz für die untere Nav */
 }
 
 
