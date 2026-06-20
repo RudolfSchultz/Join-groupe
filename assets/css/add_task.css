@@ -116,7 +116,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .form-footer {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;   /* Figma: Hinweis links, Buttons rechts */
   margin-top: 32px;
   gap: clamp(8px, 2vw, 24px);
   flex-wrap: nowrap;
