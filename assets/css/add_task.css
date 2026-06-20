@@ -116,44 +116,50 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .form-footer {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   margin-top: 32px;
+  gap: clamp(8px, 2vw, 24px);
+  flex-wrap: nowrap;
 }
 
 .required-hint { font-size: 20px; color: #FF8190; }
-.form-actions { display: flex; gap: 16px; }
+.form-actions { display: flex; gap: clamp(8px, 1.2vw, 12px); flex-shrink: 0; flex-wrap: nowrap; }
 
 .btn-clear {
+  flex: none;
   height: 56px;
-  padding: 0 32px;
+  padding: 0 clamp(14px, 3vw, 32px);
   border: 1px solid #2A3647;
   border-radius: 10px;
   background: #F6F7F8;
-  font-size: 20px;
+  font-size: clamp(15px, 4vw, 20px);
   font-weight: 400;
   color: #2A3647;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 8px;
+  white-space: nowrap;
   transition: background 0.1s, color 0.1s;
 }
 
 .btn-clear:hover { background: #ffffff; border-color: var(--primaryColor); }
 
 .btn-create {
+  flex: none;
   height: 56px;
-  padding: 0 32px;
+  padding: 0 clamp(14px, 3vw, 32px);
   border: none;
   border-radius: 10px;
   background: var(--primaryColor);
-  font-size: 21px;
+  font-size: clamp(16px, 4vw, 21px);
   font-weight: 700;
   color: #ffffff;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 8px;
+  white-space: nowrap;
   transition: background 0.1s;
 }
 
@@ -169,10 +175,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   .add-task-main { padding: 180px 40px 48px 24px; }
   .form-columns { flex-direction: column; gap: 24px; }
   .form-divider-vertical { display: none; }
+  .required-hint { display: none; }   /* "This field is required" erst ab Laptop-Ansicht sichtbar */
 }
 
 @media (max-width: 768px) {
-  .add-task-main { height: auto; padding: 108px 16px 112px; }
+  .add-task-main { height: auto; padding: 108px 16px 96px; }  /* 96px Bottom = Platz für Nav */
+  .subtask-list { min-height: 0; }   /* Mobile: keine leere Reserve → Buttons rücken nach oben */
   .page-title { font-size: 47px; margin-bottom: 24px; }
   .task-form { background: transparent; box-shadow: none; border-radius: 0; padding: 0; }
   .form-columns { flex-direction: column; gap: 16px; }
@@ -195,14 +203,19 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   .form-footer {
     flex-direction: row;
     justify-content: flex-end;
-    gap: 32px;
-    margin-top: 24px;
+    gap: 8px;
+    margin-top: 16px;
   }
   .required-hint { display: none; }
-  .form-actions { gap: 15px; justify-content: flex-end; }
-  .btn-clear, .btn-create { flex: none; height: 56px; }
+  .form-actions { gap: 32px; justify-content: flex-end; }   /* Figma-Abstand zwischen den Buttons */
+  .btn-clear, .btn-create { flex: none; height: 56px; padding: 0 16px; gap: 4px; }   /* Figma-Padding + Icon-Abstand */
   .subtask-item { font-size: 16px; padding: 4px 8px; }
   .field-error { font-size: 16px; }
+}
+
+/* sehr schmal: doppeltes Bottom-Padding der .main-wrapper neutralisieren */
+@media (max-width: 480px) {
+  .main-wrapper { padding-bottom: 0; }
 }
 
 @media (max-width: 375px) {
@@ -344,8 +357,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  min-height: 68px;  /* Platz für 2 Items (je ~32px) + 1 Gap (4px) */
-
+  min-height: 64px;   /* 2 Items à ~32px + 4px Gap */
+  max-height: 64px;
   overflow-y: auto;
 }
 
