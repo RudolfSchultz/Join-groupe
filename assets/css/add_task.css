@@ -118,7 +118,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   align-items: center;
   justify-content: space-between;   /* Figma: Hinweis links, Buttons rechts */
   margin-top: 8px;
-  margin-right: -16px;   /* Buttons in allen Ansichten etwas weiter nach rechts */
+  margin-right: -8px;   /* Buttons leicht rechts der Feldkante */
   gap: clamp(8px, 2vw, 24px);
   flex-wrap: nowrap;
 }
