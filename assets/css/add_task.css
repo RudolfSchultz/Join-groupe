@@ -185,6 +185,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   .form-columns { flex-direction: column; gap: 24px; }
   .form-divider-vertical { display: none; }
   .required-hint { display: none; }   /* "This field is required" erst ab Laptop-Ansicht sichtbar */
+  .form-footer { justify-content: flex-end; }   /* ohne Hinweis: Buttons rechts statt links */
 }
 
 @media (max-width: 768px) {
