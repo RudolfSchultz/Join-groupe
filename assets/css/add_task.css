@@ -13,7 +13,7 @@ body.app-page { max-width: none; }
   font-size: 61px;
   font-weight: 700;
   color: #000000;
-  margin-bottom: 48px;
+  margin-bottom: 16px;   /* Titel bleibt oben, Formular rückt darunter hoch */
 }
 
 .form-columns { display: flex; gap: 48px; }
