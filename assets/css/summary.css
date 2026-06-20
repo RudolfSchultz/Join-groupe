@@ -89,7 +89,7 @@ body.app-page { max-width: none; overflow-x: hidden; }
   align-items: center;
   padding: 28px 48px;
   gap: 24px;
-  justify-content: space-between;
+  justify-content: center;   /* Icon-/Datum-Gruppe zentriert statt ganz links */
   cursor: pointer;
   transition: background 0.2s ease, box-shadow 0.15s, transform 0.15s;
   text-decoration: none;
