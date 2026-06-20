@@ -365,8 +365,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  min-height: 64px;   /* 2 Items à ~32px + 4px Gap */
-  max-height: 64px;
+  min-height: 0;       /* keine leere Reserve -> Footer rückt hoch */
+  max-height: 64px;    /* max. 2 Items sichtbar, danach scrollen */
   overflow-y: auto;
 }
 
