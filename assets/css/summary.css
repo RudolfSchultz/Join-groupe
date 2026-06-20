@@ -168,7 +168,7 @@ body.app-page { max-width: none; overflow-x: hidden; }
 .greeting-name { font-size: 64px; font-weight: 700; color: var(--secondaryColor); line-height: 1.2; }
 
 @media (max-width: 1024px) {
-  .summary-main { flex-direction: column; padding: 180px 40px 0px 24px; }
+  .summary-main { flex-direction: column; padding: 180px 40px 48px 24px; }   /* etwas Bottom-Abstand, damit die letzte Reihe nicht abgehackt wirkt */
   .summary-heading { justify-content: flex-start; }
   .urgency-card { max-width: 100%; }
 }
