@@ -185,7 +185,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   .form-columns { flex-direction: column; gap: 24px; }
   .form-divider-vertical { display: none; }
   .required-hint { display: none; }   /* "This field is required" erst ab Laptop-Ansicht sichtbar */
-  .form-footer { justify-content: flex-end; }   /* ohne Hinweis: Buttons rechts statt links */
+  .form-footer { justify-content: flex-end; margin-right: 0; }   /* ohne Hinweis: Buttons rechts; kein Versatz -> Create Task wird nicht abgeschnitten */
 }
 
 @media (max-width: 768px) {
