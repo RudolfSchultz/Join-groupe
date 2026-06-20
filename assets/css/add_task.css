@@ -365,9 +365,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  min-height: 0;       /* keine leere Reserve -> Footer rückt hoch */
-  max-height: 64px;    /* max. 2 Items sichtbar, danach scrollen */
-  overflow-y: auto;
+  height: 32px;        /* feste Höhe (1 Item) -> Footer bewegt sich NIE */
+  overflow-y: auto;    /* ab dem 2. Subtask wird innerhalb der Box gescrollt */
 }
 
 .subtask-item {
