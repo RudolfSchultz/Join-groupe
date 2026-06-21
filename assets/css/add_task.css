@@ -1,53 +1,18 @@
 html, body { overflow-x: hidden; }
 body.app-page { max-width: none; }
 
-.add-task-main {
-  flex: 1;
-  padding: 180px 40px 0px 96px;
-  overflow-x: hidden;
-  overflow-y: auto;
-  max-width: 1220px;
-}
-
-.page-title {
-  font-size: 61px;
-  font-weight: 700;
-  color: #000000;
-  margin-bottom: 16px;   /* Titel bleibt oben, Formular rückt darunter hoch */
-}
+.add-task-main { flex: 1; padding: 180px 40px 0px 96px; overflow-x: hidden; overflow-y: auto; max-width: 1220px; }
+.page-title { font-size: 61px; font-weight: 700; color: #000000; margin-bottom: 16px; }
 
 .form-columns { display: flex; gap: 48px; }
-
-.form-col {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-.form-divider-vertical {
-  width: 1px;
-  background: #D1D1D1;
-  align-self: stretch;
-  flex-shrink: 0;
-}
+.form-col { flex: 1; display: flex; flex-direction: column; gap: 24px; }
+.form-divider-vertical { width: 1px; background: #D1D1D1; align-self: stretch; flex-shrink: 0; }
 
 .form-group { display: flex; flex-direction: column; gap: 8px; }
 .form-label { font-size: 20px; font-weight: 400; color: #2A3647; }
 .required { color: #FF8190; }
 
-.form-input {
-  height: 48px;
-  border: 1px solid #D1D1D1;
-  border-radius: 10px;
-  padding: 12px 16px;
-  font-size: 20px;
-  font-family: 'Inter', sans-serif;
-  color: #000000;
-  outline: none;
-  transition: border-color 0.1s;
-}
-
+.form-input { height: 48px; border: 1px solid #D1D1D1; border-radius: 10px; padding: 12px 16px; font-size: 20px; font-family: 'Inter', sans-serif; color: #000000; outline: none; transition: border-color 0.1s; }
 #task-title { padding: 12px 21px; }
 .form-input:focus { border-color: var(--secondaryColor); }
 .form-input::placeholder { color: #D1D1D1; }
@@ -55,49 +20,13 @@ body.app-page { max-width: none; }
 .form-input-icon { position: relative; }
 .form-input-icon .form-input { width: 100%; padding-right: 48px; }
 
-.input-icon {
-  position: absolute;
-  right: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 20px;
-  height: 20px;
-  pointer-events: none;
-}
+.input-icon { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; pointer-events: none; }
 
-input[type="date"]::-webkit-calendar-picker-indicator {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  cursor: pointer;
-}
-
+input[type="date"]::-webkit-calendar-picker-indicator { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
 #task-due { background-image: none; }
 
 .prio-buttons { display: flex; gap: 16px; }
-
-.prio-btn {
-  flex: 1;
-  height: 56px;
-  border: none;
-  border-radius: 10px;
-  background: #ffffff;
-  box-shadow: 0px 0px 4px 0px #0000001A;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 0 16px;
-  font-size: 20px;
-  font-weight: 400;
-  font-family: 'Inter', sans-serif;
-  color: #000000;
-  cursor: pointer;
-  transition: background 0.1s, color 0.1s, box-shadow 0.1s;
-}
-
+.prio-btn { flex: 1; height: 56px; border: none; border-radius: 10px; background: #ffffff; box-shadow: 0px 0px 4px 0px #0000001A; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 0 16px; font-size: 20px; font-weight: 400; font-family: 'Inter', sans-serif; color: #000000; cursor: pointer; transition: background 0.1s, color 0.1s, box-shadow 0.1s; }
 .prio-btn.prio-active { font-size: 21px; }
 .prio-btn:hover:not(.prio-active) { box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2); }
 
@@ -113,65 +42,20 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .prio-low.prio-active svg path { fill: #ffffff; }
 .prio-medium.prio-active svg rect { fill: #ffffff; }
 
-.form-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;   /* Figma: Hinweis links, Buttons rechts */
-  margin-top: 8px;
-  margin-right: -8px;   /* Buttons leicht rechts der Feldkante */
-  gap: clamp(8px, 2vw, 24px);
-  flex-wrap: nowrap;
-}
-
+/* Figma: Hinweis links, Buttons rechts (Versatz leicht rechts der Feldkante) */
+.form-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; margin-right: -8px; gap: clamp(8px, 2vw, 24px); flex-wrap: nowrap; }
 /* Figma t6: Inter 20px / 400 / #FF8190 */
 .required-hint { font-size: 20px; font-weight: 400; color: #FF8190; }
-
 /* Figma Frame 27: 16px Abstand zwischen Clear und Create Task */
 .form-actions { display: flex; gap: 16px; flex-shrink: 0; flex-wrap: nowrap; }
 
 /* Figma Secondary: padding 16px, gap 4px, Text 20px/400 */
-.btn-clear {
-  flex: none;
-  height: 56px;
-  padding: 0 16px;
-  border: 1px solid #2A3647;
-  border-radius: 10px;
-  background: #F6F7F8;
-  font-size: 20px;
-  font-weight: 400;
-  color: #2A3647;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  white-space: nowrap;
-  transition: background 0.1s, color 0.1s;
-}
-
+.btn-clear { flex: none; height: 56px; padding: 0 16px; border: 1px solid #2A3647; border-radius: 10px; background: #F6F7F8; font-size: 20px; font-weight: 400; color: #2A3647; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; white-space: nowrap; transition: background 0.1s, color 0.1s; }
 .btn-clear:hover { background: #ffffff; border-color: var(--primaryColor); }
 .btn-x { font-size: 24px; line-height: 1; }
 
 /* Figma Primary: padding 16px, gap 4px, Text 21px/700 */
-.btn-create {
-  flex: none;
-  height: 56px;
-  padding: 0 16px;
-  border: none;
-  border-radius: 10px;
-  background: var(--primaryColor);
-  font-size: 21px;
-  font-weight: 700;
-  color: #ffffff;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  white-space: nowrap;
-  transition: background 0.1s;
-}
-
+.btn-create { flex: none; height: 56px; padding: 0 16px; border: none; border-radius: 10px; background: var(--primaryColor); font-size: 21px; font-weight: 700; color: #ffffff; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; white-space: nowrap; transition: background 0.1s; }
 .btn-create:hover:not(:disabled) { background: var(--activeColor); }
 .btn-create:disabled { background: #d1d1d1; cursor: not-allowed; opacity: 0.7; }
 .btn-icon { width: 24px; height: 24px; filter: brightness(0) invert(1); }
@@ -184,13 +68,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   .add-task-main { padding: 180px 40px 48px 24px; }
   .form-columns { flex-direction: column; gap: 24px; }
   .form-divider-vertical { display: none; }
-  .required-hint { display: none; }   /* "This field is required" erst ab Laptop-Ansicht sichtbar */
-  .form-footer { justify-content: flex-end; margin-right: 0; }   /* ohne Hinweis: Buttons rechts; kein Versatz -> Create Task wird nicht abgeschnitten */
+  .required-hint { display: none; }   /* erst ab Laptop-Ansicht sichtbar */
+  .form-footer { justify-content: flex-end; margin-right: 0; }   /* Buttons rechts, kein Clipping */
 }
 
 @media (max-width: 768px) {
-  .add-task-main { height: auto; padding: 108px 16px 96px; }  /* 96px Bottom = Platz für Nav */
-  .subtask-list { min-height: 0; }   /* Mobile: keine leere Reserve → Buttons rücken nach oben */
+  .add-task-main { height: auto; padding: 108px 16px 96px; }
+  .subtask-list { min-height: 0; }
   .page-title { font-size: 47px; margin-bottom: 24px; }
   .task-form { background: transparent; box-shadow: none; border-radius: 0; padding: 0; }
   .form-columns { flex-direction: column; gap: 16px; }
@@ -205,20 +89,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   #task-assigned, #task-category { height: 48px; }
   .select-toggle { height: 48px; padding: 12px 16px; }
   #task-subtask { height: 43px; padding: 12px 16px; }
-  .select-option,
-  .assign-option { font-size: 16px; padding: 8px 14px; }
+  .select-option, .assign-option { font-size: 16px; padding: 8px 14px; }
   .prio-buttons { flex-direction: row; gap: 16px; }
   .prio-btn { height: 41px; font-size: 16px; min-width: 0; }
   .prio-btn.prio-active { font-size: 16px; font-weight: 700; }
-  .form-footer {
-    flex-direction: row;
-    justify-content: flex-end;
-    gap: 8px;
-    margin-top: 16px;
-  }
+  .form-footer { flex-direction: row; justify-content: flex-end; gap: 8px; margin-top: 16px; }
   .required-hint { display: none; }
-  .form-actions { gap: 32px; justify-content: flex-end; }   /* Figma-Abstand zwischen den Buttons */
-  .btn-clear, .btn-create { flex: none; height: 56px; padding: 0 16px; gap: 4px; }   /* Figma-Padding + Icon-Abstand */
+  .form-actions { gap: 32px; justify-content: flex-end; }
+  .btn-clear, .btn-create { flex: none; height: 56px; padding: 0 16px; gap: 4px; }
   .subtask-item { font-size: 16px; padding: 4px 8px; }
   .field-error { font-size: 16px; }
 }
@@ -229,24 +107,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 @media (max-width: 375px) {
-  .board-modal {
-    padding: 20px;
-  }
-
-  .btn-clear, .btn-create {
-    flex: none;
-    height: 56px;
-    padding: 0 14px;
-    width: fit-content;
-    font-size: 16px;
-  }
-
-  .form-footer {
-    flex-direction: row;
-    justify-content: space-around;
-    gap: 32px;
-    margin-top: 24px;
-  }
+  .board-modal { padding: 20px; }
+  .btn-clear, .btn-create { flex: none; height: 56px; padding: 0 14px; width: fit-content; font-size: 16px; }
+  .form-footer { flex-direction: row; justify-content: space-around; gap: 32px; margin-top: 24px; }
 }
 
 @media (max-width: 350px) {
@@ -261,169 +124,45 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .custom-select { position: relative; }
-
-.select-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  cursor: pointer;
-}
-
+.select-toggle { display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
 .select-placeholder { color: #D1D1D1; }
 .select-caret { color: var(--primaryColor); font-size: 12px; pointer-events: none; }
-
-.select-options {
-  position: absolute;
-  top: 100%;
-  margin-top: 4px;
-  left: 0;
-  right: 0;
-  height: fit-content;
-  max-height: 170px;
-  background: #ffffff;
-  border: 1px solid #D1D1D1;
-  border-radius: 10px;
-  overflow: auto;
-  z-index: 50;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-}
-
-.select-option,
-.assign-option {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 16px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background 0.1s, color 0.1s;
-}
-
-.select-option:hover,
-.assign-option:hover { background: var(--light-gray-4); }
+.select-options { position: absolute; top: 100%; margin-top: 4px; left: 0; right: 0; height: fit-content; max-height: 170px; background: #ffffff; border: 1px solid #D1D1D1; border-radius: 10px; overflow: auto; z-index: 50; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12); }
+.select-option, .assign-option { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; font-size: 16px; cursor: pointer; transition: background 0.1s, color 0.1s; }
+.select-option:hover, .assign-option:hover { background: var(--light-gray-4); }
 .assign-option--active { background: var(--primaryColor); color: #ffffff; }
 .assign-option-left { display: flex; align-items: center; gap: 12px; }
+.assign-checkbox { font-size: 28px; }
 
-.assign-checkbox {
-    font-size: 28px;
-}
-
-.avatar-chip {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  color: #ffffff;
-  font-size: 12px;
-  font-weight: 600;
-  border: 1px solid #ffffff;
-  flex-shrink: 0;
-}
-
-.avatar-chip-more {
-  background: #ff0000;
-  color: #ffffff;
-  font-weight: 700;
-}
-
+.avatar-chip { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; color: #ffffff; font-size: 12px; font-weight: 600; border: 1px solid #ffffff; flex-shrink: 0; }
+.avatar-chip-more { background: #ff0000; color: #ffffff; font-weight: 700; }
 .assigned-avatars { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
 .field-error { color: #FF8190; font-size: 13px; }
 
 .subtask-input-wrapper { position: relative; }
 .subtask-input-wrapper .form-input { width: 100%; padding-right: 84px; }
-
-.subtask-actions {
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  align-items: center;
-}
-
+.subtask-actions { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); display: flex; align-items: center; }
 .subtask-edit-actions { display: flex; align-items: center; }
-
-.subtask-icon-btn {
-  border: unset;
-  background: transparent;
-  cursor: pointer;
-  font-size: 18px;
-  line-height: 1;
-  color: var(--primaryColor);
-  padding: 4px 8px;
-  border-radius: 50%;
-  transition: background 0.1s;
-}
-
+.subtask-icon-btn { border: unset; background: transparent; cursor: pointer; font-size: 18px; line-height: 1; color: var(--primaryColor); padding: 4px 8px; border-radius: 50%; transition: background 0.1s; }
 .subtask-icon-btn:hover { background: #eef0f2; }
 .subtask-action-divider { width: 1px; height: 18px; background: #D1D1D1; }
 
-.subtask-list {
-  list-style: none;
-  margin: 8px 0 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  height: 32px;        /* feste Höhe (1 Item) -> Footer bewegt sich NIE */
-  overflow-y: auto;    /* ab dem 2. Subtask wird innerhalb der Box gescrollt */
-}
-
-.subtask-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding: 4px 12px;
-  border-radius: 8px;
-  font-size: 16px;
-  color: var(--primaryColor);
-}
-
+/* feste Höhe (1 Item) -> Footer bewegt sich nie; ab dem 2. Subtask wird gescrollt */
+.subtask-list { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 4px; height: 32px; overflow-y: auto; }
+.subtask-item { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 4px 12px; border-radius: 8px; font-size: 16px; color: var(--primaryColor); }
 .subtask-item:hover { background: #f6f7f8; }
 .subtask-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .subtask-item-actions { visibility: hidden; display: flex; align-items: center; flex-shrink: 0; }
 .subtask-item:hover .subtask-item-actions { visibility: visible; }
-
-.subtask-item--editing {
-  background: #ffffff;
-  border-bottom: 1px solid var(--secondaryColor);
-  border-radius: 0;
-  padding: 4px 0 4px 12px;
-}
-
+.subtask-item--editing { background: #ffffff; border-bottom: 1px solid var(--secondaryColor); border-radius: 0; padding: 4px 0 4px 12px; }
 .subtask-item--editing .subtask-item-actions { visibility: visible; }
+.subtask-edit-input { flex: 1; border: unset; outline: none; font-size: 16px; font-family: 'Inter', sans-serif; color: var(--primaryColor); background: transparent; }
 
-.subtask-edit-input {
-  flex: 1;
-  border: unset;
-  outline: none;
-  font-size: 16px;
-  font-family: 'Inter', sans-serif;
-  color: var(--primaryColor);
-  background: transparent;
-}
-
-.main-wrapper {
-  height: auto;
-  min-height: 100vh;
-  overflow-y: visible;
-  overflow-x: hidden;
-}
+.main-wrapper { height: auto; min-height: 100vh; overflow-y: visible; overflow-x: hidden; }
 
 /* Firefox native calendar icon entfernen */
-input[type="date"]::-moz-calendar-picker-indicator {
-    display: none;
-}
+input[type="date"]::-moz-calendar-picker-indicator { display: none; }
 
 /* Flatpickr calendar above modals/dialogs */
-.flatpickr-calendar {
-    z-index: 99999 !important;
-}
-
-.add-task-modal .flatpickr-calendar {
-    position: absolute !important;
-    z-index: 99999 !important;
-}
+.flatpickr-calendar { z-index: 99999 !important; }
+.add-task-modal .flatpickr-calendar { position: absolute !important; z-index: 99999 !important; }
