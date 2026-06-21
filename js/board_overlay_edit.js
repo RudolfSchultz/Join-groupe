@@ -91,7 +91,7 @@ function mapContacts(raw, isGuest) {
       id: String(isGuest ? (c.id || i + 1) : c.id),
       name: c.name || '',
       color: c.color || '#888',
-      initials: initialsFromName(c.name)
+      initials: getInitials(c.name)
     }))
     .sort((a, b) => a.name.localeCompare(b.name));
 }

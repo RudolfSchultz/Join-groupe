@@ -34,7 +34,7 @@ function normalizeContacts(raw) {
             id: String(contact.id),
             name: contact.name,
             color: contact.color || getRandomColor(),
-            avatar: contact.avatar || initialsFromName(contact.name)
+            avatar: contact.avatar || getInitials(contact.name)
         }))
         .sort((a, b) => a.name.localeCompare(b.name));
 }

@@ -55,7 +55,7 @@ function normalizeContacts(raw) {
             id: String(contact.id),
             name: contact.name,
             color: contact.color || (typeof getRandomColor === 'function' ? getRandomColor() : '#ccc'),
-            avatar: contact.avatar || (typeof initialsFromName === 'function' ? initialsFromName(contact.name) : '?')
+            avatar: contact.avatar || getInitials(contact.name)
         }))
         .sort((a, b) => a.name.localeCompare(b.name));
 }

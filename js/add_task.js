@@ -252,20 +252,7 @@ function setHeaderAvatar() {
     if (!avatar) return;
     let user = null;
     try { user = JSON.parse(sessionStorage.getItem('currentUser')); } catch (error) { user = null; }
-    avatar.textContent = user ? initialsFromName(user.name) : 'G';
-}
-
-
-/**
- * Builds up to two uppercase initials from a name.
- * @param {string} name - Full name.
- * @returns {string} Initials, falling back to 'G'.
- */
-function initialsFromName(name) {
-    const parts = (name || '').trim().split(' ');
-    const first = parts[0]?.charAt(0).toUpperCase() || '';
-    const second = parts[1]?.charAt(0).toUpperCase() || '';
-    return (first + second) || 'G';
+    avatar.textContent = user ? getInitials(user.name) : 'G';
 }
 
 

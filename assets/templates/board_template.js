@@ -45,17 +45,6 @@ function truncate(str, len) {
 
 
 /**
- * Derives up to two uppercase initials from a full name.
- * @param {string} name - Full name string.
- * @returns {string} One or two initials, or '?' as fallback.
- */
-function initialsFromName(name) {
-    const parts = (name || '').trim().split(' ');
-    return ((parts[0]?.charAt(0) || '') + (parts[1]?.charAt(0) || '')).toUpperCase() || '?';
-}
-
-
-/**
  * Returns the CSS class for a task category badge.
  * @param {string} category - Task category string.
  * @returns {string} CSS class name.
