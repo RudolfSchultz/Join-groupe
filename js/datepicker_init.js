@@ -4,117 +4,113 @@
  * Observes DOM changes and waits for the Flatpickr library to become available.
  */
 
-(function () {
-
-  /**
-   * Returns the Flatpickr configuration options.
-   * @returns {Object} Flatpickr options object
-   */
-  function buildFlatpickrOptions() {
-    return {
-      allowInput: true,
-      dateFormat: 'd.m.Y',
-      minDate: 'today',
-      clickOpens: true,
-      disableMobile: true  // prevents native mobile date picker overlay
-    };
-  }
+const mo = new MutationObserver(onMutation);
 
 
-  /**
-   * Initializes Flatpickr on a single element if not already initialized.
-   * @param {HTMLElement} el - The input element to initialize
-   */
-  function initFor(el) {
-    if (!el || el._flatpickr) return;
-    try {
-      if (typeof flatpickr === 'function') {
-        flatpickr(el, buildFlatpickrOptions());
-      }
-    } catch (e) { /* ignore */ }
-  }
+/**
+ * Returns the Flatpickr configuration options.
+ * @returns {Object} Flatpickr options object
+ */
+function buildFlatpickrOptions() {
+  return {
+    allowInput: true,
+    dateFormat: 'd.m.Y',
+    minDate: 'today',
+    clickOpens: true,
+    disableMobile: true  // prevents native mobile date picker overlay
+  };
+}
 
 
-  /**
-   * Attaches Flatpickr to all `.date-picker` input elements in the document.
-   */
-  function runAttach() {
-    try {
-      document.querySelectorAll('input.date-picker').forEach(initFor);
-    } catch (e) {
-      console.error('attachDatepickers error', e);
+/**
+ * Initializes Flatpickr on a single element if not already initialized.
+ * @param {HTMLElement} el - The input element to initialize
+ */
+function initFor(el) {
+  if (!el || el._flatpickr) return;
+  try {
+    if (typeof flatpickr === 'function') {
+      flatpickr(el, buildFlatpickrOptions());
     }
+  } catch (e) { /* ignore */ }
+}
+
+
+/**
+ * Attaches Flatpickr to all `.date-picker` input elements in the document.
+ */
+function runAttach() {
+  try {
+    document.querySelectorAll('input.date-picker').forEach(initFor);
+  } catch (e) {
+    console.error('attachDatepickers error', e);
   }
+}
 
 
-  /**
-   * Schedules a delayed call to runAttach.
-   * @param {number} [delay=50] - Delay in milliseconds
-   */
-  function scheduleAttach(delay = 50) {
-    setTimeout(runAttach, delay);
-  }
+/**
+ * Schedules a delayed call to runAttach.
+ * @param {number} [delay=50] - Delay in milliseconds
+ */
+function scheduleAttach(delay = 50) {
+  setTimeout(runAttach, delay);
+}
 
 
-  /**
-   * Schedules attach with a fixed delay of 100ms, used by the MutationObserver.
-   */
-  function onMutation() {
-    scheduleAttach(100);
-  }
+/**
+ * Schedules attach with a fixed delay of 100ms, used by the MutationObserver.
+ */
+function onMutation() {
+  scheduleAttach(100);
+}
 
 
-  /**
-   * Starts the MutationObserver and runs an initial attach.
-   */
-  function startObserverAndAttach() {
-    runAttach();
-    mo.observe(document.body, { childList: true, subtree: true });
-  }
+/**
+ * Starts the MutationObserver and runs an initial attach.
+ */
+function startObserverAndAttach() {
+  runAttach();
+  mo.observe(document.body, { childList: true, subtree: true });
+}
 
 
-  /**
-   * Schedules the next retry for waiting on Flatpickr to load.
-   * @param {number} retries - Remaining retry attempts
-   * @param {number} delay - Delay in milliseconds between retries
-   */
-  function scheduleRetry(retries, delay) {
-    setTimeout(function retryInit() {
-      waitForFlatpickrAndInit(retries - 1, delay);
-    }, delay);
-  }
+/**
+ * Schedules the next retry for waiting on Flatpickr to load.
+ * @param {number} retries - Remaining retry attempts
+ * @param {number} delay - Delay in milliseconds between retries
+ */
+function scheduleRetry(retries, delay) {
+  setTimeout(function retryInit() {
+    waitForFlatpickrAndInit(retries - 1, delay);
+  }, delay);
+}
 
 
-  /**
-   * Waits recursively for Flatpickr to become available, then starts initialization.
-   * @param {number} [retries=50] - Number of remaining retry attempts
-   * @param {number} [delay=100] - Wait time between attempts in milliseconds
-   */
-  function waitForFlatpickrAndInit(retries = 50, delay = 100) {
-    if (typeof flatpickr === 'function') { startObserverAndAttach(); return; }
-    if (retries <= 0) { startObserverAndAttach(); return; }
-    scheduleRetry(retries, delay);
-  }
+/**
+ * Waits recursively for Flatpickr to become available, then starts initialization.
+ * @param {number} [retries=50] - Number of remaining retry attempts
+ * @param {number} [delay=100] - Wait time between attempts in milliseconds
+ */
+function waitForFlatpickrAndInit(retries = 50, delay = 100) {
+  if (typeof flatpickr === 'function') { startObserverAndAttach(); return; }
+  if (retries <= 0) { startObserverAndAttach(); return; }
+  scheduleRetry(retries, delay);
+}
 
 
-  /**
-   * Starts the initialization process once the DOM is ready.
-   */
-  function onDomReady() {
-    waitForFlatpickrAndInit();
-  }
+/**
+ * Starts the initialization process once the DOM is ready.
+ */
+function onDomReady() {
+  waitForFlatpickrAndInit();
+}
 
 
-  const mo = new MutationObserver(onMutation);
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', onDomReady);
+} else {
+  waitForFlatpickrAndInit();
+}
 
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', onDomReady);
-  } else {
-    waitForFlatpickrAndInit();
-  }
-
-
-  window.attachDatepickers = runAttach;
-
-})();
+window.attachDatepickers = runAttach;
