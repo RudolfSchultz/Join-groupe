@@ -4,11 +4,22 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
+// ── Init ───────────────────────────────────────────────────────────────────────
+
+
+/** Initialises the shared page header. */
 function initMain() {
     setHeaderAvatar();
 }
 
 
+// ── Avatar Menu ────────────────────────────────────────────────────────────────
+
+
+/**
+ * Closes the avatar dropdown when a click occurs outside the avatar wrapper.
+ * @param {MouseEvent} e - The document click event.
+ */
 function closeAvatarMenuOnOutsideClick(e) {
     if (!e.target.closest('#user-avatar-wrapper')) {
         document.getElementById('avatar-menu')?.classList.add('d-none');
@@ -16,6 +27,19 @@ function closeAvatarMenuOnOutsideClick(e) {
 }
 
 
+/** Toggles the avatar dropdown menu visibility. */
+function toggleAvatarMenu() {
+    document.getElementById('avatar-menu')?.classList.toggle('d-none');
+}
+
+
+// ── Session ────────────────────────────────────────────────────────────────────
+
+
+/**
+ * Reads and parses the current user from sessionStorage.
+ * @returns {Object|null} The current user object, or null if not logged in.
+ */
 function getCurrentUser() {
     try {
         return JSON.parse(sessionStorage.getItem('currentUser')) || null;
@@ -25,12 +49,31 @@ function getCurrentUser() {
 }
 
 
+/**
+ * Returns whether the current session belongs to a guest user.
+ * @returns {boolean}
+ */
 function checkIsGuest() {
     const user = getCurrentUser();
     return user?.isGuest === true;
 }
 
 
+/** Removes the current user session and redirects to the login page. */
+function logout() {
+    sessionStorage.removeItem('currentUser');
+    window.location.href = '../index.html';
+}
+
+
+// ── Utilities ──────────────────────────────────────────────────────────────────
+
+
+/**
+ * Extracts up to two initials from a full name string.
+ * @param {string} name - Full name to derive initials from.
+ * @returns {string} One or two uppercase initials, or 'G' as fallback.
+ */
 function getInitials(name) {
     if (!name) return 'G';
     const nameParts = name.trim().split(' ');
@@ -40,6 +83,10 @@ function getInitials(name) {
 }
 
 
+/**
+ * Generates a random hexadecimal color string.
+ * @returns {string} Color in the format '#RRGGBB'.
+ */
 function getRandomColor() {
     const letters = '0123456789ABCDEF';
     let color = '#';
@@ -50,6 +97,19 @@ function getRandomColor() {
 }
 
 
+/**
+ * Returns the filename of the current page.
+ * @returns {string} E.g. 'board.html'.
+ */
+function getCurrentPage() {
+    return window.location.pathname.split('/').pop();
+}
+
+
+// ── Header ─────────────────────────────────────────────────────────────────────
+
+
+/** Sets the header avatar initials from the current user's name. */
 function setHeaderAvatar() {
     const avatar = document.getElementById('user-avatar');
     if (!avatar) return;
@@ -58,22 +118,26 @@ function setHeaderAvatar() {
 }
 
 
-function toggleAvatarMenu() {
-    document.getElementById('avatar-menu')?.classList.toggle('d-none');
+/**
+ * Hides the help icon and avatar wrapper for non-logged-in users.
+ * @param {Object|null} user - Current user object, or null if not logged in.
+ */
+function updateHeaderForUser(user) {
+    if (user) return;
+    const helpIcon = document.querySelector('.help-icon-link');
+    if (helpIcon) helpIcon.style.display = 'none';
+    const avatarWrapper = document.getElementById('user-avatar-wrapper');
+    if (avatarWrapper) avatarWrapper.style.display = 'none';
 }
 
 
-function logout() {
-    sessionStorage.removeItem('currentUser');
-    window.location.href = '../index.html';
-}
+// ── Navigation ─────────────────────────────────────────────────────────────────
 
 
-function getCurrentPage() {
-    return window.location.pathname.split('/').pop();
-}
-
-
+/**
+ * Adds the active class to desktop nav links matching the current page.
+ * @param {string} page - Current page filename.
+ */
 function activateDesktopNavLinks(page) {
     document.querySelectorAll('.nav-link, .nav-bottom-link').forEach(link => {
         if (link.getAttribute('href')?.endsWith(page)) link.classList.add('nav-item--active');
@@ -81,13 +145,17 @@ function activateDesktopNavLinks(page) {
 }
 
 
+/**
+ * Sets the active class on the matching mobile nav link for the current page.
+ * @param {string} page - Current page filename.
+ */
 function activateMobileNavLinks(page) {
     document.querySelectorAll('.mobil-nav-link').forEach(link => link.classList.remove('aktiv'));
-    const selector = `.mobil-nav-link[href$="${page}"]`;
-    document.querySelectorAll(selector).forEach(link => link.classList.add('aktiv'));
+    document.querySelectorAll(`.mobil-nav-link[href$="${page}"]`).forEach(link => link.classList.add('aktiv'));
 }
 
 
+/** Activates the correct nav links for the current page on desktop and mobile. */
 function setActiveNavLink() {
     const page = getCurrentPage();
     activateDesktopNavLinks(page);
@@ -95,11 +163,20 @@ function setActiveNavLink() {
 }
 
 
+/**
+ * Returns the HTML for the guest desktop navigation login link.
+ * @returns {string} HTML string.
+ */
 function getGuestDesktopNavHTML() {
     return `<a href="../index.html" class="nav-link" id="nav_login"><img src="../assets/icons/login.svg" alt="" class="nav-icon"><span>Log In</span></a>`;
 }
 
 
+/**
+ * Returns the HTML for the guest mobile navigation including active page states.
+ * @param {string} page - Current page filename.
+ * @returns {string} HTML string.
+ */
 function getGuestMobileNavHTML(page) {
     const isPrivacy = page === 'privacy_policy.html';
     const isLegal = page === 'legal_notice.html';
@@ -114,18 +191,24 @@ function getGuestMobileNavHTML(page) {
 }
 
 
+/** Replaces the desktop navigation with the guest login link. */
 function setGuestDesktopNav() {
     const navGroup = document.querySelector('.navigation-links-group');
     if (navGroup) navGroup.innerHTML = getGuestDesktopNavHTML();
 }
 
 
+/** Replaces the mobile navigation with guest-appropriate links. */
 function setGuestMobileNav() {
     const mobilNav = document.querySelector('.mobil-navigation');
     if (mobilNav) mobilNav.innerHTML = getGuestMobileNavHTML(getCurrentPage());
 }
 
 
+/**
+ * Switches navigation to guest mode when no user is logged in.
+ * @param {Object|null} user - Current user object, or null if not logged in.
+ */
 function updateNavigationForUser(user) {
     if (user) return;
     setGuestDesktopNav();
@@ -133,46 +216,40 @@ function updateNavigationForUser(user) {
 }
 
 
-function updateHeaderForUser(user) {
-    if (user) return;
-    const helpIcon = document.querySelector('.help-icon-link');
-    if (helpIcon) helpIcon.style.display = 'none';
-    const avatarWrapper = document.getElementById('user-avatar-wrapper');
-    if (avatarWrapper) avatarWrapper.style.display = 'none';
-}
+// ── Notification ───────────────────────────────────────────────────────────────
 
 
+/**
+ * Displays a notification message, moving it into the add-task dialog if open.
+ * Falls back to showNotification() if the notification element is missing.
+ * @param {string} message - Text to display.
+ * @param {boolean} [isError] - Whether this is an error notification.
+ */
 function notify(message, isError) {
-    // Ziel-Container ermitteln: wenn Add-Task-Dialog offen ist, Notification dorthin verschieben
     const dialog = document.getElementById('add-task-overlay');
     const dialogIsOpen = dialog && dialog.open;
-
     const notifEl = document.getElementById('notification');
     if (notifEl) {
-        // In den offenen Dialog verschieben, sonst zurück ans Body
-        if (dialogIsOpen) {
-            dialog.appendChild(notifEl);
-        } else {
-            document.body.appendChild(notifEl);
-        }
+        if (dialogIsOpen) { dialog.appendChild(notifEl); } else { document.body.appendChild(notifEl); }
         notifEl.textContent = message;
         notifEl.classList.remove('d-none');
         setTimeout(() => notifEl.classList.add('d-none'), 5000);
         return;
     }
-
-    // Fallback: showNotification falls vorhanden
-    if (typeof showNotification === 'function') {
-        showNotification(message, isError);
-    }
+    if (typeof showNotification === 'function') showNotification(message, isError);
 }
 
 
+// ── Auth Guard ─────────────────────────────────────────────────────────────────
+
+
+/** Redirects unauthenticated users away from protected pages to the login page. */
 function redirectIfUnauthorized() {
     const protectedPages = ['summary.html', 'add_task.html', 'board.html', 'contacts.html', 'help.html'];
     if (protectedPages.includes(getCurrentPage()) && !sessionStorage.getItem('currentUser')) {
         window.location.href = '../index.html';
     }
 }
+
 
 redirectIfUnauthorized();

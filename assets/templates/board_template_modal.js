@@ -1,3 +1,10 @@
+// ── Add Task Modal ─────────────────────────────────────────────────────────────
+
+
+/**
+ * Returns the full HTML string for the add-task modal dialog.
+ * @returns {string} HTML string for the <dialog> element.
+ */
 function renderAddTaskModal() {
     return `
     <dialog class="board-overlay" id="add-task-overlay" onclick="closeAddTaskModal(event)">
@@ -10,8 +17,7 @@ function renderAddTaskModal() {
                 <div class="form-columns">
                     <div class="form-col">
                         <div class="form-group">
-                            <label class="form-label" for="modal-task-title">Title <span
-                                    class="required">*</span></label>
+                            <label class="form-label" for="modal-task-title">Title <span class="required">*</span></label>
                             <input class="form-input" type="text" id="modal-task-title" placeholder="Enter a title"
                                 oninput="updateModalCreateButton()">
                             <span class="field-error d-none" id="modal-error-title">This field is required</span>
@@ -24,8 +30,7 @@ function renderAddTaskModal() {
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label" for="modal-task-due">Due date <span
-                                    class="required">*</span></label>
+                            <label class="form-label" for="modal-task-due">Due date <span class="required">*</span></label>
                             <div class="form-input-icon">
                                 <input class="form-input" type="text" id="modal-task-due"
                                     placeholder="TT.MM.JJJJ" readonly style="cursor:pointer;"
@@ -95,16 +100,12 @@ function renderAddTaskModal() {
                             <div class="custom-select" id="modal-category-select">
                                 <div class="form-input select-toggle" id="modal-category-toggle"
                                     onclick="toggleModalCategoryDropdown()">
-                                    <span id="modal-category-selected" class="select-placeholder">Select task
-                                        category</span>
+                                    <span id="modal-category-selected" class="select-placeholder">Select task category</span>
                                     <span class="select-caret">&#9662;</span>
                                 </div>
                                 <div class="select-options d-none" id="modal-category-options">
-                                    <div class="select-option" onclick="selectModalCategory('Technical Task')">Technical
-                                        Task
-                                    </div>
-                                    <div class="select-option" onclick="selectModalCategory('User Story')">User Story
-                                    </div>
+                                    <div class="select-option" onclick="selectModalCategory('Technical Task')">Technical Task</div>
+                                    <div class="select-option" onclick="selectModalCategory('User Story')">User Story</div>
                                 </div>
                             </div>
                             <span class="field-error d-none" id="modal-error-category">This field is required</span>
@@ -130,53 +131,62 @@ function renderAddTaskModal() {
                         </div>
                     </div>
                 </div>
-     </div>
-     
-                <div class="form-footer">
-                    <span class="required-hint"><span class="required">*</span>This field is required</span>
-                    <div class="form-actions">
-                        <button type="button" class="btn-clear" onclick="clearModalTaskForm()">Clear <span
-                                class="btn-x">✕</span></button>
-                        <button type="submit" class="btn-create" id="modal-btn-create" disabled>
-                            Create Task
-                            <img src="../assets/icons/done.svg" alt="" class="btn-icon">
-                        </button>
-                    </div>
+            </div>
+
+            <div class="form-footer">
+                <span class="required-hint"><span class="required">*</span>This field is required</span>
+                <div class="form-actions">
+                    <button type="button" class="btn-clear" onclick="clearModalTaskForm()">Clear <span class="btn-x">✕</span></button>
+                    <button type="submit" class="btn-create" id="modal-btn-create" disabled>
+                        Create Task
+                        <img src="../assets/icons/done.svg" alt="" class="btn-icon">
+                    </button>
                 </div>
+            </div>
             </form>
         </div>
     </dialog>`;
 }
 
 
+/**
+ * Injects the add-task modal into the DOM and initialises its date picker.
+ */
 function injectAddTaskModal() {
     document.body.insertAdjacentHTML('beforeend', renderAddTaskModal());
-    // ensure datepickers attach to dynamically injected modal
-    setTimeout(() => {
-        const modalDue = document.getElementById('modal-task-due');
-        const modalContainer = document.querySelector('.add-task-modal');
-        if (modalDue && window.flatpickr) {
-            flatpickr(modalDue, {
-                dateFormat: 'd.m.Y',
-                minDate: 'today',
-                allowInput: false,
-                disableMobile: true,
-                position: 'above',
-                appendTo: modalContainer || document.body,
-                onReady: function(selectedDates, dateStr, instance) {
-                    // ensure calendar stays inside modal and above input
-                    instance.calendarContainer.style.zIndex = '99999';
-                },
-                onChange: function() {
-                    if (typeof updateModalCreateButton === 'function') updateModalCreateButton();
-                }
-            });
-        }
-        if (window.attachDatepickers) try { window.attachDatepickers(); } catch (e) {}
-    }, 0);
+    setTimeout(initModalDatepicker, 0);
 }
 
 
+/**
+ * Attaches a flatpickr date picker to the modal due-date input.
+ */
+function initModalDatepicker() {
+    const modalDue = document.getElementById('modal-task-due');
+    const modalContainer = document.querySelector('.add-task-modal');
+    if (modalDue && window.flatpickr) {
+        flatpickr(modalDue, {
+            dateFormat: 'd.m.Y',
+            minDate: 'today',
+            allowInput: false,
+            disableMobile: true,
+            position: 'above',
+            appendTo: modalContainer || document.body,
+            onReady: function (selectedDates, dateStr, instance) {
+                instance.calendarContainer.style.zIndex = '99999';
+            },
+            onChange: function () {
+                if (typeof updateModalCreateButton === 'function') updateModalCreateButton();
+            }
+        });
+    }
+    if (window.attachDatepickers) try { window.attachDatepickers(); } catch (e) {}
+}
+
+
+/**
+ * Injects the add-task modal immediately or waits for DOMContentLoaded.
+ */
 function initAddTaskModal() {
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', injectAddTaskModal);
@@ -184,6 +194,7 @@ function initAddTaskModal() {
         injectAddTaskModal();
     }
 }
+
 
 try {
     initAddTaskModal();

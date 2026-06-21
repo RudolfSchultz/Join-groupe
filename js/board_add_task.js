@@ -11,6 +11,8 @@ let modalDefaultStatus = 'todo';
 
 // ── Load Contacts ──────────────────────────────────────────────────────────────
 
+
+/** @returns {Promise<Array>} Normalized contact list from guest or remote source. */
 async function loadAssignContacts() {
     try {
         return (typeof checkIsGuest === 'function' && checkIsGuest())
@@ -23,6 +25,7 @@ async function loadAssignContacts() {
 }
 
 
+/** @returns {Promise<Array>} Contacts loaded from local guest db.json. */
 async function loadGuestAssignContacts() {
     const response = await fetch('../db.json');
     const raw = await response.json();
@@ -31,6 +34,7 @@ async function loadGuestAssignContacts() {
 }
 
 
+/** @returns {Promise<Array>} Contacts loaded from remote Firebase database. */
 async function loadRemoteAssignContacts() {
     const response = await fetch(ADDTASK_CONTACTS_URL);
     const raw = await response.json();
@@ -39,6 +43,11 @@ async function loadRemoteAssignContacts() {
 }
 
 
+/**
+ * Normalizes raw contacts: filters nulls, maps to consistent shape, sorts by name.
+ * @param {Array} raw - Raw contact objects.
+ * @returns {Array} Sorted, normalized contacts.
+ */
 function normalizeContacts(raw) {
     return raw
         .filter(Boolean)
@@ -46,14 +55,19 @@ function normalizeContacts(raw) {
             id: String(contact.id),
             name: contact.name,
             color: contact.color || (typeof getRandomColor === 'function' ? getRandomColor() : '#ccc'),
-            avatar: contact.avatar || (typeof initialsFromName === 'function' ? initialsFromName(contact.name) : '?')
+            avatar: contact.avatar || getInitials(contact.name)
         }))
         .sort((a, b) => a.name.localeCompare(b.name));
 }
 
 
-// ── Priority ───────────────────────────────────────────────────────────────────
+// ── Priority & Category ────────────────────────────────────────────────────────
 
+
+/**
+ * Activates the clicked priority button and stores the selection.
+ * @param {HTMLElement} button - The clicked priority button.
+ */
 function setModalPriority(button) {
     document.querySelectorAll('#add-task-overlay .prio-btn').forEach(btn => btn.classList.remove('prio-active'));
     button.classList.add('prio-active');
@@ -61,19 +75,23 @@ function setModalPriority(button) {
 }
 
 
-// ── Category Dropdown ──────────────────────────────────────────────────────────
-
+/** Toggles the category dropdown (closes assign dropdown first). */
 function toggleModalCategoryDropdown() {
     closeModalAssignDropdown();
     document.getElementById('modal-category-options').classList.toggle('d-none');
 }
 
 
+/** Closes the category dropdown. */
 function closeModalCategoryDropdown() {
     document.getElementById('modal-category-options').classList.add('d-none');
 }
 
 
+/**
+ * Selects a category, updates the label, hides the error, and refreshes the button.
+ * @param {string} value - The selected category value.
+ */
 function selectModalCategory(value) {
     modalSelectedCategory = value;
     const label = document.getElementById('modal-category-selected');
@@ -87,6 +105,8 @@ function selectModalCategory(value) {
 
 // ── Assign Dropdown ────────────────────────────────────────────────────────────
 
+
+/** Toggles the assign dropdown (closes category dropdown first). */
 function toggleModalAssignDropdown() {
     closeModalCategoryDropdown();
     renderModalAssignOptions();
@@ -94,11 +114,13 @@ function toggleModalAssignDropdown() {
 }
 
 
+/** Closes the assign dropdown. */
 function closeModalAssignDropdown() {
     document.getElementById('modal-assign-options').classList.add('d-none');
 }
 
 
+/** Renders all contact options in the assign dropdown. */
 function renderModalAssignOptions() {
     const options = document.getElementById('modal-assign-options');
     options.innerHTML = modalContacts
@@ -107,12 +129,18 @@ function renderModalAssignOptions() {
 }
 
 
+/**
+ * Returns the HTML for one assign dropdown option.
+ * @param {Object} contact - Contact with id, name, color, avatar.
+ * @param {boolean} isSelected - Whether the contact is currently assigned.
+ * @returns {string} HTML string.
+ */
 function modalAssignOptionTemplate(contact, isSelected) {
     return `
         <div class="assign-option ${isSelected ? 'assign-option--active' : ''}"
              role="checkbox" tabindex="0" aria-checked="${isSelected}"
              onclick="toggleModalPerson('${contact.id}'); event.stopPropagation();"
-             onkeydown="if(event.key==='Enter' || event.key===' '){event.preventDefault(); toggleModalPerson('${contact.id}');}">
+             onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleModalPerson('${contact.id}');}">
             <span class="assign-option-left">
                 <span class="avatar-chip" style="background-color:${contact.color}">${contact.avatar}</span>
                 <span class="assign-option-name">${escapeHtml(contact.name)}</span>
@@ -122,6 +150,10 @@ function modalAssignOptionTemplate(contact, isSelected) {
 }
 
 
+/**
+ * Toggles a contact's assignment state and refreshes the UI.
+ * @param {string} id - Contact id to toggle.
+ */
 function toggleModalPerson(id) {
     if (modalAssignedIds.includes(id)) {
         modalAssignedIds = modalAssignedIds.filter(assignedId => assignedId !== id);
@@ -134,31 +166,37 @@ function toggleModalPerson(id) {
 }
 
 
+/**
+ * Returns false and notifies the user if the 10-person limit is reached.
+ * @returns {boolean}
+ */
 function canAssignMoreModalPersons() {
-    if (modalAssignedIds.length >= 10) {
-        notify('Maximal 10 Personen können zugewiesen werden.', true);
+    if (modalAssignedIds.length >= 99) {
+        notify('Maximal 99 Personen können zugewiesen werden.', true);
         return false;
     }
     return true;
 }
 
 
+/** Renders assigned contact avatars with a "+N" overflow chip after 5. */
 function renderModalAssignedAvatars() {
     const container = document.getElementById('modal-assigned-avatars');
     const selected = modalContacts.filter(contact => modalAssignedIds.includes(contact.id));
-    const max = 5;
-    const visible = selected.slice(0, max);
-    let html = visible.map(contact => `<span class="avatar-chip" style="background-color:${contact.color}">${contact.avatar}</span>`).join('');
-    if (selected.length > max) {
-        const more = selected.length - max;
-        html += `<span class="avatar-chip avatar-chip-more">+${more}</span>`;
-    }
+    const visible = selected.slice(0, 5);
+    let html = visible.map(c => `<span class="avatar-chip" style="background-color:${c.color}">${c.avatar}</span>`).join('');
+    if (selected.length > 5) html += `<span class="avatar-chip avatar-chip-more">+${selected.length - 5}</span>`;
     container.innerHTML = html;
 }
 
 
 // ── Subtasks ───────────────────────────────────────────────────────────────────
 
+
+/**
+ * Adds a subtask when Enter is pressed inside the subtask input.
+ * @param {KeyboardEvent} event
+ */
 function handleModalSubtaskKey(event) {
     if (event.key !== 'Enter') return;
     event.preventDefault();
@@ -166,6 +204,7 @@ function handleModalSubtaskKey(event) {
 }
 
 
+/** Shows or hides subtask action buttons based on whether the input has text. */
 function updateModalSubtaskActions() {
     const hasText = document.getElementById('modal-task-subtask').value.trim().length > 0;
     const editActions = document.getElementById('modal-subtask-edit-actions');
@@ -173,6 +212,7 @@ function updateModalSubtaskActions() {
 }
 
 
+/** Reads the subtask input, appends a new subtask object, and re-renders. */
 function addModalSubtask() {
     const input = document.getElementById('modal-task-subtask');
     const title = input.value.trim();
@@ -184,18 +224,27 @@ function addModalSubtask() {
 }
 
 
+/** Clears the subtask input and hides the action buttons. */
 function clearModalSubtaskInput() {
     document.getElementById('modal-task-subtask').value = '';
     updateModalSubtaskActions();
 }
 
 
+/**
+ * Removes a subtask by index and re-renders the list.
+ * @param {number} index
+ */
 function deleteModalSubtask(index) {
     modalSubtasks.splice(index, 1);
     renderModalSubtasks();
 }
 
 
+/**
+ * Replaces a subtask list item with an inline edit input.
+ * @param {number} index
+ */
 function editModalSubtask(index) {
     const list = document.getElementById('modal-subtask-list');
     list.children[index].outerHTML = modalSubtaskEditTemplate(modalSubtasks[index], index);
@@ -203,6 +252,10 @@ function editModalSubtask(index) {
 }
 
 
+/**
+ * Saves the edited subtask; deletes it if the input is empty.
+ * @param {number} index
+ */
 function saveModalSubtaskEdit(index) {
     const value = document.getElementById(`modal-subtask-edit-${index}`).value.trim();
     if (!value) return deleteModalSubtask(index);
@@ -211,12 +264,19 @@ function saveModalSubtaskEdit(index) {
 }
 
 
+/** Re-renders all subtask list items. */
 function renderModalSubtasks() {
     const list = document.getElementById('modal-subtask-list');
     list.innerHTML = modalSubtasks.map((subtask, index) => modalSubtaskItemTemplate(subtask, index)).join('');
 }
 
 
+/**
+ * Returns the HTML for a single read-only subtask item.
+ * @param {Object} subtask
+ * @param {number} index
+ * @returns {string}
+ */
 function modalSubtaskItemTemplate(subtask, index) {
     return `
         <li class="subtask-item" ondblclick="editModalSubtask(${index})">
@@ -230,6 +290,12 @@ function modalSubtaskItemTemplate(subtask, index) {
 }
 
 
+/**
+ * Returns the HTML for an inline subtask edit input.
+ * @param {Object} subtask
+ * @param {number} index
+ * @returns {string}
+ */
 function modalSubtaskEditTemplate(subtask, index) {
     return `
         <li class="subtask-item subtask-item--editing">
@@ -241,128 +307,4 @@ function modalSubtaskEditTemplate(subtask, index) {
                 <button type="button" class="subtask-icon-btn" title="Save" onclick="saveModalSubtaskEdit(${index})">&#10003;</button>
             </span>
         </li>`;
-}
-
-
-// ── Clear Form ─────────────────────────────────────────────────────────────────
-
-function clearModalTaskForm() {
-    clearModalTextFields();
-    resetModalPriority();
-    resetModalCategory();
-    resetModalAssignAndSubtasks();
-    hideModalFieldErrors();
-    updateModalCreateButton();
-}
-
-
-function clearModalTextFields() {
-    document.getElementById('modal-task-title').value = '';
-    document.getElementById('modal-task-desc').value = '';
-    document.getElementById('modal-task-due').value = '';
-    document.getElementById('modal-task-subtask').value = '';
-    updateModalSubtaskActions();
-}
-
-
-function resetModalPriority() {
-    modalSelectedPriority = 'medium';
-    document.querySelectorAll('#add-task-overlay .prio-btn').forEach(btn => {
-        btn.classList.remove('prio-active');
-        if (btn.dataset.prio === 'medium') btn.classList.add('prio-active');
-    });
-}
-
-
-function resetModalCategory() {
-    modalSelectedCategory = '';
-    const categoryLabel = document.getElementById('modal-category-selected');
-    categoryLabel.textContent = 'Select task category';
-    categoryLabel.classList.add('select-placeholder');
-}
-
-
-function resetModalAssignAndSubtasks() {
-    modalAssignedIds = [];
-    modalSubtasks = [];
-    renderModalAssignedAvatars();
-    renderModalSubtasks();
-}
-
-
-function hideModalFieldErrors() {
-    document.querySelectorAll('#add-task-overlay .field-error').forEach(el => el.classList.add('d-none'));
-}
-
-
-// ── Create Task ────────────────────────────────────────────────────────────────
-
-async function createTaskFromModal(event) {
-    event.preventDefault();
-    const task = collectModalTask();
-    if (!validateModalTask(task)) return;
-    const button = document.getElementById('modal-btn-create');
-    button.disabled = true;
-    await trySaveModalTask(task, button);
-}
-
-
-async function trySaveModalTask(task, button) {
-    try {
-        await saveModalTask(task);
-        showTaskNotification('Task added to board');
-        closeAddTaskModal();
-        await initTasks();
-    } catch (error) {
-        console.error('Error saving task:', error);
-        showTaskNotification('Could not save task. Please try again.', true);
-        button.disabled = false;
-    }
-}
-
-
-function collectModalAssignedTo() {
-    return modalContacts
-        .filter(c => modalAssignedIds.includes(c.id))
-        .map(c => ({ id: c.id, name: c.name, color: c.color, initials: c.avatar }));
-}
-
-
-function collectModalTask() {
-    return {
-        title: document.getElementById('modal-task-title').value.trim(),
-        description: document.getElementById('modal-task-desc').value.trim(),
-        dueDate: document.getElementById('modal-task-due').value,
-        priority: modalSelectedPriority,
-        category: modalSelectedCategory,
-        assignedTo: collectModalAssignedTo(),
-        subtasks: modalSubtasks,
-        status: modalDefaultStatus
-    };
-}
-
-
-// ── Validate Task ──────────────────────────────────────────────────────────────
-
-function validateModalField(value, errorId) {
-    const errorEl = document.getElementById(errorId);
-    const isValid = Boolean(value);
-    errorEl.classList.toggle('d-none', isValid);
-    return isValid;
-}
-
-
-function validateModalTask(task) {
-    const titleOk = validateModalField(task.title, 'modal-error-title');
-    const dueOk = validateModalField(task.dueDate, 'modal-error-due');
-    const catOk = validateModalField(task.category, 'modal-error-category');
-    return titleOk && dueOk && catOk;
-}
-
-
-function updateModalCreateButton() {
-    const title = document.getElementById('modal-task-title').value.trim();
-    const due = document.getElementById('modal-task-due').value;
-    const btn = document.getElementById('modal-btn-create');
-    btn.disabled = !(title && due && modalSelectedCategory);
 }

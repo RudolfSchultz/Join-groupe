@@ -1,3 +1,11 @@
+// ── Utilities ──────────────────────────────────────────────────────────────────
+
+
+/**
+ * Escapes special HTML characters in a string to prevent XSS.
+ * @param {string} str - The string to escape.
+ * @returns {string} HTML-safe string.
+ */
 function escapeHtml(str) {
     if (!str) return '';
     const div = document.createElement('div');
@@ -6,34 +14,41 @@ function escapeHtml(str) {
 }
 
 
+/**
+ * Converts various date formats to ISO 8601 (YYYY-MM-DD).
+ * @param {string} value - Date string in ISO, European (dd.mm.yyyy), or parseable format.
+ * @returns {string} ISO date string or empty string if conversion fails.
+ */
 function toIsoDate(value) {
     if (!value) return '';
-    // already ISO
     if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return value;
-    // European format dd.mm.yyyy
     if (/^\d{2}\.\d{2}\.\d{4}$/.test(value)) {
         const parts = value.split('.');
         return `${parts[2]}-${parts[1]}-${parts[0]}`;
     }
-    // try parseable date
     const d = new Date(value);
-    if (!isNaN(d)) return d.toISOString().slice(0,10);
+    if (!isNaN(d)) return d.toISOString().slice(0, 10);
     return '';
 }
 
 
+/**
+ * Truncates a string to a maximum length and appends an ellipsis if needed.
+ * @param {string} str - The string to truncate.
+ * @param {number} len - Maximum allowed length.
+ * @returns {string} Truncated string.
+ */
 function truncate(str, len) {
     if (!str) return '';
     return str.length > len ? str.substring(0, len) + '…' : str;
 }
 
 
-function initialsFromName(name) {
-    const parts = (name || '').trim().split(' ');
-    return ((parts[0]?.charAt(0) || '') + (parts[1]?.charAt(0) || '')).toUpperCase() || '?';
-}
-
-
+/**
+ * Returns the CSS class for a task category badge.
+ * @param {string} category - Task category string.
+ * @returns {string} CSS class name.
+ */
 function categoryColorClass(category) {
     if (!category) return '';
     const c = category.toLowerCase();
@@ -43,6 +58,11 @@ function categoryColorClass(category) {
 }
 
 
+/**
+ * Returns an inline SVG icon for the given priority level.
+ * @param {string} prio - Priority value: 'urgent', 'medium', or 'low'.
+ * @returns {string} SVG HTML string or empty string for unknown values.
+ */
 function prioSvg(prio) {
     if (!prio) return '';
     const p = prio.toLowerCase();
@@ -53,6 +73,14 @@ function prioSvg(prio) {
 }
 
 
+// ── Task Card ──────────────────────────────────────────────────────────────────
+
+
+/**
+ * Returns the full HTML string for a draggable task card on the board.
+ * @param {Object} task - Task object with id, status, category, title, description, subtasks, assignedTo, priority.
+ * @returns {string} HTML string.
+ */
 function taskCardTemplate(task) {
     const progress = buildProgressBar(task.subtasks || [], task.id);
     const avatars = buildAvatars(task.assignedTo || []);
@@ -72,10 +100,17 @@ function taskCardTemplate(task) {
 }
 
 
+/**
+ * Returns a progress bar HTML string for the subtask completion state.
+ * @param {Array} subtasks - Array of subtask objects with a done property.
+ * @param {string|number} taskId - Parent task id for event binding.
+ * @returns {string} HTML string or empty string if there are no subtasks.
+ */
 function buildProgressBar(subtasks, taskId) {
     const done = subtasks.filter(s => s.done).length;
     const total = subtasks.length;
-    return total > 0 ? `
+    if (total === 0) return '';
+    return `
         <div class="card-progress" data-task-id="${taskId}"
              onclick="toggleProgressDetails(event, ${taskId})"
              onmouseenter="showProgressTooltip(event, ${taskId})"
@@ -84,31 +119,45 @@ function buildProgressBar(subtasks, taskId) {
                 <div class="card-progressbar-fill" style="width:${Math.round(100 / total * done)}%"></div>
             </div>
             <span class="card-progress-label" title="${done} von ${total} Subtasks erledigt">${done}/${total}</span>
-        </div>` : '';
+        </div>`;
 }
 
 
+/**
+ * Returns avatar chip HTML for the assigned contacts, with +N overflow chip.
+ * @param {Array} assignedTo - Array of contact objects with color and initials.
+ * @returns {string} HTML string.
+ */
 function buildAvatars(assignedTo) {
     const max = 5;
     const visible = (assignedTo || []).slice(0, max);
     let html = visible.map(a => `<span class="card-avatar" style="background:${a.color || '#ccc'}">${a.initials || '?'}</span>`).join('');
-    if ((assignedTo || []).length > max) {
-        const more = (assignedTo || []).length - max;
-        html += `<span class="card-avatar card-avatar-more">+${more}</span>`;
-    }
+    if ((assignedTo || []).length > max) html += `<span class="card-avatar card-avatar-more">+${(assignedTo || []).length - max}</span>`;
     return html;
 }
 
 
+// ── Task Detail ────────────────────────────────────────────────────────────────
+
+
+/**
+ * Returns the full detail overlay HTML for a task.
+ * @param {Object} task - Task object with all fields.
+ * @returns {string} HTML string assembled from sub-builders.
+ */
 function taskDetailTemplate(task) {
-    const prioLabel = task.priority
-        ? task.priority.charAt(0).toUpperCase() + task.priority.slice(1) : '–';
+    const prioLabel = task.priority ? task.priority.charAt(0).toUpperCase() + task.priority.slice(1) : '–';
     const assignees = buildDetailAssignees(task.assignedTo || []);
     const subtaskList = buildDetailSubtasks(task.subtasks || [], task.id);
     return buildDetailHTML(task, prioLabel, assignees, subtaskList);
 }
 
 
+/**
+ * Returns HTML for all assigned contact rows in the detail view.
+ * @param {Array} assignedTo - Array of contact objects with color, initials, name.
+ * @returns {string} HTML string or empty string if no contacts are assigned.
+ */
 function buildDetailAssignees(assignedTo) {
     if (!(assignedTo || []).length) return '';
     const max = 5;
@@ -130,6 +179,12 @@ function buildDetailAssignees(assignedTo) {
 }
 
 
+/**
+ * Returns HTML list items for each subtask with a toggle checkbox.
+ * @param {Array} subtasks - Array of subtask objects with title and done.
+ * @param {string|number} taskId - Parent task id for change event binding.
+ * @returns {string} HTML string.
+ */
 function buildDetailSubtasks(subtasks, taskId) {
     return subtasks.map((s, i) => `
         <li class="detail-subtask-item">
@@ -140,6 +195,14 @@ function buildDetailSubtasks(subtasks, taskId) {
 }
 
 
+/**
+ * Assembles the full detail view HTML from its constituent sections.
+ * @param {Object} task - Task object.
+ * @param {string} prioLabel - Capitalised priority label.
+ * @param {string} assignees - Pre-built assignee HTML.
+ * @param {string} subtaskList - Pre-built subtask list HTML.
+ * @returns {string} Combined HTML string.
+ */
 function buildDetailHTML(task, prioLabel, assignees, subtaskList) {
     return buildDetailHeader(task)
         + buildDetailInfo(task, prioLabel)
@@ -149,6 +212,11 @@ function buildDetailHTML(task, prioLabel, assignees, subtaskList) {
 }
 
 
+/**
+ * Returns the detail overlay header HTML including category badge and close button.
+ * @param {Object} task - Task object with category, title, description.
+ * @returns {string} HTML string.
+ */
 function buildDetailHeader(task) {
     return `
         <div class="detail-header">
@@ -161,6 +229,12 @@ function buildDetailHeader(task) {
 }
 
 
+/**
+ * Returns the due date and priority row HTML for the detail view.
+ * @param {Object} task - Task object with dueDate and priority.
+ * @param {string} prioLabel - Capitalised priority label.
+ * @returns {string} HTML string.
+ */
 function buildDetailInfo(task, prioLabel) {
     return `
         <div class="detail-row">
@@ -174,6 +248,12 @@ function buildDetailInfo(task, prioLabel) {
 }
 
 
+/**
+ * Returns the assigned-to section HTML or empty string if no contacts.
+ * @param {Object} task - Task object with assignedTo array.
+ * @param {string} assignees - Pre-built assignee HTML.
+ * @returns {string} HTML string.
+ */
 function buildDetailAssignSection(task, assignees) {
     if (!(task.assignedTo || []).length) return '';
     return `
@@ -184,6 +264,12 @@ function buildDetailAssignSection(task, assignees) {
 }
 
 
+/**
+ * Returns the subtask section HTML or empty string if there are no subtasks.
+ * @param {Object} task - Task object with subtasks array.
+ * @param {string} subtaskList - Pre-built subtask list HTML.
+ * @returns {string} HTML string.
+ */
 function buildDetailSubtaskSection(task, subtaskList) {
     if (!(task.subtasks || []).length) return '';
     return `
@@ -194,6 +280,11 @@ function buildDetailSubtaskSection(task, subtaskList) {
 }
 
 
+/**
+ * Returns the delete and edit action buttons HTML for the detail overlay.
+ * @param {string|number} taskId - Task id for button event bindings.
+ * @returns {string} HTML string.
+ */
 function buildDetailActions(taskId) {
     return `
         <div class="detail-actions">
@@ -204,164 +295,5 @@ function buildDetailActions(taskId) {
             <button class="detail-btn" onclick="openEditModal(${taskId})">
                 <img src="../assets/icons/edit.svg" alt="Edit"> Edit
             </button>
-        </div>`;
-}
-
-
-function editTaskTemplate(task) {
-    const prioButtons = buildPrioButtons(task.priority);
-    return buildEditHeader()
-        + buildEditBasicFields(task)
-        + buildEditPrioField(prioButtons)
-        + buildEditAssignField()
-        + buildEditSubtaskField()
-        + buildEditSaveButton(task.id);
-}
-
-
-function buildPrioButtons(currentPrio) {
-    return ['urgent', 'medium', 'low'].map(p => `
-        <button type="button" class="edit-prio-btn edit-prio-${p} ${currentPrio === p ? 'edit-prio-btn--active' : ''}"
-            data-prio="${p}" onclick="selectEditPrio(this, '${p}')">
-            ${p.charAt(0).toUpperCase() + p.slice(1)} ${prioSvg(p)}
-        </button>`).join('');
-}
-
-
-function buildEditHeader() {
-    return `
-        <div class="detail-header">
-            <span class="detail-title">Edit Task</span>
-            <button class="detail-close-btn" onmousedown="event.stopPropagation(); event.preventDefault();" onclick="closeOverlay(); event.stopPropagation();">&#x2715;</button>
-        </div>`;
-}
-
-
-function buildEditBasicFields(task) {
-    return `
-    <div class="edit-box">
-        <div class="edit-form-group">
-            <label class="edit-label">Title <span class="required">*</span></label>
-            <input id="edit-title" class="edit-input" type="text" value="${escapeHtml(task.title || '')}">
-        </div>
-        <div class="edit-form-group">
-            <label class="edit-label">Description</label>
-            <textarea id="edit-desc" class="edit-input edit-textarea">${escapeHtml(task.description || '')}</textarea>
-        </div>
-        <div class="edit-form-group">
-            <label class="edit-label">Due Date</label>
-            <div class="form-input-icon">
-                <input id="edit-due" class="edit-input date-picker flatpickr-edit" type="text"
-                    placeholder="TT.MM.JJJJ"
-                    value="${escapeHtml(task.dueDate || '')}" readonly style="cursor:pointer;">
-                <img src="../assets/icons/event.svg" class="input-icon" alt="calendar">
-            </div>
-        </div>`;
-}
-
-
-function buildEditPrioField(prioButtons) {
-    return `
-        <div class="edit-form-group">
-            <label class="edit-label">Priority</label>
-            <div class="edit-prio-group">${prioButtons}</div>
-        </div>`;
-}
-
-
-function buildEditAssignField() {
-    return `
-        <div class="edit-form-group">
-            <label class="edit-label">Assigned To</label>
-            <div class="edit-assign-wrapper">
-                <div class="edit-input edit-assign-toggle" onclick="toggleEditAssignDropdown()">
-                    <span>Select contacts</span>
-                    <span class="select-caret">&#9662;</span>
-                </div>
-                <div class="edit-assign-options d-none" id="edit-assign-options"></div>
-            </div>
-            <div class="edit-assigned-avatars" id="edit-assigned-avatars"></div>
-        </div>`;
-}
-
-
-function buildEditSubtaskField() {
-    return `
-        <div class="edit-form-group">
-            <label class="edit-label">Subtasks</label>
-            <div class="edit-subtask-input-row">
-                <input id="edit-subtask-input" class="edit-input" type="text"
-                    placeholder="Add new subtask"
-                    onkeydown="if(event.key==='Enter'){event.preventDefault();addEditSubtask();}">
-                <button type="button" class="edit-subtask-add-btn" onclick="addEditSubtask()">&#43;</button>
-            </div>
-            <ul class="edit-subtask-list" id="edit-subtask-list"></ul>
-        </div></div>`;
-}
-
-
-function buildEditSaveButton(taskId) {
-    return `
-        <div class="edit-save-row">
-            <button type="button" class="btn-add-task" 
-                onmousedown="event.preventDefault(); event.stopPropagation();"
-                onclick="event.stopPropagation(); saveEditedTask(${taskId})">
-                OK
-                <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M1 6L6 11L15 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-        </div>`;
-}
-
-
-function renderEditAssignOptionsHTML(boardContacts, editAssignedIds) {
-    return boardContacts.map(c => {
-        const selected = editAssignedIds.includes(String(c.id));
-        return `<div class="assign-option ${selected ? 'assign-option--active' : ''}"
-                    role="checkbox" tabindex="0" aria-checked="${selected}"
-                    onclick="toggleEditPerson('${c.id}'); event.stopPropagation();"
-                    onkeydown="if(event.key==='Enter' || event.key===' '){event.preventDefault(); toggleEditPerson('${c.id}');}">
-                    <span class="assign-option-left">
-                        <span class="card-avatar" style="background:${c.color}">${c.initials}</span>
-                        <span class="assign-option-name">${escapeHtml(c.name)}</span>
-                    </span>
-                    <span class="assign-checkbox" aria-hidden="true">${selected ? '&#x2611;' : '&#x2610;'}</span>
-                </div>`;
-    }).join('');
-}
-
-
-function renderEditAssignedAvatarsHTML(boardContacts, editAssignedIds) {
-    const selected = boardContacts.filter(c => editAssignedIds.includes(String(c.id)));
-    const max = 5;
-    const visible = selected.slice(0, max);
-    let html = visible.map(c => `<span class="card-avatar" style="background:${c.color}" title="${escapeHtml(c.name)}">${c.initials}</span>`).join('');
-    if (selected.length > max) {
-        html += `<5pan class="card-avatar card-avatar-more" title="${selected.length - max} more">+${selected.length - max}</5pan>`;
-    }
-    return html;
-}
-
-
-function renderEditSubtasksHTML(editSubtasks) {
-    return editSubtasks.map((s, i) => `
-        <li class="edit-subtask-item" id="edit-sub-item-${i}">
-            <span class="subtask-text">&#8226; ${escapeHtml(s.title)}</span>
-            <div class="edit-subtask-item-actions">
-                <button type="button" class="subtask-icon-btn" onclick="startEditSubtask(${i})"><img src="../assets/icons/edit.svg" alt="Edit"></button>
-                <span class="subtask-action-divider"></span>
-                <button type="button" class="subtask-icon-btn" onclick="deleteEditSubtask(${i})"><img src="../assets/icons/delete.svg" alt="Delete"></button>
-            </div>
-        </li>`).join('');
-}
-
-
-function renderEditSubtaskInputHTML(index, title) {
-    return `
-        <input id="edit-sub-input-${index}" class="edit-input edit-subtask-inline-input"
-            value="${escapeHtml(title)}"
-            onkeydown="if(event.key==='Enter'){saveEditSubtask(${index});}">
-        <div class="edit-subtask-item-actions">
-            <button type="button" class="subtask-icon-btn" onclick="saveEditSubtask(${index})"><img src="../assets/icons/checkbox-checked.svg" alt="Save"></button>
-            <button type="button" class="subtask-icon-btn" onclick="deleteEditSubtask(${index})"><img src="../assets/icons/delete.svg" alt="Delete"></button>
         </div>`;
 }
