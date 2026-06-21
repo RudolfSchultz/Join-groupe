@@ -77,7 +77,7 @@ function renderDialogContact(title, submitAction, buttonHtml) {
                 <div class="modal-divider"></div>
             </div>
 
-            <form method="dialog" class="modal-right" onsubmit="${submitAction}">
+            <form method="dialog" class="modal-right" onsubmit="handleContactSubmit(event, '${submitAction}')">
                 <button type="button" class="close-dialog dp-hidden-mobile" onclick="closeDialog()">×</button>
 
                 <div class="profile-placeholder">
@@ -85,19 +85,22 @@ function renderDialogContact(title, submitAction, buttonHtml) {
                 </div>
 
                 <div class="input-group">
-                    <input type="text" name="name" placeholder="Name" required>
+                    <input type="text" id="modal-name" name="name" placeholder="Name" onblur="validateField('name')" autocomplete="off">
                     <i class="fa-solid fa-user"></i>
                 </div>
+                <div id="name-error" class="error-message">Please enter both your first and last name.</div>
 
                 <div class="input-group">
-                    <input type="email" name="email" placeholder="Email" required>
+                    <input type="text" id="modal-email" name="email" placeholder="Email" required onblur="validateField('email')" autocomplete="off">
                     <i class="fa-solid fa-envelope"></i>
                 </div>
+                <div id="email-error" class="error-message">Please enter a valid email address.</div>
 
                 <div class="input-group">
-                    <input type="tel" name="phone" placeholder="Phone">
+                    <input type="text" id="modal-phone" name="phone" placeholder="Phone" oninput="allowOnlyNumbers(this)" onblur="validateField('phone')" autocomplete="off">
                     <i class="fa-solid fa-phone"></i>
                 </div>
+                <div id="phone-error" class="error-message">Only numbers are allowed.</div>
 
                 <div class="modal-footer">
                     ${buttonHtml}

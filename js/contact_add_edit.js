@@ -1,3 +1,10 @@
+/** @type {Object} Centralized validation configuration for contact fields */
+const CONTACT_VALIDATION = {
+    name: { id: 'modal-name', errorId: 'name-error', type: 'name' },
+    email: { id: 'modal-email', errorId: 'email-error', type: 'regex', rule: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/ },
+    phone: { id: 'modal-phone', errorId: 'phone-error', type: 'regex', rule: /^[0-9]+$/ }
+};
+
 /**
  * Opens the dialog pre-filled with an existing contact's data for editing.
  *
@@ -97,4 +104,106 @@ async function deleteContact(id) {
         }
         if (contactDetailsContainer) contactDetailsContainer.innerHTML = '';
     } catch (error) { console.error("Fehler beim Löschen:", error); }
+}
+
+/**
+ * Checks an input field's value against a regular expression and toggles
+ * the visibility of the corresponding error message box.
+ * @param {string} inputId - The HTML ID of the input field to validate.
+ * @param {string} errorId - The HTML ID of the error message container.
+ * @param {RegExp} regex - The regular expression to test the input value against.
+ * @returns {boolean} True if the input value matches the regex, otherwise false.
+ */
+function checkFieldRegex(inputId, errorId, regex) {
+    const input = document.getElementById(inputId);
+    const errorBox = document.getElementById(errorId);
+    if (!input || !errorBox) return false;
+    
+    const isValid = regex.test(input.value.trim());
+    if (isValid) {
+        errorBox.classList.remove('visible');
+    } else {
+        errorBox.classList.add('visible');
+    }
+    return isValid;
+}
+
+/**
+ * Final check upon form submission. Re-validates all fields using the central config.
+ * @param {SubmitEvent} event - The native submit event of the form.
+ * @param {Function} originalSubmitAction - The actual save or update function.
+ * @returns {void}
+ */
+function handleContactSubmit(event, originalSubmitAction) {
+    event.preventDefault();
+    const isNameValid = validateField('name');
+    const isEmailValid = validateField('email');
+    const isPhoneValid = validateField('phone');
+    
+    if (isNameValid && isEmailValid && isPhoneValid && typeof originalSubmitAction === 'function') {
+        originalSubmitAction(); 
+    }
+}
+
+/**
+ * Checks an input field's value against a regular expression if it is not empty.
+ * Toggles the visibility of the corresponding error message box.
+ * @param {string} inputId - The HTML ID of the input field to validate.
+ * @param {string} errorId - The HTML ID of the error message container.
+ * @param {RegExp} regex - The regular expression to test the input value against.
+ * @returns {boolean} True if the input is empty or matches the regex, otherwise false.
+ */
+function checkFieldRegex(inputId, errorId, regex) {
+    const input = document.getElementById(inputId);
+    const errorBox = document.getElementById(errorId);
+    if (!input || !errorBox) return false;
+    
+    const value = input.value.trim();
+    const isValid = value === '' || regex.test(value);
+    
+    errorBox.classList.toggle('visible', !isValid);
+    return isValid;
+}
+
+/**
+ * Validates that the input contains at least a first name and a last name.
+ * Toggles the visibility of the corresponding error message box.
+ * @param {string} inputId - The HTML ID of the name input field.
+ * @param {string} errorId - The HTML ID of the error message container.
+ * @returns {boolean} True if both first and last name are present, otherwise false.
+ */
+function checkNameField(inputId, errorId) {
+    const input = document.getElementById(inputId);
+    const errorBox = document.getElementById(errorId);
+    if (!input || !errorBox) return false;
+    
+    const names = input.value.trim().split(/\s+/);
+    const isValid = names.length >= 2 && names[0] !== '' && names[1] !== '';
+    
+    errorBox.classList.toggle('visible', !isValid);
+    return isValid;
+}
+
+/**
+ * Sanitizes the input field in real-time by removing any non-numeric characters.
+ * * @param {HTMLInputElement} input - The input element triggering the event.
+ * @returns {void}
+ */
+function allowOnlyNumbers(input) {
+    input.value = input.value.replace(/[^0-9]/g, '');
+}
+
+/**
+ * Validates a single field by its configuration name (used for onblur).
+ * @param {string} fieldName - The key of the field in CONTACT_VALIDATION ('name', 'email', 'phone').
+ * @returns {boolean} True if the field is valid, otherwise false.
+ */
+function validateField(fieldName) {
+    const config = CONTACT_VALIDATION[fieldName];
+    if (!config) return false;
+    
+    if (config.type === 'name') {
+        return checkNameField(config.id, config.errorId);
+    }
+    return checkFieldRegex(config.id, config.errorId, config.rule);
 }

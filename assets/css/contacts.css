@@ -485,6 +485,26 @@
     transform: translate(-50%, -50%);
 }
 
+.error-message {
+    width: 100%;       
+    text-align: left;  
+    box-sizing: border-box;
+    font-size: 12px;
+    color: transparent;
+    margin-top: -10px; 
+    margin-bottom: 15px;
+    padding-left: 5px;
+    height: 16px; 
+    line-height: 16px;
+    visibility: hidden;
+    transition: color 0.15s ease-in-out;
+}
+
+.error-message.visible {
+    color: #FF3B3B; 
+    visibility: visible;
+}
+
 @media (max-width: 1024px) {
     .brand-header {
         flex-direction: column;
