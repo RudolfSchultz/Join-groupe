@@ -256,13 +256,33 @@ body.app-page { max-width: none; overflow-x: hidden; }
 
 @media (max-width: 769px) {
   .summary-right { display: none; }
-  .summary-main { padding: 108px 40px 96px 24px; }   /* 96px = Platz für die untere Nav */
+  .summary-main { padding: 108px 20px 96px 20px; }   /* symmetrisch -> mittig */
+
+  /* Kästchen größer + großzügigere Abstände */
+  .summary-cards { gap: 24px; }
+  .cards-row { gap: 24px; }
+  .stat-card { height: 144px; padding: 0 19px; gap: 18px; }
+  .urgency-card { height: 144px; padding: 28px 20px; gap: 20px; margin-top: 0; }
+  .cards-row-sm { gap: 16px; }
+  .stat-card-sm { height: 144px; padding: 25px 4px; gap: 13px; }
+
+  /* Label immer 2-zeilig -> alle Zahlen auf gleicher Höhe */
+  .stat-card-sm .stat-label {
+    font-size: 15px;
+    line-height: 1.2;
+    height: 2.4em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 2px;
+  }
 }
 
 
 @media (max-width: 320px) {
   .summary-heading { margin-bottom: 28px; }
-  .stat-card, .urgency-card, .stat-card-sm { height: 120px; }
+  .stat-card, .urgency-card, .stat-card-sm { height: 156px; }
   .cards-row { gap: 8px; }
   .stat-card { padding: 0 8px; }
 }
