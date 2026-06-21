@@ -10,11 +10,20 @@ let boardContacts = [];
 
 // ── Guest Storage ──────────────────────────────────────────────────────────────
 
+
+/**
+ * Reads guest tasks from sessionStorage.
+ * @returns {Array} Parsed task array or empty array on error.
+ */
 function getGuestTasks() {
     try { return JSON.parse(sessionStorage.getItem('guestTasks')) || []; } catch (e) { return []; }
 }
 
 
+/**
+ * Persists guest tasks to sessionStorage.
+ * @param {Array} tasks - Task array to store.
+ */
 function saveGuestTasks(tasks) {
     sessionStorage.setItem('guestTasks', JSON.stringify(tasks));
 }
@@ -22,11 +31,14 @@ function saveGuestTasks(tasks) {
 
 // ── Init ───────────────────────────────────────────────────────────────────────
 
+
+/** Initialises the board page. */
 function init() {
     initMain();
 }
 
 
+/** Loads all tasks and renders them onto the board. */
 async function initTasks() {
     allTasks = await loadBoardTasks();
     displayTasks(allTasks);
@@ -35,12 +47,21 @@ async function initTasks() {
 
 // ── Load Tasks ─────────────────────────────────────────────────────────────────
 
+
+/**
+ * Loads tasks from guest storage or remote database depending on login state.
+ * @returns {Promise<Array>} Array of task objects.
+ */
 async function loadBoardTasks() {
     if (checkIsGuest()) return await loadGuestTasks();
     return await loadRemoteTasks();
 }
 
 
+/**
+ * Fetches tasks from the remote Firebase database.
+ * @returns {Promise<Array>} Array of task objects or empty array on error.
+ */
 async function loadRemoteTasks() {
     try {
         const response = await fetch(`${BOARD_BASE_URL}/tasks.json`);
@@ -54,6 +75,10 @@ async function loadRemoteTasks() {
 }
 
 
+/**
+ * Loads guest tasks by merging demo data with session-stored changes.
+ * @returns {Promise<Array>} Merged task array.
+ */
 async function loadGuestTasks() {
     try {
         const fileTasks = await fetchDemoTasks();
@@ -65,6 +90,10 @@ async function loadGuestTasks() {
 }
 
 
+/**
+ * Fetches tasks from the local demo-task.json file.
+ * @returns {Promise<Array>} Array of demo task objects.
+ */
 async function fetchDemoTasks() {
     const res = await fetch('../demo-task.json');
     if (!res || !res.ok) return [];
@@ -75,6 +104,12 @@ async function fetchDemoTasks() {
 }
 
 
+/**
+ * Merges file-based demo tasks with locally modified session tasks.
+ * Session tasks overwrite demo tasks with the same id.
+ * @param {Array} fileTasks - Tasks loaded from the demo file.
+ * @returns {Array} Sorted, merged task array.
+ */
 function mergeWithSessionTasks(fileTasks) {
     const local = getGuestTasks() || [];
     const mergedMap = new Map();
@@ -88,6 +123,11 @@ function mergeWithSessionTasks(fileTasks) {
 
 // ── Display Tasks ──────────────────────────────────────────────────────────────
 
+
+/**
+ * Clears all columns, renders every task card, adds placeholders and drag boxes.
+ * @param {Array} tasks - Tasks to display.
+ */
 function displayTasks(tasks) {
     clearBoardColumns();
     tasks.forEach(task => renderTaskCard(task));
@@ -96,6 +136,7 @@ function displayTasks(tasks) {
 }
 
 
+/** Empties the inner HTML of all four board columns. */
 function clearBoardColumns() {
     ['todo', 'inProgress', 'awaitFeedback', 'done'].forEach(id => {
         const el = document.getElementById(id);
@@ -104,6 +145,10 @@ function clearBoardColumns() {
 }
 
 
+/**
+ * Inserts a task card into the matching column and attaches touch listeners.
+ * @param {Object} task - Task object with a status and id property.
+ */
 function renderTaskCard(task) {
     const col = document.getElementById(task.status);
     if (!col) return;
@@ -113,6 +158,11 @@ function renderTaskCard(task) {
 }
 
 
+/**
+ * Attaches touch drag event listeners to a task card element.
+ * @param {HTMLElement} card - The task card DOM element.
+ * @param {string|number} id - The task id used during drag operations.
+ */
 function attachTouchListenersToCard(card, id) {
     if (!card) return;
     try {
@@ -127,12 +177,20 @@ function attachTouchListenersToCard(card, id) {
 }
 
 
+/**
+ * Shows an empty-state placeholder in any column that has no task cards.
+ * Skips rendering if a no-results message is already present.
+ */
 function showEmptyPlaceholders() {
     if (document.getElementById('board-no-results')) return;
     getEmptyColumnTexts().forEach(([id, text]) => renderEmptyPlaceholder(id, text));
 }
 
 
+/**
+ * Returns column id / placeholder text pairs for all four board columns.
+ * @returns {Array} Array of [id, text] tuples.
+ */
 function getEmptyColumnTexts() {
     return Object.entries({
         todo: 'No tasks To do',
@@ -143,6 +201,11 @@ function getEmptyColumnTexts() {
 }
 
 
+/**
+ * Inserts an empty-state div into a column if the column is empty.
+ * @param {string} id - Column element id.
+ * @param {string} text - Placeholder text to display.
+ */
 function renderEmptyPlaceholder(id, text) {
     const el = document.getElementById(id);
     if (el && el.innerHTML.trim() === '') {
@@ -151,6 +214,7 @@ function renderEmptyPlaceholder(id, text) {
 }
 
 
+/** Appends a drag-highlight box to each of the four board columns. */
 function addDragHighlightBoxes() {
     ['todo', 'inProgress', 'awaitFeedback', 'done'].forEach(id => {
         const el = document.getElementById(id);
@@ -161,6 +225,8 @@ function addDragHighlightBoxes() {
 
 // ── Filter ─────────────────────────────────────────────────────────────────────
 
+
+/** Reads the search input and filters tasks, or resets the board if empty. */
 function filterTasks() {
     const term = getSearchTerm();
     if (!term) { resetFilter(); return; }
@@ -169,17 +235,27 @@ function filterTasks() {
 }
 
 
+/**
+ * Reads and lowercases the board search input value.
+ * @returns {string} The current search term.
+ */
 function getSearchTerm() {
     return (document.getElementById('board-search')?.value || '').toLowerCase();
 }
 
 
+/** Hides the no-results message and re-renders all tasks. */
 function resetFilter() {
     hideNoResultsMessage();
     displayTasks(allTasks);
 }
 
 
+/**
+ * Filters tasks whose title or description contains the search term.
+ * @param {string} term - Lowercased search term.
+ * @returns {Array} Matching task objects.
+ */
 function filterTasksByTerm(term) {
     return allTasks.filter(t =>
         (t.title || '').toLowerCase().includes(term) ||
@@ -188,6 +264,10 @@ function filterTasksByTerm(term) {
 }
 
 
+/**
+ * Renders filtered tasks or shows a no-results message if none match.
+ * @param {Array} filtered - Array of matching task objects.
+ */
 function renderFilterResults(filtered) {
     if (filtered.length === 0) {
         displayTasks([]);
@@ -199,6 +279,7 @@ function renderFilterResults(filtered) {
 }
 
 
+/** Creates and appends a no-results message element to the board columns container. */
 function showNoResultsMessage() {
     hideNoResultsMessage();
     const container = document.querySelector('.board-columns');
@@ -211,13 +292,20 @@ function showNoResultsMessage() {
 }
 
 
+/** Removes the no-results message element from the DOM if present. */
 function hideNoResultsMessage() {
     const existing = document.getElementById('board-no-results');
     if (existing && existing.parentNode) existing.parentNode.removeChild(existing);
 }
 
+
 // ── Outside Click ──────────────────────────────────────────────────────────────
 
+
+/**
+ * Closes the edit assign dropdown when a click occurs outside the assign wrapper.
+ * @param {MouseEvent} event - The document click event.
+ */
 function handleEditOutsideClick(event) {
     if (!event.target.closest('.edit-assign-wrapper')) {
         const opts = document.getElementById('edit-assign-options');
