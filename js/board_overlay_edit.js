@@ -129,8 +129,8 @@ function toggleEditPerson(id) {
 
 /** Returns true when another person may be assigned; notifies user otherwise. @returns {boolean} */
 function canAssignMorePersons() {
-  if (editAssignedIds.length >= 10) {
-    notify('Maximal 10 Personen können zugewiesen werden.', true);
+  if (editAssignedIds.length >= 99) {
+    notify('Maximal 99 Personen können zugewiesen werden.', true);
     return false;
   }
   return true;

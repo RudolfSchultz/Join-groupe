@@ -86,8 +86,8 @@ function togglePerson(id) {
  * @returns {boolean} True when another person can be assigned.
  */
 function canAssignMorePersons() {
-    if (assignedIds.length >= 10) {
-        notify('Maximal 10 Personen können zugewiesen werden.', true);
+    if (assignedIds.length >= 99) {
+        notify('Maximal 99 Personen können zugewiesen werden.', true);
         return false;
     }
     return true;

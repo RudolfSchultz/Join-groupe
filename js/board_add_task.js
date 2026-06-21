@@ -171,8 +171,8 @@ function toggleModalPerson(id) {
  * @returns {boolean}
  */
 function canAssignMoreModalPersons() {
-    if (modalAssignedIds.length >= 10) {
-        notify('Maximal 10 Personen können zugewiesen werden.', true);
+    if (modalAssignedIds.length >= 99) {
+        notify('Maximal 99 Personen können zugewiesen werden.', true);
         return false;
     }
     return true;
