@@ -148,34 +148,6 @@ function showContactDetails(contactId) {
     }
 }
 
-/**
- * Opens the dialog in "add contact" mode with an empty form and
- * default avatar placeholder.
- *
- * @returns {void}
- */
-function openAddContactModal() {
-    if (!dialog) return;
-
-    dialog.innerHTML = renderAddContactTemplate();
-
-    const avatarBox = dialog.querySelector('.profile-placeholder');
-    if (avatarBox) {
-        avatarBox.style.backgroundColor = '';
-        avatarBox.innerHTML = '<img class="big-avatar" src="../assets/icons/person.svg" alt="User Icon">';;
-    }
-    openDialog();
-}
-
-/**
- * Builds the HTML markup for the "Add contact" dialog.
- *
- * @returns {string} HTML markup for the add-contact dialog.
- */
-function renderAddContactTemplate() {
-    const buttons = renderDialogCreateContactButton();
-    return renderDialogContact('Add contact', 'createNewContact(event)', buttons);
-}
 
 /**
  * Assigns an id, avatar and color to a new contact, then saves it

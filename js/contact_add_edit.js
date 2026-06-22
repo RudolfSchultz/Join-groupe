@@ -5,9 +5,36 @@ const CONTACT_VALIDATION = {
     phone: { id: 'modal-phone', errorId: 'phone-error', type: 'regex', rule: /^[0-9]+$/ }
 };
 
+
+/**
+ * Opens the dialog in "add contact" mode with an empty form and
+ * default avatar placeholder.
+ * @returns {void}
+ */
+function openAddContactModal() {
+    if (!dialog) return;
+
+    dialog.innerHTML = renderAddContactTemplate();
+
+    const avatarBox = dialog.querySelector('.profile-placeholder');
+    if (avatarBox) {
+        avatarBox.style.backgroundColor = '';
+        avatarBox.innerHTML = '<img class="big-avatar" src="../assets/icons/person.svg" alt="User Icon">';;
+    }
+    openDialog();
+}
+
+/**
+ * Builds the HTML markup for the "Add contact" dialog.
+ * @returns {string} HTML markup for the add-contact dialog.
+ */
+function renderAddContactTemplate() {
+    const buttons = renderDialogCreateContactButton();
+    return renderDialogContact('Add contact', 'createNewContact(event)', buttons);
+}
+
 /**
  * Opens the dialog pre-filled with an existing contact's data for editing.
- *
  * @param {string|number} id - The id of the contact to edit.
  * @returns {void}
  */
@@ -25,7 +52,6 @@ function editContact(id) {
 /**
  * Fills the edit-contact form fields (avatar, name, email, phone)
  * with the given contact's current values.
- *
  * @param {Object} contact - The contact whose data should populate the form.
  * @returns {void}
  */
@@ -41,7 +67,6 @@ function fillEditForm(contact) {
 
 /**
  * Builds the HTML markup for the "Edit contact" dialog.
- *
  * @param {Object} contact - The contact being edited, used to wire the update handler.
  * @returns {string} HTML markup for the edit-contact dialog.
  */
@@ -53,7 +78,6 @@ function renderEditContactTemplate(contact) {
 /**
  * Handles submission of the "Add contact" form: reads form data,
  * builds a new contact object, and persists it.
- *
  * @param {SubmitEvent} event - The form submit event.
  * @returns {void}
  */
@@ -72,7 +96,6 @@ function createNewContact(event) {
 /**
  * Saves a new contact locally for guest users (no backend persistence),
  * closes the dialog and re-renders the contact list.
- *
  * @param {Object} newContact - The contact to add to the local list.
  * @returns {void}
  */
@@ -86,7 +109,6 @@ function saveGuestContact(newContact) {
  * Common cleanup after a contact update: closes the dialog,
  * re-renders the contact list, and re-opens the detail view
  * for the updated contact.
- *
  * @param {string|number} id - The id of the updated contact.
  * @returns {void}
  */
@@ -103,7 +125,7 @@ async function deleteContact(id) {
             showToastFeedback('Contact successfully deleted');
         }
         if (contactDetailsContainer) contactDetailsContainer.innerHTML = '';
-    } catch (error) { console.error("Fehler beim Löschen:", error); }
+    } catch (error) { console.error("Delete contact error:", error); }
 }
 
 /**
@@ -186,7 +208,7 @@ function checkNameField(inputId, errorId) {
 
 /**
  * Sanitizes the input field in real-time by removing any non-numeric characters.
- * * @param {HTMLInputElement} input - The input element triggering the event.
+ * @param {HTMLInputElement} input - The input element triggering the event.
  * @returns {void}
  */
 function allowOnlyNumbers(input) {
