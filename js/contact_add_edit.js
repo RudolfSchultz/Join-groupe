@@ -2,7 +2,7 @@
 const CONTACT_VALIDATION = {
     name: { id: 'modal-name', errorId: 'name-error', type: 'name' },
     email: { id: 'modal-email', errorId: 'email-error', type: 'regex', rule: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/ },
-    phone: { id: 'modal-phone', errorId: 'phone-error', type: 'regex', rule: /^[0-9]+$/ }
+    phone: { id: 'modal-phone', errorId: 'phone-error', type: 'regex', rule: /^\+?[0-9\s]+$/ }
 };
 
 
@@ -30,7 +30,7 @@ function openAddContactModal() {
  */
 function renderAddContactTemplate() {
     const buttons = renderDialogCreateContactButton();
-    return renderDialogContact('Add contact', 'createNewContact(event)', buttons);
+    return renderDialogContact('Add contact', (e) => createNewContact(e), buttons);
 }
 
 /**
@@ -51,28 +51,28 @@ function editContact(id) {
 
 /**
  * Fills the edit-contact form fields (avatar, name, email, phone)
- * with the given contact's current values.
+ * with the given contact's current values using their unique element IDs.
  * @param {Object} contact - The contact whose data should populate the form.
  * @returns {void}
  */
 function fillEditForm(contact) {
     const avatarBox = dialog.querySelector('.profile-placeholder');
     if (avatarBox) {
-        avatarBox.innerHTML = `<div class="big-avatar" style="background-color: ${contact.color};">${contact.avatar}</div>`;
+        avatarBox.innerHTML = `<div class="big-avatar" style="background-color: ${contact.color}">${contact.avatar}</div>`;
     }
-    dialog.querySelector('input[type="text"]').value = contact.name;
-    dialog.querySelector('input[type="email"]').value = contact.email;
-    dialog.querySelector('input[type="tel"]').value = contact.phone || '';
+    document.getElementById('modal-name').value = contact.name;
+    document.getElementById('modal-email').value = contact.email;
+    document.getElementById('modal-phone').value = contact.phone || '';
 }
 
 /**
  * Builds the HTML markup for the "Edit contact" dialog.
- * @param {Object} contact - The contact being edited, used to wire the update handler.
+ * @param {Object} contact - The contact being edited.
  * @returns {string} HTML markup for the edit-contact dialog.
  */
 function renderEditContactTemplate(contact) {
     const buttons = renderDialogContactEditButton(contact);
-    return renderDialogContact('Edit contact', `updateContact(event, '${contact.id}')`, buttons);
+    return renderDialogContact('Edit contact', async (e) => await updateContact(e, contact.id), buttons);
 }
 
 /**
@@ -151,19 +151,20 @@ function checkFieldRegex(inputId, errorId, regex) {
 }
 
 /**
- * Final check upon form submission. Re-validates all fields using the central config.
- * @param {SubmitEvent} event - The native submit event of the form.
- * @param {Function} originalSubmitAction - The actual save or update function.
- * @returns {void}
+ * Handles the form submission by validating all fields.
+ * Executes the provided callback function only if validation passes.
+ * @param {SubmitEvent} event - The native submit event.
+ * @param {Function} submitCallback - The (async) function to execute on success.
+ * @returns {Promise<void>}
  */
-function handleContactSubmit(event, originalSubmitAction) {
+async function handleContactSubmit(event, submitCallback) {
     event.preventDefault();
     const isNameValid = validateField('name');
     const isEmailValid = validateField('email');
     const isPhoneValid = validateField('phone');
     
-    if (isNameValid && isEmailValid && isPhoneValid && typeof originalSubmitAction === 'function') {
-        originalSubmitAction(); 
+    if (isNameValid && isEmailValid && isPhoneValid && typeof submitCallback === 'function') {
+        await submitCallback(event); 
     }
 }
 
@@ -212,7 +213,7 @@ function checkNameField(inputId, errorId) {
  * @returns {void}
  */
 function allowOnlyNumbers(input) {
-    input.value = input.value.replace(/[^0-9]/g, '');
+    input.value = input.value.replace(/[^0-9+ ]/g, '').replace(/(?!^)\+/g, '');
 }
 
 /**

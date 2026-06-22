@@ -68,6 +68,8 @@ function renderContactDetails(contact) {
 }
 
 function renderDialogContact(title, submitAction, buttonHtml) {
+    window.currentSubmitAction = submitAction; 
+    const isEdit = typeof title === 'string' && title.toLowerCase().includes('edit');
     return `<div class="modal-content" onclick="event.stopPropagation()">
             <div class="modal-left">
             <button type="button" class="close-dialog dp-show-mobile" onclick="closeDialog()">×</button>
@@ -77,7 +79,7 @@ function renderDialogContact(title, submitAction, buttonHtml) {
                 <div class="modal-divider"></div>
             </div>
 
-            <form method="dialog" class="modal-right" onsubmit="handleContactSubmit(event, '${submitAction}')">
+            <form method="dialog" class="modal-right" onsubmit="handleContactSubmit(event, window.currentSubmitAction)">
                 <button type="button" class="close-dialog dp-hidden-mobile" onclick="closeDialog()">×</button>
 
                 <div class="profile-placeholder">
@@ -91,7 +93,7 @@ function renderDialogContact(title, submitAction, buttonHtml) {
                 <div id="name-error" class="error-message">Please enter both your first and last name.</div>
 
                 <div class="input-group">
-                    <input type="text" id="modal-email" name="email" placeholder="Email" required onblur="validateField('email')" autocomplete="off">
+                    <input type="text" id="modal-email" name="email" placeholder="Email" onblur="validateField('email')" autocomplete="off">
                     <i class="fa-solid fa-envelope"></i>
                 </div>
                 <div id="email-error" class="error-message">Please enter a valid email address.</div>
