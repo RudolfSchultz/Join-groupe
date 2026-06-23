@@ -565,7 +565,8 @@
     }
 
     .contacts-split-right {
-        padding: 96px 24px;
+        padding: 20px 16px 0px;
+        margin-top: 64px;
     }
 
     .btn-back-mobile {
@@ -697,33 +698,36 @@
 
     .modal-content {
         flex-direction: column;
+        justify-content: space-between;
         height: 90vh;
     }
 
     .modal-left {
         width: 100%;
-        height: 50%;
+        height: 30%;
     }
 
     .modal-right {
         width: 100%;
         height: 50%;
-        justify-content: flex-end;
+        justify-content: center;
     }
 
     .profile-placeholder {
         position: absolute;
-        top: -60px;
+        top: -45%;
         left: 50%;
         transform: translateX(-50%);
         width: 120px;
         height: 120px;
         border: 4px solid #ffffff;
         border-radius: 50%;
+
     }
 
     .modal-footer {
         justify-content: center;
+        padding-bottom: 25px;
     }
 
     .for-mobile-hide {
@@ -798,7 +802,26 @@
 }
 
 
-@media (max-width: 400px) {
+@media (max-height: 768px) {
+    .big-avatar {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+        line-height: 50px;
+    }
+
+    .profile-placeholder img {
+        width: 50px;
+        height: 50px;
+    }
+
+    .profile-placeholder {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+@media (max-width: 425px) {
     .contact-item {
         gap: 5px;
         padding: 15px 5px;
@@ -825,9 +848,12 @@
     }
 
     .profile-placeholder {
-        top: -30px;
+        top: -45%;
         width: 60px;
         height: 60px;
+    }
 
+    .btn-back-mobile {
+        top: -25px;
     }
 }
