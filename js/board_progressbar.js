@@ -1,4 +1,6 @@
-/** Creates or returns the singleton progress popover element. @returns {HTMLElement} */
+/** Creates or returns the singleton progress popover element. 
+ * @returns {HTMLElement} 
+ * */
 function createProgressPopover() {
   let pop = document.getElementById('progress-popover');
   if (!pop) {

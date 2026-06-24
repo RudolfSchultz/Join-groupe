@@ -8,9 +8,6 @@ let editSubtasks = [];
 let boardContacts = [];
 
 
-// ── Guest Storage ──────────────────────────────────────────────────────────────
-
-
 /**
  * Reads guest tasks from sessionStorage.
  * @returns {Array} Parsed task array or empty array on error.
@@ -30,9 +27,6 @@ function saveGuestTasks(tasks) {
 }
 
 
-// ── Init ───────────────────────────────────────────────────────────────────────
-
-
 /**
  * Initialises the board page.
  * @returns {void}
@@ -50,9 +44,6 @@ async function initTasks() {
     allTasks = await loadBoardTasks();
     displayTasks(allTasks);
 }
-
-
-// ── Load Tasks ─────────────────────────────────────────────────────────────────
 
 
 /**
@@ -126,9 +117,6 @@ function mergeWithSessionTasks(fileTasks) {
     merged.sort((a, b) => (Number(a.id) || 0) - (Number(b.id) || 0));
     return merged;
 }
-
-
-// ── Display Tasks ──────────────────────────────────────────────────────────────
 
 
 /**
@@ -241,9 +229,6 @@ function addDragHighlightBoxes() {
 }
 
 
-// ── Filter ─────────────────────────────────────────────────────────────────────
-
-
 /**
  * Reads the search input and filters tasks, or resets the board if empty.
  * @returns {void}
@@ -328,9 +313,6 @@ function hideNoResultsMessage() {
     const existing = document.getElementById('board-no-results');
     if (existing && existing.parentNode) existing.parentNode.removeChild(existing);
 }
-
-
-// ── Outside Click ──────────────────────────────────────────────────────────────
 
 
 /**
