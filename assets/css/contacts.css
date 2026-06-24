@@ -105,8 +105,9 @@
     text-align: center;
     color: white;
     font-weight: bold;
-    /* font-size: 14px; */
-    line-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .big-avatar {
@@ -638,11 +639,10 @@
     }
 
     .avatar {
-        width: 32px;
-        height: 32px;
-        border-radius: 32px;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
         border: 2px solid #ffffff;
-        line-height: 32px;
         font-size: 14px;
     }
 
@@ -805,6 +805,10 @@
 
     .dp-show-mobile {
         display: block;
+    }
+
+    .btn-cancel {
+        Display: none;
     }
 }
 
