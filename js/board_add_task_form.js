@@ -1,6 +1,3 @@
-// ── Clear Form ─────────────────────────────────────────────────────────────────
-
-
 /**
  * Resets all modal form fields, state variables, and error messages.
  * @returns {void}
@@ -74,9 +71,6 @@ function hideModalFieldErrors() {
 }
 
 
-// ── Create Task ────────────────────────────────────────────────────────────────
-
-
 /**
  * Handles the create-task form submission: validates and saves the task.
  * @param {Event} event - The submit event.
@@ -139,9 +133,6 @@ function collectModalTask() {
         status: modalDefaultStatus
     };
 }
-
-
-// ── Validate Task ──────────────────────────────────────────────────────────────
 
 
 /**

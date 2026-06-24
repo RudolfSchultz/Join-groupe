@@ -1,6 +1,3 @@
-// ── Login ──────────────────────────────────────────────────────────────────────
-
-
 /**
  * Displays an invalid-credentials error inline or as a notification.
  * @param {HTMLElement|null} loginErrorEl - Inline error element, if present.
@@ -52,9 +49,6 @@ async function login() {
     clearLoginError();
     window.location.href = './html/summary.html';
 }
-
-
-// ── Registration Validation ────────────────────────────────────────────────────
 
 
 /**
@@ -177,9 +171,6 @@ function validateRegistrationForm() {
     const isValid = name && email && emailValid && pw && pw.length >= 8 && pw === pwConfirm && privacy && !pwHasSpaces;
     updateSubmitState(isValid);
 }
-
-
-// ── Register ───────────────────────────────────────────────────────────────────
 
 
 /**

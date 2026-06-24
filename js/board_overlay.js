@@ -1,5 +1,3 @@
-// ── Overlay ────────────────────────────────────────────────────────────────────
-
 /**
  * Shows the board overlay.
  * @returns {void}
@@ -57,8 +55,6 @@ function openTaskDetail(id) {
 }
 
 
-// ── Delete Task ────────────────────────────────────────────────────────────────
-
 /**
  * Removes a task from allTasks and persists the deletion.
  * @param {number|string} id
@@ -103,8 +99,6 @@ async function deleteTaskRemote(id) {
   }
 }
 
-
-// ── Subtasks ───────────────────────────────────────────────────────────────────
 
 /**
  * Toggles a subtask's done-state and persists the change.

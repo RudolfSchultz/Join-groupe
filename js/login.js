@@ -2,9 +2,6 @@ const FIREBASE_BASE = 'https://remotestorage-c0469-default-rtdb.europe-west1.fir
 const USERS_URL = `${FIREBASE_BASE}/users.json`;
 
 
-// ── Guest ──────────────────────────────────────────────────────────────────────
-
-
 /**
  * Logs in as a guest user and redirects to the summary page.
  * @returns {void}
@@ -14,9 +11,6 @@ function guestLogin() {
     sessionStorage.setItem('currentUser', JSON.stringify(guestUser));
     window.location.href = './html/summary.html';
 }
-
-
-// ── Form Switch ────────────────────────────────────────────────────────────────
 
 
 /**
@@ -68,9 +62,6 @@ function updateSignupButton(activeForm) {
 }
 
 
-// ── Hint Helpers ───────────────────────────────────────────────────────────────
-
-
 /**
  * Makes a hint element visible (uses visibility, no layout shift).
  * @param {string} id - Element id.
@@ -91,9 +82,6 @@ function hideHint(id) {
     const el = document.getElementById(id);
     if (el) el.classList.remove('visible');
 }
-
-
-// ── Clear Forms ────────────────────────────────────────────────────────────────
 
 
 /**
@@ -173,9 +161,6 @@ function clearLoginForm() {
 }
 
 
-// ── Notification ───────────────────────────────────────────────────────────────
-
-
 /**
  * Displays a notification banner and auto-hides it after 5 seconds.
  * @param {string} message - Text to display.
@@ -189,9 +174,6 @@ function showNotification(message, isError = false) {
     notif.classList.remove('d-none');
     setTimeout(() => notif.classList.add('d-none'), 5000);
 }
-
-
-// ── Firebase ───────────────────────────────────────────────────────────────────
 
 
 /**
@@ -242,9 +224,6 @@ async function saveUserToFirebase(id, user) {
 async function saveContactToFirebase(id, contact) {
     await fetch(`${FIREBASE_BASE}/contacts/${id}.json`, buildPutOptions(contact));
 }
-
-
-// ── Page Lifecycle ─────────────────────────────────────────────────────────────
 
 
 /**

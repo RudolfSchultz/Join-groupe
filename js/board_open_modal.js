@@ -1,5 +1,3 @@
-// ── Open / Close Modal ─────────────────────────────────────────────────────────
-
 /**
  * Opens the add-task modal for the given status column.
  * @param {string} [status='todo']

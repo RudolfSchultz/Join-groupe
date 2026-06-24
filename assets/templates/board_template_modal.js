@@ -1,6 +1,3 @@
-// ── Add Task Modal ─────────────────────────────────────────────────────────────
-
-
 /**
  * Returns the full HTML string for the add-task modal dialog.
  * @returns {string} HTML string for the <dialog> element.

@@ -4,9 +4,6 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-// ── Init ───────────────────────────────────────────────────────────────────────
-
-
 /**
  * Initialises the shared page header.
  * @returns {void}
@@ -14,9 +11,6 @@ document.addEventListener('DOMContentLoaded', function () {
 function initMain() {
     setHeaderAvatar();
 }
-
-
-// ── Avatar Menu ────────────────────────────────────────────────────────────────
 
 
 /**
@@ -38,9 +32,6 @@ function closeAvatarMenuOnOutsideClick(e) {
 function toggleAvatarMenu() {
     document.getElementById('avatar-menu')?.classList.toggle('d-none');
 }
-
-
-// ── Session ────────────────────────────────────────────────────────────────────
 
 
 /**
@@ -74,9 +65,6 @@ function logout() {
     sessionStorage.removeItem('currentUser');
     window.location.href = '../index.html';
 }
-
-
-// ── Utilities ──────────────────────────────────────────────────────────────────
 
 
 /**
@@ -116,9 +104,6 @@ function getCurrentPage() {
 }
 
 
-// ── Header ─────────────────────────────────────────────────────────────────────
-
-
 /**
  * Sets the header avatar initials from the current user's name.
  * @returns {void}
@@ -143,9 +128,6 @@ function updateHeaderForUser(user) {
     const avatarWrapper = document.getElementById('user-avatar-wrapper');
     if (avatarWrapper) avatarWrapper.style.display = 'none';
 }
-
-
-// ── Navigation ─────────────────────────────────────────────────────────────────
 
 
 /**
@@ -242,9 +224,6 @@ function updateNavigationForUser(user) {
 }
 
 
-// ── Notification ───────────────────────────────────────────────────────────────
-
-
 /**
  * Displays a notification message, moving it into the add-task dialog if open.
  * Falls back to showNotification() if the notification element is missing.
@@ -265,9 +244,6 @@ function notify(message, isError) {
     }
     if (typeof showNotification === 'function') showNotification(message, isError);
 }
-
-
-// ── Auth Guard ─────────────────────────────────────────────────────────────────
 
 
 /**

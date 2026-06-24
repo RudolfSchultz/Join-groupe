@@ -9,9 +9,6 @@ let modalContacts = [];
 let modalDefaultStatus = 'todo';
 
 
-// ── Load Contacts ──────────────────────────────────────────────────────────────
-
-
 /** @returns {Promise<Array>} Normalized contact list from guest or remote source. */
 async function loadAssignContacts() {
     try {
@@ -61,10 +58,6 @@ function normalizeContacts(raw) {
         .sort((a, b) => a.name.localeCompare(b.name));
 }
 
-
-// ── Priority & Category ────────────────────────────────────────────────────────
-
-
 /**
  * Activates the clicked priority button and stores the selection.
  * @param {HTMLElement} button - The clicked priority button.
@@ -110,9 +103,6 @@ function selectModalCategory(value) {
     document.getElementById('modal-error-category').classList.add('d-none');
     updateModalCreateButton();
 }
-
-
-// ── Assign Dropdown ────────────────────────────────────────────────────────────
 
 
 /**
@@ -210,9 +200,6 @@ function renderModalAssignedAvatars() {
     if (selected.length > 5) html += `<span class="avatar-chip avatar-chip-more">+${selected.length - 5}</span>`;
     container.innerHTML = html;
 }
-
-
-// ── Subtasks ───────────────────────────────────────────────────────────────────
 
 
 /**

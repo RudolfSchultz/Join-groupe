@@ -1,6 +1,3 @@
-// ── Utilities ──────────────────────────────────────────────────────────────────
-
-
 /**
  * Escapes special HTML characters in a string to prevent XSS.
  * @param {string} str - The string to escape.
@@ -73,9 +70,6 @@ function prioSvg(prio) {
 }
 
 
-// ── Task Card ──────────────────────────────────────────────────────────────────
-
-
 /**
  * Returns the full HTML string for a draggable task card on the board.
  * @param {Object} task - Task object with id, status, category, title, description, subtasks, assignedTo, priority.
@@ -135,9 +129,6 @@ function buildAvatars(assignedTo) {
     if ((assignedTo || []).length > max) html += `<span class="card-avatar card-avatar-more">+${(assignedTo || []).length - max}</span>`;
     return html;
 }
-
-
-// ── Task Detail ────────────────────────────────────────────────────────────────
 
 
 /**

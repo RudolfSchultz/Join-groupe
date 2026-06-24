@@ -1,5 +1,3 @@
-// ── Save Task ──────────────────────────────────────────────────────────────────
-
 /**
  * Routes task saving to guest or remote storage.
  * @param {Object} task
@@ -100,8 +98,6 @@ async function getNextModalTaskId() {
   }
 }
 
-
-// ── Notification ───────────────────────────────────────────────────────────────
 
 /**
  * Displays a temporary notification banner.

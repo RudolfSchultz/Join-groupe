@@ -1,5 +1,3 @@
-// ── Edit Modal ─────────────────────────────────────────────────────────────────
-
 /**
  * Opens the edit modal, loading contacts if not yet cached.
  * @param {number|string} id
@@ -64,8 +62,6 @@ function handleEditAssignOutsideClick(event) {
 }
 
 
-// ── Load Contacts ──────────────────────────────────────────────────────────────
-
 /** Loads board contacts from the appropriate source. @returns {Promise<Array>} */
 async function loadBoardContacts() {
   return checkIsGuest() ? await loadGuestContacts() : await loadRemoteContacts();
@@ -116,8 +112,6 @@ function mapContacts(raw, isGuest) {
     .sort((a, b) => a.name.localeCompare(b.name));
 }
 
-
-// ── Edit Assign ────────────────────────────────────────────────────────────────
 
 /**
  * Toggles visibility of the assign-contact dropdown.
@@ -178,8 +172,6 @@ function renderEditAssignedAvatars() {
 }
 
 
-// ── Edit Prio ──────────────────────────────────────────────────────────────────
-
 /**
  * Marks the clicked priority button active and stores the selected priority.
  * @param {HTMLElement} button
@@ -192,8 +184,6 @@ function selectEditPrio(button, prio) {
   editSelectedPrio = prio;
 }
 
-
-// ── Edit Subtasks ──────────────────────────────────────────────────────────────
 
 /**
  * Reads the subtask input, appends a new entry and re-renders the list.
@@ -255,8 +245,6 @@ function renderEditSubtasks() {
   list.innerHTML = renderEditSubtasksHTML(editSubtasks);
 }
 
-
-// ── Save Edited Task ───────────────────────────────────────────────────────────
 
 /**
  * Validates the form, applies updates to the task object and persists them.
