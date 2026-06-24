@@ -119,7 +119,7 @@ function touchDragStart(event, id) {
   const rect = card.getBoundingClientRect();
   setTouchDragOffset(event.touches[0], rect);
   createTouchClone(card, rect);
-  card.style.opacity = '0.4';
+  card.classList.add('card--dragging');
 }
 
 
@@ -131,12 +131,10 @@ function touchDragStart(event, id) {
  */
 function createTouchClone(card, rect) {
   touchDragClone = card.cloneNode(true);
-  touchDragClone.style.cssText = `
-    position:fixed;left:${rect.left}px;top:${rect.top}px;
-    width:${rect.width}px;opacity:0.8;pointer-events:none;
-    z-index:9999;transform:rotate(3deg);
-    box-shadow:0 8px 24px rgba(0,0,0,0.25);
-  `;
+  touchDragClone.classList.add('card--ghost');
+  touchDragClone.style.left = `${rect.left}px`;
+  touchDragClone.style.top = `${rect.top}px`;
+  touchDragClone.style.width = `${rect.width}px`;
   document.body.appendChild(touchDragClone);
 }
 
@@ -216,7 +214,7 @@ function cleanupTouchDrag(card) {
     touchDragClone.remove();
     touchDragClone = null;
   }
-  card.style.opacity = '';
+  card.classList.remove('card--dragging');
 }
 
 
