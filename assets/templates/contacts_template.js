@@ -119,7 +119,7 @@ function renderDialogContactEditButton(contact) {
 }
 
 function renderDialogCreateContactButton() {
-    return `<button type="button" class="btn-cancel" onclick="closeDialog()"> Cancel <i
+    return `<button type="button" class="btn-cancel btn-mobile-hide" onclick="closeDialog()"> Cancel <i
                 class="fa-solid fa-xmark"></i></button>
             <button type="submit" class="btn-submit"> Create contact <i class="fa-solid fa-check"></i></button>`;
 }
