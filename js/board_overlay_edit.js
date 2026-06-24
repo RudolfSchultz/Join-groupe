@@ -1,6 +1,10 @@
 // ── Edit Modal ─────────────────────────────────────────────────────────────────
 
-/** Opens the edit modal, loading contacts if not yet cached. @param {number|string} id */
+/**
+ * Opens the edit modal, loading contacts if not yet cached.
+ * @param {number|string} id
+ * @returns {Promise<void>}
+ */
 async function openEditModal(id) {
   const task = allTasks.find(t => t.id == id);
   if (!task) return;
@@ -10,7 +14,11 @@ async function openEditModal(id) {
 }
 
 
-/** Initialises module-level edit state from the given task. @param {Object} task */
+/**
+ * Initialises module-level edit state from the given task.
+ * @param {Object} task
+ * @returns {void}
+ */
 function initEditState(task) {
   editSelectedPrio = task.priority || 'medium';
   editSubtasks = (task.subtasks || []).map(s => ({ ...s }));
@@ -18,7 +26,11 @@ function initEditState(task) {
 }
 
 
-/** Injects the edit form into the overlay and wires up supporting behaviour. @param {Object} task */
+/**
+ * Injects the edit form into the overlay and wires up supporting behaviour.
+ * @param {Object} task
+ * @returns {void}
+ */
 function renderEditModal(task) {
   document.getElementById('board-detail-box').classList.add('d-none');
   document.getElementById('board-edit-box').innerHTML = editTaskTemplate(task);
@@ -30,14 +42,21 @@ function renderEditModal(task) {
 }
 
 
-/** Attaches datepicker and assign outside-click listeners asynchronously. */
+/**
+ * Attaches datepicker and assign outside-click listeners asynchronously.
+ * @returns {void}
+ */
 function attachEditModalListeners() {
   setTimeout(() => { if (window.attachDatepickers) window.attachDatepickers(); }, 0);
   setTimeout(() => { document.addEventListener('click', handleEditAssignOutsideClick, true); }, 0);
 }
 
 
-/** Closes the assign dropdown on clicks outside the assign wrapper. @param {MouseEvent} event */
+/**
+ * Closes the assign dropdown on clicks outside the assign wrapper.
+ * @param {MouseEvent} event
+ * @returns {void}
+ */
 function handleEditAssignOutsideClick(event) {
   if (event.target.closest('.edit-assign-wrapper')) return;
   const opts = document.getElementById('edit-assign-options');
@@ -100,13 +119,19 @@ function mapContacts(raw, isGuest) {
 
 // ── Edit Assign ────────────────────────────────────────────────────────────────
 
-/** Toggles visibility of the assign-contact dropdown. */
+/**
+ * Toggles visibility of the assign-contact dropdown.
+ * @returns {void}
+ */
 function toggleEditAssignDropdown() {
   document.getElementById('edit-assign-options').classList.toggle('d-none');
 }
 
 
-/** Re-renders the selectable contact list inside the assign dropdown. */
+/**
+ * Re-renders the selectable contact list inside the assign dropdown.
+ * @returns {void}
+ */
 function renderEditAssignOptions() {
   const el = document.getElementById('edit-assign-options');
   if (!el) return;
@@ -114,7 +139,11 @@ function renderEditAssignOptions() {
 }
 
 
-/** Adds or removes a contact from the current assignment. @param {number|string} id */
+/**
+ * Adds or removes a contact from the current assignment.
+ * @param {number|string} id
+ * @returns {void}
+ */
 function toggleEditPerson(id) {
   const sid = String(id);
   if (editAssignedIds.includes(sid)) {
@@ -138,7 +167,10 @@ function canAssignMorePersons() {
 }
 
 
-/** Re-renders the row of assigned-contact avatars below the dropdown. */
+/**
+ * Re-renders the row of assigned-contact avatars below the dropdown.
+ * @returns {void}
+ */
 function renderEditAssignedAvatars() {
   const el = document.getElementById('edit-assigned-avatars');
   if (!el) return;
@@ -152,6 +184,7 @@ function renderEditAssignedAvatars() {
  * Marks the clicked priority button active and stores the selected priority.
  * @param {HTMLElement} button
  * @param {string} prio - 'low' | 'medium' | 'urgent'
+ * @returns {void}
  */
 function selectEditPrio(button, prio) {
   document.querySelectorAll('.edit-prio-btn').forEach(b => b.classList.remove('edit-prio-btn--active'));
@@ -162,7 +195,10 @@ function selectEditPrio(button, prio) {
 
 // ── Edit Subtasks ──────────────────────────────────────────────────────────────
 
-/** Reads the subtask input, appends a new entry and re-renders the list. */
+/**
+ * Reads the subtask input, appends a new entry and re-renders the list.
+ * @returns {void}
+ */
 function addEditSubtask() {
   const input = document.getElementById('edit-subtask-input');
   const title = input.value.trim();
@@ -173,14 +209,22 @@ function addEditSubtask() {
 }
 
 
-/** Removes the subtask at the given index and re-renders. @param {number} index */
+/**
+ * Removes the subtask at the given index and re-renders.
+ * @param {number} index
+ * @returns {void}
+ */
 function deleteEditSubtask(index) {
   editSubtasks.splice(index, 1);
   renderEditSubtasks();
 }
 
 
-/** Replaces a subtask list item with an inline text input. @param {number} index */
+/**
+ * Replaces a subtask list item with an inline text input.
+ * @param {number} index
+ * @returns {void}
+ */
 function startEditSubtask(index) {
   const item = document.getElementById(`edit-sub-item-${index}`);
   item.innerHTML = renderEditSubtaskInputHTML(index, editSubtasks[index].title);
@@ -188,7 +232,11 @@ function startEditSubtask(index) {
 }
 
 
-/** Saves the inline-edited title, or deletes the entry if empty. @param {number} index */
+/**
+ * Saves the inline-edited title, or deletes the entry if empty.
+ * @param {number} index
+ * @returns {void}
+ */
 function saveEditSubtask(index) {
   const val = document.getElementById(`edit-sub-input-${index}`)?.value.trim();
   if (!val) { deleteEditSubtask(index); return; }
@@ -197,7 +245,10 @@ function saveEditSubtask(index) {
 }
 
 
-/** Re-renders the full subtask list inside the edit modal. */
+/**
+ * Re-renders the full subtask list inside the edit modal.
+ * @returns {void}
+ */
 function renderEditSubtasks() {
   const list = document.getElementById('edit-subtask-list');
   if (!list) return;
@@ -207,7 +258,11 @@ function renderEditSubtasks() {
 
 // ── Save Edited Task ───────────────────────────────────────────────────────────
 
-/** Validates the form, applies updates to the task object and persists them. @param {number|string} id */
+/**
+ * Validates the form, applies updates to the task object and persists them.
+ * @param {number|string} id
+ * @returns {Promise<void>}
+ */
 async function saveEditedTask(id) {
   const task = allTasks.find(t => t.id == id);
   if (!task) return;
@@ -249,7 +304,10 @@ function buildTaskUpdates(title, task) {
 }
 
 
-/** Saves updates locally for guests or via the remote API. */
+/**
+ * Saves updates locally for guests or via the remote API.
+ * @returns {Promise<void>}
+ */
 async function saveTaskUpdates(id, updates) {
   if (checkIsGuest()) {
     saveGuestTasks(allTasks);
@@ -261,13 +319,20 @@ async function saveTaskUpdates(id, updates) {
 }
 
 
-/** Returns fetch options for a PATCH request with a JSON body. @param {Object} data @returns {RequestInit} */
+/**
+ * Returns fetch options for a PATCH request with a JSON body.
+ * @param {Object} data
+ * @returns {RequestInit}
+ */
 function buildPatchOptions(data) {
   return { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) };
 }
 
 
-/** PATCHes the updated task to the API and refreshes the board. */
+/**
+ * PATCHes the updated task to the API and refreshes the board.
+ * @returns {Promise<void>}
+ */
 async function updateTaskRemote(id, updates) {
   try {
     await fetch(`${BOARD_BASE_URL}/tasks/${id}.json`, buildPatchOptions(updates));
@@ -280,7 +345,10 @@ async function updateTaskRemote(id, updates) {
 }
 
 
-/** Resets all module-level edit state variables to their defaults. */
+/**
+ * Resets all module-level edit state variables to their defaults.
+ * @returns {void}
+ */
 function resetEditState() {
   editSelectedPrio = null;
   editAssignedIds = [];

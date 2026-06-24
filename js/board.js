@@ -23,6 +23,7 @@ function getGuestTasks() {
 /**
  * Persists guest tasks to sessionStorage.
  * @param {Array} tasks - Task array to store.
+ * @returns {void}
  */
 function saveGuestTasks(tasks) {
     sessionStorage.setItem('guestTasks', JSON.stringify(tasks));
@@ -32,13 +33,19 @@ function saveGuestTasks(tasks) {
 // ── Init ───────────────────────────────────────────────────────────────────────
 
 
-/** Initialises the board page. */
+/**
+ * Initialises the board page.
+ * @returns {void}
+ */
 function init() {
     initMain();
 }
 
 
-/** Loads all tasks and renders them onto the board. */
+/**
+ * Loads all tasks and renders them onto the board.
+ * @returns {Promise<void>}
+ */
 async function initTasks() {
     allTasks = await loadBoardTasks();
     displayTasks(allTasks);
@@ -127,6 +134,7 @@ function mergeWithSessionTasks(fileTasks) {
 /**
  * Clears all columns, renders every task card, adds placeholders and drag boxes.
  * @param {Array} tasks - Tasks to display.
+ * @returns {void}
  */
 function displayTasks(tasks) {
     clearBoardColumns();
@@ -136,7 +144,10 @@ function displayTasks(tasks) {
 }
 
 
-/** Empties the inner HTML of all four board columns. */
+/**
+ * Empties the inner HTML of all four board columns.
+ * @returns {void}
+ */
 function clearBoardColumns() {
     ['todo', 'inProgress', 'awaitFeedback', 'done'].forEach(id => {
         const el = document.getElementById(id);
@@ -148,6 +159,7 @@ function clearBoardColumns() {
 /**
  * Inserts a task card into the matching column and attaches touch listeners.
  * @param {Object} task - Task object with a status and id property.
+ * @returns {void}
  */
 function renderTaskCard(task) {
     const col = document.getElementById(task.status);
@@ -162,6 +174,7 @@ function renderTaskCard(task) {
  * Attaches touch drag event listeners to a task card element.
  * @param {HTMLElement} card - The task card DOM element.
  * @param {string|number} id - The task id used during drag operations.
+ * @returns {void}
  */
 function attachTouchListenersToCard(card, id) {
     if (!card) return;
@@ -180,6 +193,7 @@ function attachTouchListenersToCard(card, id) {
 /**
  * Shows an empty-state placeholder in any column that has no task cards.
  * Skips rendering if a no-results message is already present.
+ * @returns {void}
  */
 function showEmptyPlaceholders() {
     if (document.getElementById('board-no-results')) return;
@@ -205,6 +219,7 @@ function getEmptyColumnTexts() {
  * Inserts an empty-state div into a column if the column is empty.
  * @param {string} id - Column element id.
  * @param {string} text - Placeholder text to display.
+ * @returns {void}
  */
 function renderEmptyPlaceholder(id, text) {
     const el = document.getElementById(id);
@@ -214,7 +229,10 @@ function renderEmptyPlaceholder(id, text) {
 }
 
 
-/** Appends a drag-highlight box to each of the four board columns. */
+/**
+ * Appends a drag-highlight box to each of the four board columns.
+ * @returns {void}
+ */
 function addDragHighlightBoxes() {
     ['todo', 'inProgress', 'awaitFeedback', 'done'].forEach(id => {
         const el = document.getElementById(id);
@@ -226,7 +244,10 @@ function addDragHighlightBoxes() {
 // ── Filter ─────────────────────────────────────────────────────────────────────
 
 
-/** Reads the search input and filters tasks, or resets the board if empty. */
+/**
+ * Reads the search input and filters tasks, or resets the board if empty.
+ * @returns {void}
+ */
 function filterTasks() {
     const term = getSearchTerm();
     if (!term) { resetFilter(); return; }
@@ -244,7 +265,10 @@ function getSearchTerm() {
 }
 
 
-/** Hides the no-results message and re-renders all tasks. */
+/**
+ * Hides the no-results message and re-renders all tasks.
+ * @returns {void}
+ */
 function resetFilter() {
     hideNoResultsMessage();
     displayTasks(allTasks);
@@ -267,6 +291,7 @@ function filterTasksByTerm(term) {
 /**
  * Renders filtered tasks or shows a no-results message if none match.
  * @param {Array} filtered - Array of matching task objects.
+ * @returns {void}
  */
 function renderFilterResults(filtered) {
     if (filtered.length === 0) {
@@ -279,7 +304,10 @@ function renderFilterResults(filtered) {
 }
 
 
-/** Creates and appends a no-results message element to the board columns container. */
+/**
+ * Creates and appends a no-results message element to the board columns container.
+ * @returns {void}
+ */
 function showNoResultsMessage() {
     hideNoResultsMessage();
     const container = document.querySelector('.board-columns');
@@ -292,7 +320,10 @@ function showNoResultsMessage() {
 }
 
 
-/** Removes the no-results message element from the DOM if present. */
+/**
+ * Removes the no-results message element from the DOM if present.
+ * @returns {void}
+ */
 function hideNoResultsMessage() {
     const existing = document.getElementById('board-no-results');
     if (existing && existing.parentNode) existing.parentNode.removeChild(existing);
@@ -305,6 +336,7 @@ function hideNoResultsMessage() {
 /**
  * Closes the edit assign dropdown when a click occurs outside the assign wrapper.
  * @param {MouseEvent} event - The document click event.
+ * @returns {void}
  */
 function handleEditOutsideClick(event) {
     if (!event.target.closest('.edit-assign-wrapper')) {

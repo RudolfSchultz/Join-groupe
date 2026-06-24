@@ -68,6 +68,7 @@ function normalizeContacts(raw) {
 /**
  * Activates the clicked priority button and stores the selection.
  * @param {HTMLElement} button - The clicked priority button.
+ * @returns {void}
  */
 function setModalPriority(button) {
     document.querySelectorAll('#add-task-overlay .prio-btn').forEach(btn => btn.classList.remove('prio-active'));
@@ -76,14 +77,20 @@ function setModalPriority(button) {
 }
 
 
-/** Toggles the category dropdown (closes assign dropdown first). */
+/**
+ * Toggles the category dropdown (closes assign dropdown first).
+ * @returns {void}
+ */
 function toggleModalCategoryDropdown() {
     closeModalAssignDropdown();
     document.getElementById('modal-category-options').classList.toggle('d-none');
 }
 
 
-/** Closes the category dropdown. */
+/**
+ * Closes the category dropdown.
+ * @returns {void}
+ */
 function closeModalCategoryDropdown() {
     document.getElementById('modal-category-options').classList.add('d-none');
 }
@@ -92,6 +99,7 @@ function closeModalCategoryDropdown() {
 /**
  * Selects a category, updates the label, hides the error, and refreshes the button.
  * @param {string} value - The selected category value.
+ * @returns {void}
  */
 function selectModalCategory(value) {
     modalSelectedCategory = value;
@@ -107,7 +115,10 @@ function selectModalCategory(value) {
 // ── Assign Dropdown ────────────────────────────────────────────────────────────
 
 
-/** Toggles the assign dropdown (closes category dropdown first). */
+/**
+ * Toggles the assign dropdown (closes category dropdown first).
+ * @returns {void}
+ */
 function toggleModalAssignDropdown() {
     closeModalCategoryDropdown();
     renderModalAssignOptions();
@@ -115,13 +126,19 @@ function toggleModalAssignDropdown() {
 }
 
 
-/** Closes the assign dropdown. */
+/**
+ * Closes the assign dropdown.
+ * @returns {void}
+ */
 function closeModalAssignDropdown() {
     document.getElementById('modal-assign-options').classList.add('d-none');
 }
 
 
-/** Renders all contact options in the assign dropdown. */
+/**
+ * Renders all contact options in the assign dropdown.
+ * @returns {void}
+ */
 function renderModalAssignOptions() {
     const options = document.getElementById('modal-assign-options');
     options.innerHTML = modalContacts
@@ -154,6 +171,7 @@ function modalAssignOptionTemplate(contact, isSelected) {
 /**
  * Toggles a contact's assignment state and refreshes the UI.
  * @param {string} id - Contact id to toggle.
+ * @returns {void}
  */
 function toggleModalPerson(id) {
     if (modalAssignedIds.includes(id)) {
@@ -180,7 +198,10 @@ function canAssignMoreModalPersons() {
 }
 
 
-/** Renders assigned contact avatars with a "+N" overflow chip after 5. */
+/**
+ * Renders assigned contact avatars with a "+N" overflow chip after 5.
+ * @returns {void}
+ */
 function renderModalAssignedAvatars() {
     const container = document.getElementById('modal-assigned-avatars');
     const selected = modalContacts.filter(contact => modalAssignedIds.includes(contact.id));
@@ -197,6 +218,7 @@ function renderModalAssignedAvatars() {
 /**
  * Adds a subtask when Enter is pressed inside the subtask input.
  * @param {KeyboardEvent} event
+ * @returns {void}
  */
 function handleModalSubtaskKey(event) {
     if (event.key !== 'Enter') return;
@@ -205,7 +227,10 @@ function handleModalSubtaskKey(event) {
 }
 
 
-/** Shows or hides subtask action buttons based on whether the input has text. */
+/**
+ * Shows or hides subtask action buttons based on whether the input has text.
+ * @returns {void}
+ */
 function updateModalSubtaskActions() {
     const hasText = document.getElementById('modal-task-subtask').value.trim().length > 0;
     const editActions = document.getElementById('modal-subtask-edit-actions');
@@ -213,7 +238,10 @@ function updateModalSubtaskActions() {
 }
 
 
-/** Reads the subtask input, appends a new subtask object, and re-renders. */
+/**
+ * Reads the subtask input, appends a new subtask object, and re-renders.
+ * @returns {void}
+ */
 function addModalSubtask() {
     const input = document.getElementById('modal-task-subtask');
     const title = input.value.trim();
@@ -225,7 +253,10 @@ function addModalSubtask() {
 }
 
 
-/** Clears the subtask input and hides the action buttons. */
+/**
+ * Clears the subtask input and hides the action buttons.
+ * @returns {void}
+ */
 function clearModalSubtaskInput() {
     document.getElementById('modal-task-subtask').value = '';
     updateModalSubtaskActions();
@@ -235,6 +266,7 @@ function clearModalSubtaskInput() {
 /**
  * Removes a subtask by index and re-renders the list.
  * @param {number} index
+ * @returns {void}
  */
 function deleteModalSubtask(index) {
     modalSubtasks.splice(index, 1);
@@ -245,6 +277,7 @@ function deleteModalSubtask(index) {
 /**
  * Replaces a subtask list item with an inline edit input.
  * @param {number} index
+ * @returns {void}
  */
 function editModalSubtask(index) {
     const list = document.getElementById('modal-subtask-list');
@@ -256,6 +289,7 @@ function editModalSubtask(index) {
 /**
  * Saves the edited subtask; deletes it if the input is empty.
  * @param {number} index
+ * @returns {void}
  */
 function saveModalSubtaskEdit(index) {
     const value = document.getElementById(`modal-subtask-edit-${index}`).value.trim();
@@ -265,7 +299,10 @@ function saveModalSubtaskEdit(index) {
 }
 
 
-/** Re-renders all subtask list items. */
+/**
+ * Re-renders all subtask list items.
+ * @returns {void}
+ */
 function renderModalSubtasks() {
     const list = document.getElementById('modal-subtask-list');
     list.innerHTML = modalSubtasks.map((subtask, index) => modalSubtaskItemTemplate(subtask, index)).join('');

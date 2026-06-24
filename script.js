@@ -7,7 +7,10 @@ document.addEventListener('DOMContentLoaded', function () {
 // ── Init ───────────────────────────────────────────────────────────────────────
 
 
-/** Initialises the shared page header. */
+/**
+ * Initialises the shared page header.
+ * @returns {void}
+ */
 function initMain() {
     setHeaderAvatar();
 }
@@ -19,6 +22,7 @@ function initMain() {
 /**
  * Closes the avatar dropdown when a click occurs outside the avatar wrapper.
  * @param {MouseEvent} e - The document click event.
+ * @returns {void}
  */
 function closeAvatarMenuOnOutsideClick(e) {
     if (!e.target.closest('#user-avatar-wrapper')) {
@@ -27,7 +31,10 @@ function closeAvatarMenuOnOutsideClick(e) {
 }
 
 
-/** Toggles the avatar dropdown menu visibility. */
+/**
+ * Toggles the avatar dropdown menu visibility.
+ * @returns {void}
+ */
 function toggleAvatarMenu() {
     document.getElementById('avatar-menu')?.classList.toggle('d-none');
 }
@@ -59,7 +66,10 @@ function checkIsGuest() {
 }
 
 
-/** Removes the current user session and redirects to the login page. */
+/**
+ * Removes the current user session and redirects to the login page.
+ * @returns {void}
+ */
 function logout() {
     sessionStorage.removeItem('currentUser');
     window.location.href = '../index.html';
@@ -109,7 +119,10 @@ function getCurrentPage() {
 // ── Header ─────────────────────────────────────────────────────────────────────
 
 
-/** Sets the header avatar initials from the current user's name. */
+/**
+ * Sets the header avatar initials from the current user's name.
+ * @returns {void}
+ */
 function setHeaderAvatar() {
     const avatar = document.getElementById('user-avatar');
     if (!avatar) return;
@@ -121,6 +134,7 @@ function setHeaderAvatar() {
 /**
  * Hides the help icon and avatar wrapper for non-logged-in users.
  * @param {Object|null} user - Current user object, or null if not logged in.
+ * @returns {void}
  */
 function updateHeaderForUser(user) {
     if (user) return;
@@ -137,6 +151,7 @@ function updateHeaderForUser(user) {
 /**
  * Adds the active class to desktop nav links matching the current page.
  * @param {string} page - Current page filename.
+ * @returns {void}
  */
 function activateDesktopNavLinks(page) {
     document.querySelectorAll('.nav-link, .nav-bottom-link').forEach(link => {
@@ -148,6 +163,7 @@ function activateDesktopNavLinks(page) {
 /**
  * Sets the active class on the matching mobile nav link for the current page.
  * @param {string} page - Current page filename.
+ * @returns {void}
  */
 function activateMobileNavLinks(page) {
     document.querySelectorAll('.mobil-nav-link').forEach(link => link.classList.remove('aktiv'));
@@ -155,7 +171,10 @@ function activateMobileNavLinks(page) {
 }
 
 
-/** Activates the correct nav links for the current page on desktop and mobile. */
+/**
+ * Activates the correct nav links for the current page on desktop and mobile.
+ * @returns {void}
+ */
 function setActiveNavLink() {
     const page = getCurrentPage();
     activateDesktopNavLinks(page);
@@ -191,14 +210,20 @@ function getGuestMobileNavHTML(page) {
 }
 
 
-/** Replaces the desktop navigation with the guest login link. */
+/**
+ * Replaces the desktop navigation with the guest login link.
+ * @returns {void}
+ */
 function setGuestDesktopNav() {
     const navGroup = document.querySelector('.navigation-links-group');
     if (navGroup) navGroup.innerHTML = getGuestDesktopNavHTML();
 }
 
 
-/** Replaces the mobile navigation with guest-appropriate links. */
+/**
+ * Replaces the mobile navigation with guest-appropriate links.
+ * @returns {void}
+ */
 function setGuestMobileNav() {
     const mobilNav = document.querySelector('.mobil-navigation');
     if (mobilNav) mobilNav.innerHTML = getGuestMobileNavHTML(getCurrentPage());
@@ -208,6 +233,7 @@ function setGuestMobileNav() {
 /**
  * Switches navigation to guest mode when no user is logged in.
  * @param {Object|null} user - Current user object, or null if not logged in.
+ * @returns {void}
  */
 function updateNavigationForUser(user) {
     if (user) return;
@@ -224,6 +250,7 @@ function updateNavigationForUser(user) {
  * Falls back to showNotification() if the notification element is missing.
  * @param {string} message - Text to display.
  * @param {boolean} [isError] - Whether this is an error notification.
+ * @returns {void}
  */
 function notify(message, isError) {
     const dialog = document.getElementById('add-task-overlay');
@@ -243,7 +270,10 @@ function notify(message, isError) {
 // ── Auth Guard ─────────────────────────────────────────────────────────────────
 
 
-/** Redirects unauthenticated users away from protected pages to the login page. */
+/**
+ * Redirects unauthenticated users away from protected pages to the login page.
+ * @returns {void}
+ */
 function redirectIfUnauthorized() {
     const protectedPages = ['summary.html', 'add_task.html', 'board.html', 'contacts.html', 'help.html'];
     if (protectedPages.includes(getCurrentPage()) && !sessionStorage.getItem('currentUser')) {
@@ -256,6 +286,7 @@ redirectIfUnauthorized();
 /**
  * Highlights the nav link that matches the current page URL
  * by adding the 'aktiv' class to both sidebar and mobile nav links.
+ * @returns {void}
  */
 function setActiveNavLink() {
     const currentPage = window.location.pathname.split('/').pop();

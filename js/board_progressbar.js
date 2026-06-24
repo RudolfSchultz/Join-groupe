@@ -36,7 +36,10 @@ function getPopoverPosition(event) {
 }
 
 
-/** Applies absolute positioning to the popover based on the event coordinates. */
+/**
+ * Applies absolute positioning to the popover based on the event coordinates.
+ * @returns {void}
+ */
 function positionPopover(pop, event) {
   const pos = getPopoverPosition(event);
   pop.style.left = pos.left + 'px';
@@ -44,19 +47,30 @@ function positionPopover(pop, event) {
 }
 
 
-/** Returns the popover header HTML showing completion progress. @returns {string} */
+/**
+ * Returns the popover header HTML showing completion progress.
+ * @returns {string}
+ */
 function renderPopoverHeader(done, total) {
   return `<div class="progress-popover-header">${done} von ${total} Subtasks erledigt</div>`;
 }
 
 
-/** Escapes < and > characters in a subtask title. @param {string} title @returns {string} */
+/**
+ * Escapes < and > characters in a subtask title.
+ * @param {string} title
+ * @returns {string}
+ */
 function escapedTitle(title) {
   return (title || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
 
-/** Returns the HTML for a single subtask list item. @param {Object} subtask @returns {string} */
+/**
+ * Returns the HTML for a single subtask list item.
+ * @param {Object} subtask
+ * @returns {string}
+ */
 function renderSubtaskItem(subtask) {
   const doneClass = subtask.done ? 'done' : '';
   const icon = subtask.done ? '✓' : '○';
@@ -67,13 +81,20 @@ function renderSubtaskItem(subtask) {
 }
 
 
-/** Returns the HTML for the full subtask list. @param {Array} subtasks @returns {string} */
+/**
+ * Returns the HTML for the full subtask list.
+ * @param {Array} subtasks
+ * @returns {string}
+ */
 function renderPopoverList(subtasks) {
   return `<ul class="progress-popover-list">${subtasks.map(renderSubtaskItem).join('')}</ul>`;
 }
 
 
-/** Shows the progress tooltip with the completion summary above the progress bar. */
+/**
+ * Shows the progress tooltip with the completion summary above the progress bar.
+ * @returns {void}
+ */
 function showProgressTooltip(event, taskId) {
   const stats = getSubtaskStats(taskId);
   if (!stats) return;
@@ -85,7 +106,10 @@ function showProgressTooltip(event, taskId) {
 }
 
 
-/** Hides the progress tooltip popover. */
+/**
+ * Hides the progress tooltip popover.
+ * @returns {void}
+ */
 function hideProgressTooltip() {
   const pop = document.getElementById('progress-popover');
   if (pop) pop.classList.add('d-none');
@@ -103,7 +127,10 @@ function isPopoverVisibleForTask(pop, taskId) {
 }
 
 
-/** Toggles the detailed subtask list popover on click. */
+/**
+ * Toggles the detailed subtask list popover on click.
+ * @returns {void}
+ */
 function toggleProgressDetails(event, taskId) {
   event.stopPropagation();
   event.preventDefault();

@@ -4,6 +4,7 @@
 /**
  * Displays an invalid-credentials error inline or as a notification.
  * @param {HTMLElement|null} loginErrorEl - Inline error element, if present.
+ * @returns {void}
  */
 function showLoginError(loginErrorEl) {
     if (loginErrorEl) {
@@ -18,6 +19,7 @@ function showLoginError(loginErrorEl) {
 /**
  * Stores the authenticated user's basic data in sessionStorage.
  * @param {Object} user - User object with id, name, and email.
+ * @returns {void}
  */
 function saveUserSession(user) {
     sessionStorage.setItem('currentUser', JSON.stringify({ id: user.id, name: user.name, email: user.email }));
@@ -36,7 +38,10 @@ function getLoginCredentials() {
 }
 
 
-/** Authenticates the user against Firebase and redirects on success. */
+/**
+ * Authenticates the user against Firebase and redirects on success.
+ * @returns {Promise<void>}
+ */
 async function login() {
     const { email, password } = getLoginCredentials();
     const users = await loadUsers();
@@ -65,6 +70,7 @@ function validateEmailFormat(email) {
 /**
  * Marks an input as touched so validation hints become eligible to show.
  * @param {string} id - Element id to mark.
+ * @returns {void}
  */
 function markTouched(id) {
     const el = document.getElementById(id);
@@ -104,6 +110,7 @@ function isFieldTouched(id) {
  * @param {HTMLElement|null} hint - The hint element to update.
  * @param {string} pw - Current password value.
  * @param {string} pwConfirm - Current confirm-password value.
+ * @returns {void}
  */
 function updatePasswordHint(hint, pw, pwConfirm) {
     if (!hint) return;
@@ -139,6 +146,7 @@ function setPasswordValidity(pw) {
  * Shows or hides the email format hint based on input value and touched state.
  * @param {string} email - Current email value.
  * @param {boolean} emailValid - Whether the email passes format validation.
+ * @returns {void}
  */
 function setEmailValidity(email, emailValid) {
     const showError = email && !emailValid && isFieldTouched('reg_email');
@@ -149,13 +157,17 @@ function setEmailValidity(email, emailValid) {
 /**
  * Enables or disables the registration submit button.
  * @param {boolean} isValid - Whether all fields pass validation.
+ * @returns {void}
  */
 function updateSubmitState(isValid) {
     document.getElementById('reg_submit_btn').disabled = !isValid;
 }
 
 
-/** Runs all registration field validations and updates the submit button state. */
+/**
+ * Runs all registration field validations and updates the submit button state.
+ * @returns {void}
+ */
 function validateRegistrationForm() {
     const { name, email, pw, pwConfirm, privacy } = getRegValues();
     updatePasswordHint(document.getElementById('pw_match_hint'), pw, pwConfirm);
@@ -231,6 +243,7 @@ function buildNewUserAndContact(id, name, email, password) {
  * @param {number} newId - The new user id.
  * @param {Object} newUser - User data object.
  * @param {Object} newContact - Contact data object.
+ * @returns {Promise<void>}
  */
 async function saveRegistration(newId, newUser, newContact) {
     try {
@@ -258,7 +271,10 @@ function getRegFormValues() {
 }
 
 
-/** Validates inputs, checks for duplicates, and submits the registration. */
+/**
+ * Validates inputs, checks for duplicates, and submits the registration.
+ * @returns {Promise<void>}
+ */
 async function register() {
     const { name, email, password } = getRegFormValues();
     if (!validateRegisterInput(password, email)) return;
