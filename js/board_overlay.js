@@ -71,6 +71,7 @@ async function deleteTaskRemote(id) {
     notify('Der Task wurde gelöscht.');
   } catch (e) {
     console.error('Error deleting task:', e);
+    showNotification('Error saving task!', true);
   }
 }
 
@@ -112,6 +113,7 @@ async function updateSubtasksRemote(taskId, subtasks) {
     });
   } catch (e) {
     console.error('Error updating subtask:', e);
+    showNotification('Error updating subtask!', true);
   }
 }
 

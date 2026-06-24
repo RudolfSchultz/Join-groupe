@@ -68,6 +68,7 @@ async function updateTaskStatusRemote(taskId, status) {
     });
   } catch (e) {
     console.error('Error updating task status:', e);
+    showNotification('Error updating task status!', true);
   }
 }
 

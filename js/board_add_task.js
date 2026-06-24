@@ -20,6 +20,7 @@ async function loadAssignContacts() {
             : await loadRemoteAssignContacts();
     } catch (error) {
         console.error('Error loading contacts:', error);
+        showNotification('Error loading contacts!', true);
         return [];
     }
 }

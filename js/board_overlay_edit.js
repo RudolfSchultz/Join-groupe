@@ -73,6 +73,7 @@ async function loadRemoteContacts() {
     return mapContacts(raw, false);
   } catch (e) {
     console.error('Error loading contacts:', e);
+    showNotification('Error loading contacts!', true);
     return [];
   }
 }
@@ -274,6 +275,7 @@ async function updateTaskRemote(id, updates) {
     displayTasks(allTasks);
   } catch (e) {
     console.error('Error saving task:', e);
+    showNotification('Error saving task!', true);
   }
 }
 

@@ -83,6 +83,7 @@ async function getNextModalTaskId() {
     return calcMaxId(tasks) + 1;
   } catch (error) {
     console.error('Error getting next task ID:', error);
+    showNotification('Error getting next task ID!', true);
     return 1;
   }
 }

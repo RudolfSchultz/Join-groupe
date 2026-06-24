@@ -177,6 +177,7 @@ async function loadUsers() {
         return Array.isArray(data) ? data.filter(Boolean) : Object.values(data).filter(Boolean);
     } catch (e) {
         console.error('Error loading users:', e);
+        showNotification('Error loading users!', true);
         return [];
     }
 }
