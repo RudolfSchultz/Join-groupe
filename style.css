@@ -247,6 +247,11 @@ input[type='date']::-webkit-calendar-picker-indicator {
         messageHide 0.5s 1.7s forwards ease-in-out;
 }
 
+.notification--error {
+    background-color: var(--red, #ff3d00);
+    border-color: var(--red, #ff3d00);
+}
+
 @keyframes messageStartup {
     from {
         top: 100%;

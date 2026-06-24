@@ -112,5 +112,5 @@ function showTaskNotification(message, isError = false) {
   notification.className = 'notification';
   if (isError) notification.classList.add('notification--error');
   notification.classList.remove('d-none');
-  setTimeout(() => notification.classList.add('d-none'), 2000);
+  setTimeout(() => notification.classList.add('d-none'), 3000);
 }
