@@ -173,7 +173,7 @@
 }
 
 .nav-link:hover {
-    background-color: var(--primary-darkblue);
+    background-color: var(--hoverColor);
 }
 
 .nav-link.aktiv {
