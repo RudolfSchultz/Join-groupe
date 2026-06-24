@@ -251,5 +251,29 @@ function redirectIfUnauthorized() {
     }
 }
 
-
 redirectIfUnauthorized();
+
+/**
+ * Highlights the nav link that matches the current page URL
+ * by adding the 'aktiv' class to both sidebar and mobile nav links.
+ */
+function setActiveNavLink() {
+    const currentPage = window.location.pathname.split('/').pop();
+
+    const navMap = {
+        'summary.html': '[id="nav_overview"], .mobil-nav-link:nth-child(1)',
+        'add_task.html': '[id="nav_addtask"],  .mobil-nav-link:nth-child(2)',
+        'board.html': '[id="nav_board"],    .mobil-nav-link:nth-child(3)',
+        'contacts.html': '[id="nav_contacts"], .mobil-nav-link:nth-child(4)',
+        'privacy_policy.html': '[id="nav_privacy"], .nav-bottom-left .nav-link:nth-child(1)',
+        'legal_notice.html': '[id="nav_legal"], .nav-bottom-left .nav-link:nth-child(2)',
+    };
+
+    const selector = navMap[currentPage];
+    if (!selector) return;
+
+    document.querySelectorAll(selector).forEach(link => link.classList.add('aktiv'));
+}
+
+
+setActiveNavLink();

@@ -176,6 +176,11 @@
     background-color: var(--primary-darkblue);
 }
 
+.nav-link.aktiv {
+    background-color: var(--primary-darkblue);
+    color: #ffffff;
+}
+
 .nav-item:hover,
 .nav-item--active {
   background: var(--activeColor);
