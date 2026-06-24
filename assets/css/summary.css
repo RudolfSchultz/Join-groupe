@@ -120,7 +120,6 @@ body.app-page { max-width: none; overflow-x: hidden; }
   flex-shrink: 0;
 }
 
-/* Icon proportional zum Kreis -> gleichmäßiger Rand, mittig (konsistent mit den anderen Icons) */
 .urgency-icon-circle svg { display: block; width: 28px; height: auto; }
 
 .urgency-info { display: flex; flex-direction: column; gap: 4px; }
@@ -256,9 +255,7 @@ body.app-page { max-width: none; overflow-x: hidden; }
 
 @media (max-width: 769px) {
   .summary-right { display: none; }
-  /* kein verschachtelter Scroll-Container mehr -> kein Streifen/zweiter Scrollbalken unten */
   .summary-main { overflow: visible; }
-  /* etwas Abstand zwischen letzter Kartenreihe und Bottom-Nav */
   .summary-main { padding: 108px 20px 24px 20px; }
 
   /* Kästchen größer + großzügigere Abstände */
