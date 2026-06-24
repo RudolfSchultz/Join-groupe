@@ -836,6 +836,9 @@
     .contacts-split-right {
         margin-top: 64px;
     }
+    .contacts-list {
+        padding: 46px 16px;
+    }
 }
 
 @media (max-width: 425px) {
