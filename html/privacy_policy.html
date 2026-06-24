@@ -14,17 +14,16 @@
     <title>Privacy Policy</title>
 </head>
 
-<body class="app-page">
-    <div class="header-background">
+<body class="app-page" id="body">
+    <div class="header-background" id="header-section">
         <header class="header">
-            <span class="header-titel">Kanban Projekt Management Tool</span>
+            <span class="header-titel">Kanban Project Management Tool</span>
             <img src="../assets/img/logo_big.svg" class="header-logo-mobil" alt="Join">
 
-            <div class="header-account">
+            <div class="header-account" id="header-account-logged-in" style="display:none;">
                 <a href="../html/help.html" class="help-icon-link" title="Hilfe">
                     <img src="../assets/icons/help.svg" alt="View help" class="help-icon">
                 </a>
-
                 <div class="avatar-wrapper" id="user-avatar-wrapper" onclick="toggleAvatarMenu()">
                     <div class="user-avatar" id="user-avatar"></div>
                     <div class="avatar-dropdown d-none" id="avatar-menu">
@@ -41,15 +40,15 @@
         </header>
     </div>
 
-    <nav class="sidebar">
+    <!-- Sidebar for logged-in users -->
+    <nav class="sidebar" id="sidebar-logged-in" style="display:none;">
         <a href="../html/summary.html" class="sidebar-logo-link">
             <img src="../assets/img/logo_white.svg" alt="Join Logo" class="sidebar-logo">
         </a>
-
         <div class="navigation-links-group">
             <a href="../html/summary.html" class="nav-link" id="nav_overview">
                 <img src="../assets/icons/summary.svg" alt="" class="nav-icon">
-                <span>Summary</Summary></span>
+                <span>Summary</span>
             </a>
             <a href="../html/add_task.html" class="nav-link" id="nav_addtask">
                 <img src="../assets/icons/add_task.svg" alt="" class="nav-icon">
@@ -64,14 +63,31 @@
                 <span>Contacts</span>
             </a>
         </div>
-
         <div class="nav-bottom-left">
-            <a href="../html/privacy_policy.html" class="nav-link">Privacy Policy</a>
+            <a href="../html/privacy_policy.html" class="nav-link active">Privacy Policy</a>
             <a href="../html/legal_notice.html" class="nav-link">Legal Notice</a>
         </div>
     </nav>
 
-    <nav class="mobil-navigation">
+    <!-- Sidebar for external (not logged in) users -->
+    <nav class="sidebar" id="sidebar-external">
+        <a href="../index.html" class="sidebar-logo-link">
+            <img src="../assets/img/logo_white.svg" alt="Join Logo" class="sidebar-logo">
+        </a>
+        <div class="navigation-links-group">
+            <a href="../index.html" class="nav-link" id="nav_login_external">
+                <img src="../assets/icons/login.svg" alt="" class="nav-icon">
+                <span>Log In</span>
+            </a>
+        </div>
+        <div class="nav-bottom-left">
+            <a href="../html/privacy_policy.html" class="nav-link active">Privacy Policy</a>
+            <a href="../html/legal_notice.html" class="nav-link">Legal Notice</a>
+        </div>
+    </nav>
+
+    <!-- Mobile nav for logged-in users -->
+    <nav class="mobil-navigation" id="mobile-nav-logged-in" style="display:none;">
         <a href="../html/summary.html" class="mobil-nav-link">
             <img src="../assets/icons/summary.svg" alt="" class="mobil-nav-icon">
             <span>Summary</span>
@@ -87,6 +103,20 @@
         <a href="../html/contacts.html" class="mobil-nav-link">
             <img src="../assets/icons/contacts.svg" alt="" class="mobil-nav-icon">
             <span>Contacts</span>
+        </a>
+    </nav>
+
+    <!-- Mobile nav for external (not logged in) users -->
+    <nav class="mobil-navigation" id="mobile-nav-external">
+        <a href="../index.html" class="mobil-nav-link">
+            <img src="../assets/icons/login.svg" alt="" class="mobil-nav-icon">
+            <span>Log In</span>
+        </a>
+        <a href="../html/privacy_policy.html" class="mobil-nav-link aktiv">
+            <span>Privacy Policy</span>
+        </a>
+        <a href="../html/legal_notice.html" class="mobil-nav-link">
+            <span>Legal Notice</span>
         </a>
     </nav>
 
@@ -140,7 +170,20 @@
             </section>
         </div>
     </main>
+
     <script src="../script.js"></script>
+    <script>
+        (function () {
+            const user = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
+            if (user) {
+                document.getElementById('sidebar-external').style.display = 'none';
+                document.getElementById('sidebar-logged-in').style.display = '';
+                document.getElementById('mobile-nav-external').style.display = 'none';
+                document.getElementById('mobile-nav-logged-in').style.display = '';
+                document.getElementById('header-account-logged-in').style.display = '';
+            }
+        })();
+    </script>
 </body>
 
 </html>

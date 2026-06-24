@@ -1,6 +1,3 @@
-// ── Add Task Modal ─────────────────────────────────────────────────────────────
-
-
 /**
  * Returns the full HTML string for the add-task modal dialog.
  * @returns {string} HTML string for the <dialog> element.
@@ -151,6 +148,7 @@ function renderAddTaskModal() {
 
 /**
  * Injects the add-task modal into the DOM and initialises its date picker.
+ * @returns {void}
  */
 function injectAddTaskModal() {
     document.body.insertAdjacentHTML('beforeend', renderAddTaskModal());
@@ -160,6 +158,7 @@ function injectAddTaskModal() {
 
 /**
  * Attaches a flatpickr date picker to the modal due-date input.
+ * @returns {void}
  */
 function initModalDatepicker() {
     const modalDue = document.getElementById('modal-task-due');
@@ -186,6 +185,7 @@ function initModalDatepicker() {
 
 /**
  * Injects the add-task modal immediately or waits for DOMContentLoaded.
+ * @returns {void}
  */
 function initAddTaskModal() {
     if (document.readyState === 'loading') {

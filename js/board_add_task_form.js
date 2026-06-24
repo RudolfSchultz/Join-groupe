@@ -1,7 +1,7 @@
-// ── Clear Form ─────────────────────────────────────────────────────────────────
-
-
-/** Resets all modal form fields, state variables, and error messages. */
+/**
+ * Resets all modal form fields, state variables, and error messages.
+ * @returns {void}
+ */
 function clearModalTaskForm() {
     clearModalTextFields();
     resetModalPriority();
@@ -12,7 +12,10 @@ function clearModalTaskForm() {
 }
 
 
-/** Clears all text inputs and hides subtask action buttons. */
+/**
+ * Clears all text inputs and hides subtask action buttons.
+ * @returns {void}
+ */
 function clearModalTextFields() {
     document.getElementById('modal-task-title').value = '';
     document.getElementById('modal-task-desc').value = '';
@@ -22,7 +25,10 @@ function clearModalTextFields() {
 }
 
 
-/** Resets priority state to 'medium' and updates button active classes. */
+/**
+ * Resets priority state to 'medium' and updates button active classes.
+ * @returns {void}
+ */
 function resetModalPriority() {
     modalSelectedPriority = 'medium';
     document.querySelectorAll('#add-task-overlay .prio-btn').forEach(btn => {
@@ -32,7 +38,10 @@ function resetModalPriority() {
 }
 
 
-/** Resets the category dropdown label to its placeholder state. */
+/**
+ * Resets the category dropdown label to its placeholder state.
+ * @returns {void}
+ */
 function resetModalCategory() {
     modalSelectedCategory = '';
     const categoryLabel = document.getElementById('modal-category-selected');
@@ -41,7 +50,10 @@ function resetModalCategory() {
 }
 
 
-/** Clears assigned contacts and subtasks arrays, then re-renders both. */
+/**
+ * Clears assigned contacts and subtasks arrays, then re-renders both.
+ * @returns {void}
+ */
 function resetModalAssignAndSubtasks() {
     modalAssignedIds = [];
     modalSubtasks = [];
@@ -50,18 +62,19 @@ function resetModalAssignAndSubtasks() {
 }
 
 
-/** Hides all field error elements inside the add-task overlay. */
+/**
+ * Hides all field error elements inside the add-task overlay.
+ * @returns {void}
+ */
 function hideModalFieldErrors() {
     document.querySelectorAll('#add-task-overlay .field-error').forEach(el => el.classList.add('d-none'));
 }
 
 
-// ── Create Task ────────────────────────────────────────────────────────────────
-
-
 /**
  * Handles the create-task form submission: validates and saves the task.
  * @param {Event} event - The submit event.
+ * @returns {Promise<void>}
  */
 async function createTaskFromModal(event) {
     event.preventDefault();
@@ -77,6 +90,7 @@ async function createTaskFromModal(event) {
  * Attempts to save the task; shows success or error notification.
  * @param {Object} task - Task data object.
  * @param {HTMLElement} button - Submit button to re-enable on failure.
+ * @returns {Promise<void>}
  */
 async function trySaveModalTask(task, button) {
     try {
@@ -121,9 +135,6 @@ function collectModalTask() {
 }
 
 
-// ── Validate Task ──────────────────────────────────────────────────────────────
-
-
 /**
  * Validates a single required field and toggles its error element visibility.
  * @param {string} value - Field value to check.
@@ -151,7 +162,10 @@ function validateModalTask(task) {
 }
 
 
-/** Enables or disables the create button based on required field values. */
+/**
+ * Enables or disables the create button based on required field values.
+ * @returns {void}
+ */
 function updateModalCreateButton() {
     const title = document.getElementById('modal-task-title').value.trim();
     const due = document.getElementById('modal-task-due').value;

@@ -2,10 +2,10 @@ const FIREBASE_BASE = 'https://remotestorage-c0469-default-rtdb.europe-west1.fir
 const USERS_URL = `${FIREBASE_BASE}/users.json`;
 
 
-// ── Guest ──────────────────────────────────────────────────────────────────────
-
-
-/** Logs in as a guest user and redirects to the summary page. */
+/**
+ * Logs in as a guest user and redirects to the summary page.
+ * @returns {void}
+ */
 function guestLogin() {
     const guestUser = { id: 'guest', name: 'Gast', email: '', isGuest: true };
     sessionStorage.setItem('currentUser', JSON.stringify(guestUser));
@@ -13,13 +13,11 @@ function guestLogin() {
 }
 
 
-// ── Form Switch ────────────────────────────────────────────────────────────────
-
-
 /**
  * Switches visibility between two form sections and resets the hidden one.
  * @param {string} currentForm - Id of the form to hide.
  * @param {string} targetForm - Id of the form to show.
+ * @returns {void}
  */
 function switchForm(currentForm, targetForm) {
     hideForm(currentForm);
@@ -33,6 +31,7 @@ function switchForm(currentForm, targetForm) {
 /**
  * Hides a form section.
  * @param {string} formId - Element id to hide.
+ * @returns {void}
  */
 function hideForm(formId) {
     const el = document.getElementById(formId);
@@ -43,6 +42,7 @@ function hideForm(formId) {
 /**
  * Shows a form section.
  * @param {string} formId - Element id to show.
+ * @returns {void}
  */
 function showForm(formId) {
     const el = document.getElementById(formId);
@@ -53,6 +53,7 @@ function showForm(formId) {
 /**
  * Shows the sign-up button only when the login section is active.
  * @param {string} activeForm - Id of the currently visible form.
+ * @returns {void}
  */
 function updateSignupButton(activeForm) {
     const signupBtn = document.getElementById('signup_btn');
@@ -61,12 +62,10 @@ function updateSignupButton(activeForm) {
 }
 
 
-// ── Hint Helpers ───────────────────────────────────────────────────────────────
-
-
 /**
  * Makes a hint element visible (uses visibility, no layout shift).
  * @param {string} id - Element id.
+ * @returns {void}
  */
 function showHint(id) {
     const el = document.getElementById(id);
@@ -77,6 +76,7 @@ function showHint(id) {
 /**
  * Hides a hint element (uses visibility, no layout shift).
  * @param {string} id - Element id.
+ * @returns {void}
  */
 function hideHint(id) {
     const el = document.getElementById(id);
@@ -84,12 +84,10 @@ function hideHint(id) {
 }
 
 
-// ── Clear Forms ────────────────────────────────────────────────────────────────
-
-
 /**
  * Clears an input field value and removes its validation state attributes.
  * @param {string} id - Element id of the input to clear.
+ * @returns {void}
  */
 function clearFieldValue(id) {
     const el = document.getElementById(id);
@@ -100,19 +98,28 @@ function clearFieldValue(id) {
 }
 
 
-/** Clears all registration input fields. */
+/**
+ * Clears all registration input fields.
+ * @returns {void}
+ */
 function clearRegFields() {
     ['reg_name', 'reg_email', 'reg_passwort', 'reg_password_confirm'].forEach(clearFieldValue);
 }
 
 
-/** Hides all registration hint and error messages. */
+/**
+ * Hides all registration hint and error messages.
+ * @returns {void}
+ */
 function clearRegHints() {
     ['pw_hint', 'email_format_hint', 'pw_match_hint'].forEach(hideHint);
 }
 
 
-/** Resets the registration form including checkbox and submit button state. */
+/**
+ * Resets the registration form including checkbox and submit button state.
+ * @returns {void}
+ */
 function clearRegistrationForm() {
     clearRegFields();
     clearRegHints();
@@ -123,13 +130,19 @@ function clearRegistrationForm() {
 }
 
 
-/** Clears all login input fields. */
+/**
+ * Clears all login input fields.
+ * @returns {void}
+ */
 function clearLoginFields() {
     ['login_email', 'login_passwort'].forEach(clearFieldValue);
 }
 
 
-/** Clears the login error message and hides its hint. */
+/**
+ * Clears the login error message and hides its hint.
+ * @returns {void}
+ */
 function clearLoginError() {
     const el = document.getElementById('login_error');
     if (!el) return;
@@ -138,20 +151,21 @@ function clearLoginError() {
 }
 
 
-/** Resets the full login form including error state. */
+/**
+ * Resets the full login form including error state.
+ * @returns {void}
+ */
 function clearLoginForm() {
     clearLoginFields();
     clearLoginError();
 }
 
 
-// ── Notification ───────────────────────────────────────────────────────────────
-
-
 /**
  * Displays a notification banner and auto-hides it after 5 seconds.
  * @param {string} message - Text to display.
  * @param {boolean} [isError=false] - Whether this is an error notification.
+ * @returns {void}
  */
 function showNotification(message, isError = false) {
     const notif = document.getElementById('notification');
@@ -160,9 +174,6 @@ function showNotification(message, isError = false) {
     notif.classList.remove('d-none');
     setTimeout(() => notif.classList.add('d-none'), 5000);
 }
-
-
-// ── Firebase ───────────────────────────────────────────────────────────────────
 
 
 /**
@@ -177,6 +188,7 @@ async function loadUsers() {
         return Array.isArray(data) ? data.filter(Boolean) : Object.values(data).filter(Boolean);
     } catch (e) {
         console.error('Error loading users:', e);
+        showNotification('Error loading users!', true);
         return [];
     }
 }
@@ -196,6 +208,7 @@ function buildPutOptions(body) {
  * Saves a user object to Firebase under /users/{id}.
  * @param {string|number} id - Firebase key.
  * @param {Object} user - User data.
+ * @returns {Promise<void>}
  */
 async function saveUserToFirebase(id, user) {
     await fetch(`${FIREBASE_BASE}/users/${id}.json`, buildPutOptions(user));
@@ -206,16 +219,17 @@ async function saveUserToFirebase(id, user) {
  * Saves a contact object to Firebase under /contacts/{id}.
  * @param {string|number} id - Firebase key.
  * @param {Object} contact - Contact data.
+ * @returns {Promise<void>}
  */
 async function saveContactToFirebase(id, contact) {
     await fetch(`${FIREBASE_BASE}/contacts/${id}.json`, buildPutOptions(contact));
 }
 
 
-// ── Page Lifecycle ─────────────────────────────────────────────────────────────
-
-
-/** Silently clears all forms on page unload or back-navigation. */
+/**
+ * Silently clears all forms on page unload or back-navigation.
+ * @returns {void}
+ */
 function clearAllForms() {
     try { clearRegistrationForm(); clearLoginForm(); } catch (e) { /* ignore */ }
 }

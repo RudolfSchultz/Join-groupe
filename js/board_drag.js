@@ -5,25 +5,41 @@ let touchDragOffsetY = 0;
 const COLUMN_IDS = ['todo', 'inProgress', 'awaitFeedback', 'done'];
 
 
-/** Sets the currently dragged task ID. @param {number|string} id */
+/**
+ * Sets the currently dragged task ID.
+ * @param {number|string} id
+ * @returns {void}
+ */
 function startDragging(id) {
   currentDraggedTaskId = id;
 }
 
 
-/** Prevents default browser behaviour to allow dropping. @param {DragEvent} ev */
+/**
+ * Prevents default browser behaviour to allow dropping.
+ * @param {DragEvent} ev
+ * @returns {void}
+ */
 function allowDrop(ev) {
   ev.preventDefault();
 }
 
 
-/** Adds the drag-active highlight to the given column. @param {string} id */
+/**
+ * Adds the drag-active highlight to the given column.
+ * @param {string} id
+ * @returns {void}
+ */
 function highlight(id) {
   document.getElementById(`drag-hl-${id}`)?.classList.add('drag-active');
 }
 
 
-/** Removes the drag-active highlight from the given column. @param {string} id */
+/**
+ * Removes the drag-active highlight from the given column.
+ * @param {string} id
+ * @returns {void}
+ */
 function removeHighlight(id) {
   document.getElementById(`drag-hl-${id}`)?.classList.remove('drag-active');
 }
@@ -32,6 +48,7 @@ function removeHighlight(id) {
 /**
  * Updates the dragged task's status and refreshes the board.
  * @param {string} status - Target column ID.
+ * @returns {Promise<void>}
  */
 async function moveTo(status) {
   if (currentDraggedTaskId === null) return;
@@ -44,7 +61,11 @@ async function moveTo(status) {
 }
 
 
-/** Persists the updated task status for guests or remote users. @param {Object} task */
+/**
+ * Persists the updated task status for guests or remote users.
+ * @param {Object} task
+ * @returns {Promise<void>}
+ */
 async function updateTaskStatus(task) {
   if (checkIsGuest()) {
     saveGuestTasks(allTasks);
@@ -58,6 +79,7 @@ async function updateTaskStatus(task) {
  * Sends a PATCH request to update the task status on the remote API.
  * @param {number|string} taskId
  * @param {string} status
+ * @returns {Promise<void>}
  */
 async function updateTaskStatusRemote(taskId, status) {
   try {
@@ -68,6 +90,7 @@ async function updateTaskStatusRemote(taskId, status) {
     });
   } catch (e) {
     console.error('Error updating task status:', e);
+    showNotification('Error updating task status!', true);
   }
 }
 
@@ -76,6 +99,7 @@ async function updateTaskStatusRemote(taskId, status) {
  * Calculates and stores the pointer offset relative to the drag card.
  * @param {Touch} touch
  * @param {DOMRect} rect
+ * @returns {void}
  */
 function setTouchDragOffset(touch, rect) {
   touchDragOffsetX = touch.clientX - rect.left;
@@ -87,6 +111,7 @@ function setTouchDragOffset(touch, rect) {
  * Initiates a touch drag: records the task ID, offset and creates the clone.
  * @param {TouchEvent} event
  * @param {number|string} id
+ * @returns {void}
  */
 function touchDragStart(event, id) {
   currentDraggedTaskId = id;
@@ -94,7 +119,7 @@ function touchDragStart(event, id) {
   const rect = card.getBoundingClientRect();
   setTouchDragOffset(event.touches[0], rect);
   createTouchClone(card, rect);
-  card.style.opacity = '0.4';
+  card.classList.add('card--dragging');
 }
 
 
@@ -102,15 +127,14 @@ function touchDragStart(event, id) {
  * Creates a fixed-position visual clone of the dragged card.
  * @param {HTMLElement} card
  * @param {DOMRect} rect
+ * @returns {void}
  */
 function createTouchClone(card, rect) {
   touchDragClone = card.cloneNode(true);
-  touchDragClone.style.cssText = `
-    position:fixed;left:${rect.left}px;top:${rect.top}px;
-    width:${rect.width}px;opacity:0.8;pointer-events:none;
-    z-index:9999;transform:rotate(3deg);
-    box-shadow:0 8px 24px rgba(0,0,0,0.25);
-  `;
+  touchDragClone.classList.add('card--ghost');
+  touchDragClone.style.left = `${rect.left}px`;
+  touchDragClone.style.top = `${rect.top}px`;
+  touchDragClone.style.width = `${rect.width}px`;
   document.body.appendChild(touchDragClone);
 }
 
@@ -118,6 +142,7 @@ function createTouchClone(card, rect) {
 /**
  * Repositions the clone to follow the touch pointer.
  * @param {Touch} touch
+ * @returns {void}
  */
 function moveTouchClone(touch) {
   touchDragClone.style.left = (touch.clientX - touchDragOffsetX) + 'px';
@@ -125,7 +150,11 @@ function moveTouchClone(touch) {
 }
 
 
-/** Moves the clone and updates column highlights during a touch drag. @param {TouchEvent} event */
+/**
+ * Moves the clone and updates column highlights during a touch drag.
+ * @param {TouchEvent} event
+ * @returns {void}
+ */
 function touchDragMove(event) {
   if (!touchDragClone) return;
   event.preventDefault();
@@ -148,7 +177,11 @@ function isTouchInsideColumn(touch, col) {
 }
 
 
-/** Highlights the column under the touch point and removes all others. @param {Touch} touch */
+/**
+ * Highlights the column under the touch point and removes all others.
+ * @param {Touch} touch
+ * @returns {void}
+ */
 function updateColumnHighlights(touch) {
   COLUMN_IDS.forEach(colId => {
     const col = document.getElementById(colId);
@@ -158,7 +191,11 @@ function updateColumnHighlights(touch) {
 }
 
 
-/** Cleans up the touch drag and triggers a drop into the column under the finger. @param {TouchEvent} event */
+/**
+ * Cleans up the touch drag and triggers a drop into the column under the finger.
+ * @param {TouchEvent} event
+ * @returns {void}
+ */
 function touchDragEnd(event) {
   if (!touchDragClone) return;
   const touch = event.changedTouches[0];
@@ -167,17 +204,25 @@ function touchDragEnd(event) {
 }
 
 
-/** Removes the clone and restores the original card's opacity. @param {HTMLElement} card */
+/**
+ * Removes the clone and restores the original card's opacity.
+ * @param {HTMLElement} card
+ * @returns {void}
+ */
 function cleanupTouchDrag(card) {
   if (touchDragClone) {
     touchDragClone.remove();
     touchDragClone = null;
   }
-  card.style.opacity = '';
+  card.classList.remove('card--dragging');
 }
 
 
-/** Removes all highlights and calls moveTo for the column under the touch point. @param {Touch} touch */
+/**
+ * Removes all highlights and calls moveTo for the column under the touch point.
+ * @param {Touch} touch
+ * @returns {void}
+ */
 function checkDropZone(touch) {
   COLUMN_IDS.forEach(colId => {
     removeHighlight(colId);

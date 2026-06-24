@@ -1,6 +1,3 @@
-// ── Edit Task Template ─────────────────────────────────────────────────────────
-
-
 /**
  * Returns the full HTML string for the edit-task overlay.
  * @param {Object} task - Task object with all editable fields.
@@ -141,9 +138,6 @@ function buildEditSaveButton(taskId) {
             </button>
         </div>`;
 }
-
-
-// ── Edit Assign / Subtask Partials ─────────────────────────────────────────────
 
 
 /**

@@ -299,7 +299,8 @@ function showTaskNotification(message, isError = false) {
     const notification = document.getElementById('notification');
     if (!notification) return;
     notification.textContent = message;
-    notification.style.backgroundColor = isError ? 'var(--red, #ff3d00)' : 'var(--primaryColor, #2a3647)';
+    notification.className = 'notification';
+    if (isError) notification.classList.add('notification--error');
     notification.classList.remove('d-none');
     setTimeout(() => notification.classList.add('d-none'), 3000);
 }

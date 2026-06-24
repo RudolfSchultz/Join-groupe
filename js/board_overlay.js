@@ -1,12 +1,16 @@
-// ── Overlay ────────────────────────────────────────────────────────────────────
-
-/** Shows the board overlay. */
+/**
+ * Shows the board overlay.
+ * @returns {void}
+ */
 function openOverlay() {
   document.getElementById('board-overlay').classList.remove('d-none');
 }
 
 
-/** Hides the overlay, clears its content and removes the outside-click listener. */
+/**
+ * Hides the overlay, clears its content and removes the outside-click listener.
+ * @returns {void}
+ */
 function closeOverlay() {
   document.getElementById('board-overlay').classList.add('d-none');
   clearOverlayContent();
@@ -14,7 +18,10 @@ function closeOverlay() {
 }
 
 
-/** Empties the detail and edit boxes and resets their visibility. */
+/**
+ * Empties the detail and edit boxes and resets their visibility.
+ * @returns {void}
+ */
 function clearOverlayContent() {
   document.getElementById('board-detail-box').innerHTML = '';
   document.getElementById('board-edit-box').innerHTML = '';
@@ -23,13 +30,21 @@ function clearOverlayContent() {
 }
 
 
-/** Closes the overlay when the user clicks the backdrop. @param {MouseEvent} event */
+/**
+ * Closes the overlay when the user clicks the backdrop.
+ * @param {MouseEvent} event
+ * @returns {void}
+ */
 function handleOverlayClick(event) {
   if (event.target.id === 'board-overlay') closeOverlay();
 }
 
 
-/** Renders the task detail view and opens the overlay. @param {number|string} id */
+/**
+ * Renders the task detail view and opens the overlay.
+ * @param {number|string} id
+ * @returns {void}
+ */
 function openTaskDetail(id) {
   const task = allTasks.find(t => t.id == id);
   if (!task) return;
@@ -40,9 +55,11 @@ function openTaskDetail(id) {
 }
 
 
-// ── Delete Task ────────────────────────────────────────────────────────────────
-
-/** Removes a task from allTasks and persists the deletion. @param {number|string} id */
+/**
+ * Removes a task from allTasks and persists the deletion.
+ * @param {number|string} id
+ * @returns {Promise<void>}
+ */
 async function deleteTask(id) {
   allTasks = allTasks.filter(t => t.id != id);
   if (checkIsGuest()) {
@@ -53,7 +70,10 @@ async function deleteTask(id) {
 }
 
 
-/** Persists deletion for guest users and refreshes the board. */
+/**
+ * Persists deletion for guest users and refreshes the board.
+ * @returns {void}
+ */
 function deleteTaskGuest() {
   saveGuestTasks(allTasks);
   closeOverlay();
@@ -62,7 +82,11 @@ function deleteTaskGuest() {
 }
 
 
-/** Sends DELETE to the API and refreshes the board. @param {number|string} id */
+/**
+ * Sends DELETE to the API and refreshes the board.
+ * @param {number|string} id
+ * @returns {Promise<void>}
+ */
 async function deleteTaskRemote(id) {
   try {
     await fetch(`${BOARD_BASE_URL}/tasks/${id}.json`, { method: 'DELETE' });
@@ -71,16 +95,16 @@ async function deleteTaskRemote(id) {
     notify('Der Task wurde gelöscht.');
   } catch (e) {
     console.error('Error deleting task:', e);
+    showNotification('Error saving task!', true);
   }
 }
 
-
-// ── Subtasks ───────────────────────────────────────────────────────────────────
 
 /**
  * Toggles a subtask's done-state and persists the change.
  * @param {number|string} taskId
  * @param {number} subtaskIndex
+ * @returns {Promise<void>}
  */
 async function toggleSubtask(taskId, subtaskIndex) {
   const task = allTasks.find(t => t.id == taskId);
@@ -92,7 +116,10 @@ async function toggleSubtask(taskId, subtaskIndex) {
 }
 
 
-/** Persists subtask state for guests locally or via the API. */
+/**
+ * Persists subtask state for guests locally or via the API.
+ * @returns {Promise<void>}
+ */
 async function saveSubtaskState(taskId, subtasks) {
   if (checkIsGuest()) {
     saveGuestTasks(allTasks);
@@ -102,7 +129,10 @@ async function saveSubtaskState(taskId, subtasks) {
 }
 
 
-/** PATCHes updated subtasks to the remote API. */
+/**
+ * PATCHes updated subtasks to the remote API.
+ * @returns {Promise<void>}
+ */
 async function updateSubtasksRemote(taskId, subtasks) {
   try {
     await fetch(`${BOARD_BASE_URL}/tasks/${taskId}.json`, {
@@ -112,11 +142,16 @@ async function updateSubtasksRemote(taskId, subtasks) {
     });
   } catch (e) {
     console.error('Error updating subtask:', e);
+    showNotification('Error updating subtask!', true);
   }
 }
 
 
-/** Replaces the task card DOM node with a freshly rendered version. @param {number|string} taskId */
+/**
+ * Replaces the task card DOM node with a freshly rendered version.
+ * @param {number|string} taskId
+ * @returns {void}
+ */
 function refreshTaskCard(taskId) {
   const task = allTasks.find(t => t.id == taskId);
   if (!task) return;
@@ -128,7 +163,11 @@ function refreshTaskCard(taskId) {
 }
 
 
-/** Syncs subtask checkbox states in the detail view with the task data. @param {Object} task */
+/**
+ * Syncs subtask checkbox states in the detail view with the task data.
+ * @param {Object} task
+ * @returns {void}
+ */
 function refreshSubtaskChecks(task) {
   (task.subtasks || []).forEach((s, i) => {
     const cb = document.getElementById(`sub-check-${i}`);

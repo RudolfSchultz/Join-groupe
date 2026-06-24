@@ -25,6 +25,7 @@ function buildFlatpickrOptions() {
 /**
  * Initializes Flatpickr on a single element if not already initialized.
  * @param {HTMLElement} el - The input element to initialize
+ * @returns {void}
  */
 function initFor(el) {
   if (!el || el._flatpickr) return;
@@ -38,6 +39,7 @@ function initFor(el) {
 
 /**
  * Attaches Flatpickr to all `.date-picker` input elements in the document.
+ * @returns {void}
  */
 function runAttach() {
   try {
@@ -51,6 +53,7 @@ function runAttach() {
 /**
  * Schedules a delayed call to runAttach.
  * @param {number} [delay=50] - Delay in milliseconds
+ * @returns {void}
  */
 function scheduleAttach(delay = 50) {
   setTimeout(runAttach, delay);
@@ -59,6 +62,7 @@ function scheduleAttach(delay = 50) {
 
 /**
  * Schedules attach with a fixed delay of 100ms, used by the MutationObserver.
+ * @returns {void}
  */
 function onMutation() {
   scheduleAttach(100);
@@ -67,6 +71,7 @@ function onMutation() {
 
 /**
  * Starts the MutationObserver and runs an initial attach.
+ * @returns {void}
  */
 function startObserverAndAttach() {
   runAttach();
@@ -78,6 +83,7 @@ function startObserverAndAttach() {
  * Schedules the next retry for waiting on Flatpickr to load.
  * @param {number} retries - Remaining retry attempts
  * @param {number} delay - Delay in milliseconds between retries
+ * @returns {void}
  */
 function scheduleRetry(retries, delay) {
   setTimeout(function retryInit() {
@@ -90,6 +96,7 @@ function scheduleRetry(retries, delay) {
  * Waits recursively for Flatpickr to become available, then starts initialization.
  * @param {number} [retries=50] - Number of remaining retry attempts
  * @param {number} [delay=100] - Wait time between attempts in milliseconds
+ * @returns {void}
  */
 function waitForFlatpickrAndInit(retries = 50, delay = 100) {
   if (typeof flatpickr === 'function') { startObserverAndAttach(); return; }
@@ -100,6 +107,7 @@ function waitForFlatpickrAndInit(retries = 50, delay = 100) {
 
 /**
  * Starts the initialization process once the DOM is ready.
+ * @returns {void}
  */
 function onDomReady() {
   waitForFlatpickrAndInit();

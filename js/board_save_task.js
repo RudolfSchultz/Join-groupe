@@ -1,6 +1,8 @@
-// ── Save Task ──────────────────────────────────────────────────────────────────
-
-/** Routes task saving to guest or remote storage. @param {Object} task */
+/**
+ * Routes task saving to guest or remote storage.
+ * @param {Object} task
+ * @returns {Promise<void>}
+ */
 async function saveModalTask(task) {
   if (checkIsGuest()) {
     await saveModalTaskAsGuest(task);
@@ -10,7 +12,11 @@ async function saveModalTask(task) {
 }
 
 
-/** Assigns an ID and persists a new task in guest (local) storage. @param {Object} task */
+/**
+ * Assigns an ID and persists a new task in guest (local) storage.
+ * @param {Object} task
+ * @returns {Promise<void>}
+ */
 async function saveModalTaskAsGuest(task) {
   const guestTasks = getGuestTasks();
   task.id = await resolveGuestTaskId(guestTasks);
@@ -59,7 +65,11 @@ async function fetchDemoTaskList() {
 }
 
 
-/** Assigns the next remote ID and PUTs the task to the API. @param {Object} task */
+/**
+ * Assigns the next remote ID and PUTs the task to the API.
+ * @param {Object} task
+ * @returns {Promise<void>}
+ */
 async function saveModalTaskRemote(task) {
   task.id = await getNextModalTaskId();
   await fetch(`${ADDTASK_BASE_URL}/tasks/${task.id}.json`, {
@@ -83,17 +93,17 @@ async function getNextModalTaskId() {
     return calcMaxId(tasks) + 1;
   } catch (error) {
     console.error('Error getting next task ID:', error);
+    showNotification('Error getting next task ID!', true);
     return 1;
   }
 }
 
 
-// ── Notification ───────────────────────────────────────────────────────────────
-
 /**
  * Displays a temporary notification banner.
  * @param {string} message
  * @param {boolean} [isError=false]
+ * @returns {void}
  */
 function showTaskNotification(message, isError = false) {
   const notification = document.getElementById('notification');
@@ -102,5 +112,5 @@ function showTaskNotification(message, isError = false) {
   notification.className = 'notification';
   if (isError) notification.classList.add('notification--error');
   notification.classList.remove('d-none');
-  setTimeout(() => notification.classList.add('d-none'), 2000);
+  setTimeout(() => notification.classList.add('d-none'), 3000);
 }

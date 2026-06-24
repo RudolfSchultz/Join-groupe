@@ -193,3 +193,16 @@
   color: #A8A8A8;
   padding: 0 12px;
 }
+
+.card--dragging {
+  opacity: 0.4;
+}
+
+.card--ghost {
+  position: fixed;
+  opacity: 0.8;
+  pointer-events: none;
+  z-index: 9999;
+  transform: rotate(3deg);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
