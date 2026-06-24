@@ -119,6 +119,12 @@ body.app-page {
 
 /* ── Tablet: Icon-only Sidebar ── */
 @media (max-width: 768px) {
+  /* Bottom-Nav-Ansicht: nicht body als 100vh-Scrollbox, sondern das Fenster scrollen lassen */
+  body.app-page {
+    overflow-y: visible;
+    height: auto;
+  }
+
   .sidebar {
     width: 72px;
     padding: 40px 0;
@@ -151,6 +157,11 @@ body.app-page {
 
   .main-wrapper {
     margin-left: 0;
+    /* Bottom-Nav erscheint ab hier -> Fenster-Scroll statt 100vh-Container, damit man ganz nach unten kommt */
+    height: auto;
+    min-height: 100vh;
+    overflow-y: visible;
+    padding-bottom: 88px;   /* 72px Bottom-Nav + 16px Abstand */
   }
 
   .main-header {
@@ -165,7 +176,8 @@ body.app-page {
 /* ── Mobile: Sidebar → Bottom Navigation ── */
 @media (max-width: 480px) {
   body.app-page {
-    overflow: auto;
+    overflow-y: visible;
+    height: auto;
   }
 
   .sidebar {
@@ -242,7 +254,10 @@ body.app-page {
 
   .main-wrapper {
     width: 100%;
-    padding-bottom: 80px;
+    height: auto;
+    min-height: 100vh;
+    overflow-y: visible;
+    padding-bottom: 88px;   /* 72px Bottom-Nav + 16px Abstand */
   }
 
   .main-header {
