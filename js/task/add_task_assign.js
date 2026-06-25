@@ -1,20 +1,39 @@
 /**
+ * Loads contacts from the guest database (db.json).
+ * @async
+ * @returns {Promise<Object[]>} Normalized contacts for the guest user.
+ */
+async function loadGuestContacts() {
+    const response = await fetch('../db.json');
+    const raw = await response.json();
+    const contactsObj = raw.contacts || {};
+    const contacts = Object.entries(contactsObj).map(([key, c]) => ({ ...c, id: key }));
+    return normalizeContacts(contacts);
+}
+
+
+/**
+ * Loads contacts from Firebase for authenticated users.
+ * @async
+ * @returns {Promise<Object[]>} Normalized contacts from the remote database.
+ */
+async function loadFirebaseContacts() {
+    const response = await fetch(ADDTASK_CONTACTS_URL);
+    const raw = await response.json();
+    if (!raw) return [];
+    return normalizeContacts(Array.isArray(raw) ? raw : Object.values(raw));
+}
+
+
+/**
  * Loads and normalizes all contacts used in the assignment dropdown.
+ * @async
  * @returns {Promise<Object[]>} Normalized contacts (empty if unreachable).
  */
 async function loadAssignContacts() {
     try {
-        if (typeof checkIsGuest === 'function' && checkIsGuest()) {
-            const response = await fetch('../db.json');
-            const raw = await response.json();
-            const contactsObj = raw.contacts || {};
-            const contacts = Object.entries(contactsObj).map(([key, c]) => ({ ...c, id: key }));
-            return normalizeContacts(contacts);
-        }
-        const response = await fetch(ADDTASK_CONTACTS_URL);
-        const raw = await response.json();
-        if (!raw) return [];
-        return normalizeContacts(Array.isArray(raw) ? raw : Object.values(raw));
+        if (typeof checkIsGuest === 'function' && checkIsGuest()) return loadGuestContacts();
+        return loadFirebaseContacts();
     } catch (error) {
         console.error('Error loading contacts:', error);
         return [];
@@ -82,7 +101,7 @@ function togglePerson(id) {
 
 
 /**
- * Enforces a maximum of 6 assigned persons and shows a notification.
+ * Enforces a maximum of 99 assigned persons and shows a notification.
  * @returns {boolean} True when another person can be assigned.
  */
 function canAssignMorePersons() {
@@ -95,6 +114,26 @@ function canAssignMorePersons() {
 
 
 /**
+ * Returns the HTML for a single avatar chip.
+ * @param {Object} contact - Contact with color and avatar properties.
+ * @returns {string} HTML string for one avatar chip.
+ */
+function avatarChipTemplate(contact) {
+    return `<span class="avatar-chip" style="background-color:${contact.color}">${contact.avatar}</span>`;
+}
+
+
+/**
+ * Returns the HTML for the overflow chip showing the remaining count.
+ * @param {number} count - Number of hidden contacts.
+ * @returns {string} HTML string for the overflow chip.
+ */
+function avatarOverflowTemplate(count) {
+    return `<span class="avatar-chip avatar-chip-more">+${count}</span>`;
+}
+
+
+/**
  * Renders avatar chips for all currently assigned contacts.
  * @returns {void}
  */
@@ -103,14 +142,10 @@ function renderAssignedAvatars() {
     const selected = addTaskContacts.filter(contact => assignedIds.includes(contact.id));
     const max = 5;
     const visible = selected.slice(0, max);
-    let html = visible.map(contact => `<span class="avatar-chip" style="background-color:${contact.color}">${contact.avatar}</span>`).join('');
-    if (selected.length > max) {
-        const more = selected.length - max;
-        html += `<span class="avatar-chip avatar-chip-more">+${more}</span>`;
-    }
+    let html = visible.map(avatarChipTemplate).join('');
+    if (selected.length > max) html += avatarOverflowTemplate(selected.length - max);
     container.innerHTML = html;
 }
-
 
 
 /**

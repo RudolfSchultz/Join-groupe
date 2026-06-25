@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', initSummary);
 
 /**
  * Initializes the summary page: greeting first, then the live task stats.
+ * @async
  * @returns {Promise<void>}
  */
 async function initSummary() {
@@ -19,21 +20,11 @@ async function initSummary() {
 
 /**
  * Loads all tasks: from sessionStorage for guests, from Firebase for users.
+ * @async
  * @returns {Promise<Object[]>} List of task objects (empty if none/unreachable).
  */
 async function loadTasks() {
-    if (typeof checkIsGuest === 'function' && checkIsGuest()) {
-        try {
-            const fileTasks = await safeFetchFileTasks('../demo-task.json');
-            const local = JSON.parse(sessionStorage.getItem('guestTasks')) || [];
-            const map = new Map();
-            (fileTasks || []).forEach(t => map.set(String(t.id), t));
-            (local || []).forEach(t => map.set(String(t.id), t));
-            const merged = Array.from(map.values());
-            merged.sort((a, b) => (Number(a.id) || 0) - (Number(b.id) || 0));
-            return merged;
-        } catch (e) { try { return JSON.parse(sessionStorage.getItem('guestTasks')) || []; } catch (e) { return []; } }
-    }
+    if (typeof checkIsGuest === 'function' && checkIsGuest()) return loadGuestTasks();
     try {
         const response = await fetch(SUMMARY_TASKS_URL);
         const data = await response.json();
@@ -43,6 +34,36 @@ async function loadTasks() {
         console.error('Error loading tasks:', error);
         return [];
     }
+}
+
+
+/**
+ * Merges demo file tasks with locally stored guest tasks, sorted by id.
+ * @async
+ * @returns {Promise<Object[]>} Merged and sorted guest task list.
+ */
+async function loadGuestTasks() {
+    try {
+        const fileTasks = await safeFetchFileTasks('../demo-task.json');
+        const local = JSON.parse(sessionStorage.getItem('guestTasks')) || [];
+        return mergeTasksById(fileTasks || [], local || []);
+    } catch (e) {
+        try { return JSON.parse(sessionStorage.getItem('guestTasks')) || []; } catch (e) { return []; }
+    }
+}
+
+
+/**
+ * Merges two task arrays by id (local entries overwrite file entries) and sorts by id.
+ * @param {Object[]} fileTasks - Tasks loaded from the demo JSON file.
+ * @param {Object[]} localTasks - Tasks stored in sessionStorage.
+ * @returns {Object[]} Deduplicated, id-sorted task array.
+ */
+function mergeTasksById(fileTasks, localTasks) {
+    const map = new Map();
+    fileTasks.forEach(t => map.set(String(t.id), t));
+    localTasks.forEach(t => map.set(String(t.id), t));
+    return Array.from(map.values()).sort((a, b) => (Number(a.id) || 0) - (Number(b.id) || 0));
 }
 
 
@@ -168,7 +189,12 @@ function setText(id, value) {
     if (element) element.textContent = value;
 }
 
-// Helper: safely fetch tasks from a local JSON file (used for guest view)
+/**
+ * Safely fetches and normalizes tasks from a local JSON file (used for guest view).
+ * @async
+ * @param {string} path - Relative path to the JSON file.
+ * @returns {Promise<Object[]>} Array of task objects, empty on error.
+ */
 async function safeFetchFileTasks(path) {
     try {
         const res = await fetch(path);
