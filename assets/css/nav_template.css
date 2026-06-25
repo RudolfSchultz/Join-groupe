@@ -119,6 +119,10 @@
   color: #ffffff;
 }
 
+.avatar-menu-btn--mobile-only {
+  display: none;
+}
+
 .sidebar {
     position: fixed;
     top: 0;
