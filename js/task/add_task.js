@@ -14,20 +14,30 @@ document.addEventListener('DOMContentLoaded', initTaskPage);
 
 /**
  * Initializes the Add Task page (avatar, min date, contacts, outside-click).
+ * @async
  * @returns {Promise<void>}
  */
 async function initTaskPage() {
     setHeaderAvatar();
     setMinDueDate();
-    flatpickr("#task-due", {
-        dateFormat: "d.m.Y",
-        minDate: "today",
-        allowInput: false,
-        disableMobile: true,
-        onChange: function() { updateCreateButton(); }
-    });
+    initDatePicker();
     document.addEventListener('click', handleOutsideClick);
     addTaskContacts = await loadAssignContacts();
+}
+
+
+/**
+ * Initializes the flatpickr date picker for the due date field.
+ * @returns {void}
+ */
+function initDatePicker() {
+    flatpickr('#task-due', {
+        dateFormat: 'd.m.Y',
+        minDate: 'today',
+        allowInput: false,
+        disableMobile: true,
+        onChange: function () { updateCreateButton(); }
+    });
 }
 
 
@@ -133,7 +143,31 @@ function validateTask(task) {
 
 
 /**
+ * Handles a successful task save: shows notification and redirects to board.
+ * @returns {void}
+ */
+function handleTaskSaveSuccess() {
+    showTaskNotification('Task added to board');
+    setTimeout(() => { window.location.href = 'board.html'; }, 1400);
+}
+
+
+/**
+ * Handles a failed task save: shows error and re-enables the create button.
+ * @param {Error} error - The caught error.
+ * @param {HTMLElement} button - The create button to re-enable.
+ * @returns {void}
+ */
+function handleTaskSaveError(error, button) {
+    console.error('Error saving task:', error);
+    showTaskNotification('Could not save task. Please try again.', true);
+    button.disabled = false;
+}
+
+
+/**
  * Creates the task: validates, saves to Firebase and redirects to the board.
+ * @async
  * @returns {Promise<void>}
  */
 async function createTask() {
@@ -143,46 +177,68 @@ async function createTask() {
     button.disabled = true;
     try {
         await saveTask(task);
-        showTaskNotification('Task added to board');
-        setTimeout(() => { window.location.href = 'board.html'; }, 1400);
+        handleTaskSaveSuccess();
     } catch (error) {
-        console.error('Error saving task:', error);
-        showTaskNotification('Could not save task. Please try again.', true);
-        button.disabled = false;
+        handleTaskSaveError(error, button);
     }
 }
 
 
 /**
+ * Persists a task to sessionStorage when logged in as guest.
+ * @async
+ * @param {Object} task - The task to save.
+ * @returns {Promise<void>}
+ */
+async function saveGuestTask(task) {
+    const guestTasks = JSON.parse(sessionStorage.getItem('guestTasks') || '[]');
+    task.id = await resolveGuestTaskId(guestTasks);
+    guestTasks.push(task);
+    sessionStorage.setItem('guestTasks', JSON.stringify(guestTasks));
+}
+
+
+/**
+ * Resolves a unique numeric id for a new guest task.
+ * @async
+ * @param {Object[]} guestTasks - Existing guest tasks from sessionStorage.
+ * @returns {Promise<number>} A unique task id.
+ */
+async function resolveGuestTaskId(guestTasks) {
+    try {
+        const fileTasks = await fetchDemoTasks();
+        const maxFileId = fileTasks.length ? Math.max(...fileTasks.map(t => Number(t.id) || 0)) : 0;
+        const maxLocalId = guestTasks.length ? Math.max(...guestTasks.map(t => Number(t.id) || 0)) : 0;
+        return Math.max(maxFileId, maxLocalId) + 1;
+    } catch (e) {
+        return guestTasks.length ? Math.max(...guestTasks.map(t => Number(t.id) || 0)) + 1 : 1;
+    }
+}
+
+
+/**
+ * Fetches and normalizes tasks from the demo-task.json file.
+ * @async
+ * @returns {Promise<Object[]>} Array of demo tasks.
+ */
+async function fetchDemoTasks() {
+    const res = await fetch('../demo-task.json');
+    if (!res || !res.ok) return [];
+    const data = await res.json();
+    const raw = data?.tasks || data;
+    if (!raw) return [];
+    return Array.isArray(raw) ? raw.filter(Boolean) : Object.keys(raw).map(k => ({ ...raw[k], id: k })).filter(Boolean);
+}
+
+
+/**
  * Persists a task under a fresh id in Firebase.
+ * @async
  * @param {Object} task - The task to save.
  * @returns {Promise<void>}
  */
 async function saveTask(task) {
-    if (checkIsGuest()) {
-        // ensure new guest task id doesn't collide with ids from demo-task.json
-        const guestTasks = JSON.parse(sessionStorage.getItem('guestTasks') || '[]');
-        try {
-            const res = await fetch('../demo-task.json');
-            const fileTasks = [];
-            if (res && res.ok) {
-                const data = await res.json();
-                const raw = data?.tasks || data;
-                if (raw) {
-                    const arr = Array.isArray(raw) ? raw : Object.keys(raw).map(k => ({ ...raw[k], id: k }));
-                    fileTasks.push(...arr.filter(Boolean));
-                }
-            }
-            const maxFileId = fileTasks.length ? Math.max(...fileTasks.map(t => Number(t.id) || 0)) : 0;
-            const maxLocalId = guestTasks.length ? Math.max(...guestTasks.map(t => Number(t.id) || 0)) : 0;
-            task.id = Math.max(maxFileId, maxLocalId) + 1;
-        } catch (e) {
-            task.id = guestTasks.length ? Math.max(...guestTasks.map(t => Number(t.id) || 0)) + 1 : 1;
-        }
-        guestTasks.push(task);
-        sessionStorage.setItem('guestTasks', JSON.stringify(guestTasks));
-        return;
-    }
+    if (checkIsGuest()) return saveGuestTask(task);
     const id = await getNextTaskId();
     task.id = id;
     await fetch(`${ADDTASK_BASE_URL}/tasks/${id}.json`, {
@@ -195,6 +251,7 @@ async function saveTask(task) {
 
 /**
  * Determines the next free numeric task id from Firebase.
+ * @async
  * @returns {Promise<number>} The next id.
  */
 async function getNextTaskId() {
