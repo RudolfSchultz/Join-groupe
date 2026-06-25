@@ -673,9 +673,11 @@
     }
 
     .btn-add-contact button {
-        width: 64px;
-        height: 64px;
-        background: transparent;
+        width: 56px;
+        height: 56px;
+        background-color: #2b3647;
+        border-radius: 50%;
+        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
         border: none;
         padding: 0;
         font-size: 0;
@@ -684,23 +686,21 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        transition: background-color 0.15s ease-in-out, transform 0.1s ease;
+    }
+
+    .btn-add-contact button:hover {
+        background-color: #29ABE2;
     }
 
     .btn-add-contact .fab-icon {
-        width: 56px;
-        height: 56px;
-        background-color: #2b3647;
-        border-radius: 50%;
-        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-        padding: 14px;
-        box-sizing: border-box;
+        width: 28px; 
+        height: 28px;
         object-fit: contain;
-        transition: background-color 0.15s ease-in-out, transform 0.1s ease;
-        cursor: pointer;
-    }
-
-    .btn-add-contact .fab-icon:hover {
-        background-color: #29ABE2;
+        background: transparent;
+        border-radius: 0;
+        box-shadow: none;
+        padding: 0;
     }
 
     .modal-content {
