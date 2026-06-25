@@ -1,9 +1,3 @@
-/**
- * @file datepicker_init.js
- * @description Initializes Flatpickr date pickers for all `.date-picker` input fields.
- * Observes DOM changes and waits for the Flatpickr library to become available.
- */
-
 const mo = new MutationObserver(onMutation);
 
 

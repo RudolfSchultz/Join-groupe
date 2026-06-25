@@ -1,5 +1,6 @@
 /**
  * Opens the add-task modal for the given status column.
+ * @async 
  * @param {string} [status='todo']
  * @returns {Promise<void>}
  */

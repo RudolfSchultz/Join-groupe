@@ -9,7 +9,10 @@ let modalContacts = [];
 let modalDefaultStatus = 'todo';
 
 
-/** @returns {Promise<Array>} Normalized contact list from guest or remote source. */
+/** Normalized contact list from guest or remote source. 
+ * @async
+ * @returns {Promise<Array>} 
+ */
 async function loadAssignContacts() {
     try {
         return (typeof checkIsGuest === 'function' && checkIsGuest())
@@ -23,7 +26,10 @@ async function loadAssignContacts() {
 }
 
 
-/** @returns {Promise<Array>} Contacts loaded from local guest db.json. */
+/** Contacts loaded from local guest db.json. 
+ * @async 
+ * @returns {Promise<Array>}
+ */
 async function loadGuestAssignContacts() {
     const response = await fetch('../db.json');
     const raw = await response.json();
@@ -32,7 +38,10 @@ async function loadGuestAssignContacts() {
 }
 
 
-/** @returns {Promise<Array>} Contacts loaded from remote Firebase database. */
+/** Contacts loaded from remote Firebase database. 
+ * @async 
+ *  @returns {Promise<Array>}  
+ */
 async function loadRemoteAssignContacts() {
     const response = await fetch(ADDTASK_CONTACTS_URL);
     const raw = await response.json();

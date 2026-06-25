@@ -178,6 +178,7 @@ function showNotification(message, isError = false) {
 
 /**
  * Loads all users from Firebase.
+ * @async
  * @returns {Promise<Array>} Array of user objects or empty array on error.
  */
 async function loadUsers() {
@@ -206,6 +207,7 @@ function buildPutOptions(body) {
 
 /**
  * Saves a user object to Firebase under /users/{id}.
+ * @async
  * @param {string|number} id - Firebase key.
  * @param {Object} user - User data.
  * @returns {Promise<void>}
@@ -217,6 +219,7 @@ async function saveUserToFirebase(id, user) {
 
 /**
  * Saves a contact object to Firebase under /contacts/{id}.
+ * @async
  * @param {string|number} id - Firebase key.
  * @param {Object} contact - Contact data.
  * @returns {Promise<void>}

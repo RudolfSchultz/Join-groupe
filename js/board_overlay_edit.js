@@ -1,5 +1,6 @@
 /**
  * Opens the edit modal, loading contacts if not yet cached.
+ * @async 
  * @param {number|string} id
  * @returns {Promise<void>}
  */
@@ -62,13 +63,19 @@ function handleEditAssignOutsideClick(event) {
 }
 
 
-/** Loads board contacts from the appropriate source. @returns {Promise<Array>} */
+/** Loads board contacts from the appropriate source. 
+ * @async 
+ * @returns {Promise<Array>} 
+ */
 async function loadBoardContacts() {
   return checkIsGuest() ? await loadGuestContacts() : await loadRemoteContacts();
 }
 
 
-/** Fetches contacts from local db.json for guest users. @returns {Promise<Array>} */
+/** Fetches contacts from local db.json for guest users. 
+ * @async 
+ * @returns {Promise<Array>} 
+ */
 async function loadGuestContacts() {
   try {
     const res = await fetch('../db.json');
@@ -78,7 +85,10 @@ async function loadGuestContacts() {
 }
 
 
-/** Fetches contacts from the remote Firebase endpoint. @returns {Promise<Array>} */
+/** Fetches contacts from the remote Firebase endpoint. 
+ * @async 
+ * @returns {Promise<Array>} 
+ */
 async function loadRemoteContacts() {
   try {
     const response = await fetch(`${BOARD_BASE_URL}/contacts.json`);
@@ -250,6 +260,7 @@ function renderEditSubtasks() {
 
 /**
  * Validates the form, applies updates to the task object and persists them.
+ * @async 
  * @param {number|string} id
  * @returns {Promise<void>}
  */
@@ -296,6 +307,7 @@ function buildTaskUpdates(title, task) {
 
 /**
  * Saves updates locally for guests or via the remote API.
+ * @async 
  * @returns {Promise<void>}
  */
 async function saveTaskUpdates(id, updates) {
@@ -321,6 +333,7 @@ function buildPatchOptions(data) {
 
 /**
  * PATCHes the updated task to the API and refreshes the board.
+ * @async 
  * @returns {Promise<void>}
  */
 async function updateTaskRemote(id, updates) {

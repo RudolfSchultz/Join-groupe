@@ -73,6 +73,7 @@ function hideModalFieldErrors() {
 
 /**
  * Handles the create-task form submission: validates and saves the task.
+ * @async
  * @param {Event} event - The submit event.
  * @returns {Promise<void>}
  */
@@ -88,6 +89,7 @@ async function createTaskFromModal(event) {
 
 /**
  * Attempts to save the task; shows success or error notification.
+ * @async
  * @param {Object} task - Task data object.
  * @param {HTMLElement} button - Submit button to re-enable on failure.
  * @returns {Promise<void>}

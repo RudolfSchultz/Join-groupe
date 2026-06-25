@@ -47,6 +47,7 @@ function removeHighlight(id) {
 
 /**
  * Updates the dragged task's status and refreshes the board.
+ * @async 
  * @param {string} status - Target column ID.
  * @returns {Promise<void>}
  */
@@ -63,6 +64,7 @@ async function moveTo(status) {
 
 /**
  * Persists the updated task status for guests or remote users.
+ * @async 
  * @param {Object} task
  * @returns {Promise<void>}
  */
@@ -77,6 +79,7 @@ async function updateTaskStatus(task) {
 
 /**
  * Sends a PATCH request to update the task status on the remote API.
+ * @async 
  * @param {number|string} taskId
  * @param {string} status
  * @returns {Promise<void>}

@@ -1,5 +1,6 @@
 /**
  * Routes task saving to guest or remote storage.
+ * @async 
  * @param {Object} task
  * @returns {Promise<void>}
  */
@@ -14,6 +15,7 @@ async function saveModalTask(task) {
 
 /**
  * Assigns an ID and persists a new task in guest (local) storage.
+ * @async 
  * @param {Object} task
  * @returns {Promise<void>}
  */
@@ -27,6 +29,7 @@ async function saveModalTaskAsGuest(task) {
 
 /**
  * Returns the next available task ID by taking the max of demo and local IDs.
+ * @async 
  * @param {Array} guestTasks
  * @returns {Promise<number>}
  */
@@ -53,6 +56,7 @@ function calcMaxId(tasks) {
 
 /**
  * Fetches the demo task list from the static JSON file.
+ * @async 
  * @returns {Promise<Array>}
  */
 async function fetchDemoTaskList() {
@@ -67,6 +71,7 @@ async function fetchDemoTaskList() {
 
 /**
  * Assigns the next remote ID and PUTs the task to the API.
+ * @async 
  * @param {Object} task
  * @returns {Promise<void>}
  */
@@ -82,6 +87,7 @@ async function saveModalTaskRemote(task) {
 
 /**
  * Fetches all remote tasks and returns the next available numeric ID.
+ * @async 
  * @returns {Promise<number>}
  */
 async function getNextModalTaskId() {

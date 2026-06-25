@@ -37,6 +37,7 @@ function getLoginCredentials() {
 
 /**
  * Authenticates the user against Firebase and redirects on success.
+ * @async 
  * @returns {Promise<void>}
  */
 async function login() {
@@ -203,6 +204,7 @@ function validateRegisterInput(password, email) {
 
 /**
  * Checks for duplicate email and returns the next available user id.
+ * @async 
  * @param {string} email - Email to check for uniqueness.
  * @returns {Promise<number|null>} Next id, or null if the email is already taken.
  */
@@ -231,6 +233,7 @@ function buildNewUserAndContact(id, name, email, password) {
 
 /**
  * Saves a new user and contact to Firebase, then notifies and switches to login.
+ * @async 
  * @param {number} newId - The new user id.
  * @param {Object} newUser - User data object.
  * @param {Object} newContact - Contact data object.
@@ -264,6 +267,7 @@ function getRegFormValues() {
 
 /**
  * Validates inputs, checks for duplicates, and submits the registration.
+ * @async 
  * @returns {Promise<void>}
  */
 async function register() {

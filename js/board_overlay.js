@@ -57,6 +57,7 @@ function openTaskDetail(id) {
 
 /**
  * Removes a task from allTasks and persists the deletion.
+ * @async 
  * @param {number|string} id
  * @returns {Promise<void>}
  */
@@ -84,6 +85,7 @@ function deleteTaskGuest() {
 
 /**
  * Sends DELETE to the API and refreshes the board.
+ * @async 
  * @param {number|string} id
  * @returns {Promise<void>}
  */
@@ -102,6 +104,7 @@ async function deleteTaskRemote(id) {
 
 /**
  * Toggles a subtask's done-state and persists the change.
+ * @async 
  * @param {number|string} taskId
  * @param {number} subtaskIndex
  * @returns {Promise<void>}
@@ -118,6 +121,7 @@ async function toggleSubtask(taskId, subtaskIndex) {
 
 /**
  * Persists subtask state for guests locally or via the API.
+ * @async 
  * @returns {Promise<void>}
  */
 async function saveSubtaskState(taskId, subtasks) {
@@ -131,6 +135,7 @@ async function saveSubtaskState(taskId, subtasks) {
 
 /**
  * PATCHes updated subtasks to the remote API.
+ * @async 
  * @returns {Promise<void>}
  */
 async function updateSubtasksRemote(taskId, subtasks) {
