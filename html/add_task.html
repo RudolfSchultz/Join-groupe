@@ -11,7 +11,7 @@
     <link rel="manifest" href="../assets/icons/favicon/site.webmanifest" />
     <link rel="stylesheet" href="../style.css">
     <link rel="stylesheet" href="../assets/css/add_task.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="../assets/vendor/flatpickr/flatpickr.min.css">
     <title>Add Task</title>
 </head>
 
@@ -251,23 +251,10 @@
     <div id="notification" class="notification d-none"></div>
     <script src="../script.js"></script>
     <script src="../assets/templates/add_task_template.js"></script>
-    <script src="../js/add_task.js"></script>
-    <script src="../js/add_task_subtasks.js"></script>
-    <script src="../js/add_task_assign.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://npmcdn.com/flatpickr/dist/l10n/de.js"></script>
-    <script>
-        flatpickr("#task-due", {
-            locale: "de",
-            dateFormat: "d.m.Y",
-            minDate: "today",
-            allowInput: false,
-            disableMobile: true,
-            onChange: function() {
-                updateCreateButton();
-            }
-        });
-    </script>
+    <script src="../js/task/add_task.js"></script>
+    <script src="../js/task/add_task_subtasks.js"></script>
+    <script src="../js/task/add_task_assign.js"></script>
+    <script src="../assets/vendor/flatpickr/flatpickr.min.js"></script>
 </body>
 
 </html>

@@ -19,6 +19,13 @@ document.addEventListener('DOMContentLoaded', initTaskPage);
 async function initTaskPage() {
     setHeaderAvatar();
     setMinDueDate();
+    flatpickr("#task-due", {
+        dateFormat: "d.m.Y",
+        minDate: "today",
+        allowInput: false,
+        disableMobile: true,
+        onChange: function() { updateCreateButton(); }
+    });
     document.addEventListener('click', handleOutsideClick);
     addTaskContacts = await loadAssignContacts();
 }
