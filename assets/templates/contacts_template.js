@@ -1,3 +1,9 @@
+
+/**
+ * Renders the HTML template for a single contact item within the contact list.
+ * * @param {Contact} contact - The contact object to be rendered.
+ * @returns {string} The HTML string template for the list item.
+ */
 function renderContactlist(contact) {
     return `<div class="contact-item" id="${contact.id}" onclick="showContactDetails('${contact.id}')">
         <div class="avatar" style="background-color: ${contact.color};">${contact.avatar}</div>
@@ -8,6 +14,13 @@ function renderContactlist(contact) {
     </div>`;
 }
 
+
+/**
+ * Renders a letter group container (e.g., "A", "B", "C") used for alphabetical sorting in the contact list.
+ * * @param {string} letter - The initial letter of the group.
+ * @param {string} itemsHtml - The pre-rendered HTML string of contacts belonging to this letter group.
+ * @returns {string} The HTML string template for the letter group.
+ */
 function renderLetterGroupTemplate(letter, itemsHtml) {
     return `
         <div class="letter-group">
@@ -17,6 +30,12 @@ function renderLetterGroupTemplate(letter, itemsHtml) {
     `;
 }
 
+
+/**
+ * Renders the detailed profile view of a contact, including action buttons for both desktop and mobile views.
+ * * @param {Contact} contact - The contact object whose details are to be displayed.
+ * @returns {string} The HTML string template for the detailed profile view.
+ */
 function renderContactDetails(contact) {
     return `<div class="profile-header">
                         <div class="profile-avatar" style="background-color: ${contact.color};">${contact.avatar}</div>
@@ -67,6 +86,15 @@ function renderContactDetails(contact) {
                     </div>`;
 }
 
+
+/**
+ * Renders the layout framework of the modal dialog used for adding or editing a contact.
+ * It also stores the form submission action globally on the `window` object.
+ * * @param {string} title - The title of the dialog (e.g., "Add contact" or "Edit contact").
+ * @param {string} submitAction - The name of the global function (as a string) to execute upon form submission.
+ * @param {string} buttonHtml - The pre-rendered HTML string for the footer buttons (context-dependent).
+ * @returns {string} The HTML string template for the modal dialog.
+ */
 function renderDialogContact(title, submitAction, buttonHtml) {
     window.currentSubmitAction = submitAction; 
     const isEdit = typeof title === 'string' && title.toLowerCase().includes('edit');
@@ -112,12 +140,22 @@ function renderDialogContact(title, submitAction, buttonHtml) {
 }
 
 
+/**
+ * Renders the action buttons for the dialog when an existing contact is being *edited* (Delete & Save).
+ * * @param {Contact} contact - The contact object currently being edited.
+ * @returns {string} The HTML string template for the "Delete" and "Save" buttons.
+ */
 function renderDialogContactEditButton(contact) {
     return `<button type="button" class="btn-cancel" onclick="deleteContact('${contact.id}')"> Delete <i
                 class="fa-solid fa-xmark"></i></button>
             <button type="submit" class="btn-submit"> Save <i class="fa-solid fa-check"></i></button>`;
 }
 
+
+/**
+ * Renders the action buttons for the dialog when a new contact is being *created* (Cancel & Create contact).
+ * * @returns {string} The HTML string template for the "Cancel" and "Create contact" buttons.
+ */
 function renderDialogCreateContactButton() {
     return `<button type="button" class="btn-cancel btn-mobile-hide" onclick="closeDialog()"> Cancel <i
                 class="fa-solid fa-xmark"></i></button>

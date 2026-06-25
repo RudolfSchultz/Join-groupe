@@ -24,6 +24,7 @@ function openAddContactModal() {
     openDialog();
 }
 
+
 /**
  * Builds the HTML markup for the "Add contact" dialog.
  * @returns {string} HTML markup for the add-contact dialog.
@@ -32,6 +33,7 @@ function renderAddContactTemplate() {
     const buttons = renderDialogCreateContactButton();
     return renderDialogContact('Add contact', (e) => createNewContact(e), buttons);
 }
+
 
 /**
  * Opens the dialog pre-filled with an existing contact's data for editing.
@@ -49,6 +51,7 @@ function editContact(id) {
     }
 }
 
+
 /**
  * Fills the edit-contact form fields (avatar, name, email, phone)
  * with the given contact's current values using their unique element IDs.
@@ -65,6 +68,7 @@ function fillEditForm(contact) {
     document.getElementById('modal-phone').value = contact.phone || '';
 }
 
+
 /**
  * Builds the HTML markup for the "Edit contact" dialog.
  * @param {Object} contact - The contact being edited.
@@ -74,6 +78,7 @@ function renderEditContactTemplate(contact) {
     const buttons = renderDialogContactEditButton(contact);
     return renderDialogContact('Edit contact', async (e) => await updateContact(e, contact.id), buttons);
 }
+
 
 /**
  * Handles submission of the "Add contact" form: reads form data,
@@ -93,6 +98,7 @@ function createNewContact(event) {
     showToastFeedback('Contact successfully created');
 }
 
+
 /**
  * Saves a new contact locally for guest users (no backend persistence),
  * closes the dialog and re-renders the contact list.
@@ -104,6 +110,7 @@ function saveGuestContact(newContact) {
     dialog.close();
     renderContacts();
 }
+
 
 /**
  * Common cleanup after a contact update: closes the dialog,
@@ -128,6 +135,7 @@ async function deleteContact(id) {
     } catch (error) { console.error("Delete contact error:", error); }
 }
 
+
 /**
  * Checks an input field's value against a regular expression and toggles
  * the visibility of the corresponding error message box.
@@ -150,6 +158,7 @@ function checkFieldRegex(inputId, errorId, regex) {
     return isValid;
 }
 
+
 /**
  * Handles the form submission by validating all fields.
  * Executes the provided callback function only if validation passes.
@@ -167,6 +176,7 @@ async function handleContactSubmit(event, submitCallback) {
         await submitCallback(event); 
     }
 }
+
 
 /**
  * Checks an input field's value against a regular expression if it is not empty.
@@ -188,6 +198,7 @@ function checkFieldRegex(inputId, errorId, regex) {
     return isValid;
 }
 
+
 /**
  * Validates that the input contains at least a first name and a last name.
  * Toggles the visibility of the corresponding error message box.
@@ -207,6 +218,7 @@ function checkNameField(inputId, errorId) {
     return isValid;
 }
 
+
 /**
  * Sanitizes the input field in real-time by removing any non-numeric characters.
  * @param {HTMLInputElement} input - The input element triggering the event.
@@ -215,6 +227,7 @@ function checkNameField(inputId, errorId) {
 function allowOnlyNumbers(input) {
     input.value = input.value.replace(/[^0-9+ ]/g, '').replace(/(?!^)\+/g, '');
 }
+
 
 /**
  * Validates a single field by its configuration name (used for onblur).

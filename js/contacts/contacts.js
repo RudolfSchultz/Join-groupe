@@ -5,11 +5,11 @@ const contactDetailsContainer = document.getElementById("contact-details-view");
 const CONTACTS_URL = 'https://remotestorage-c0469-default-rtdb.europe-west1.firebasedatabase.app/contacts.json';
 let loadedContacts = [];
 
+
 /**
  * Initializes the contacts view: resets the local contacts cache,
  * loads contacts from the appropriate source (guest or remote DB)
  * and renders them into the DOM.
- *
  * @async
  * @returns {Promise<void>}
  */
@@ -21,11 +21,11 @@ async function init() {
 
 }
 
+
 /**
  * Loads contacts either from the local guest JSON file or from the
  * remote Firebase database, normalizes them into an array, and
  * populates `loadedContacts` via {@link addContactsToLoaded}.
- *
  * @async
  * @returns {Promise<void>}
  */
@@ -42,11 +42,11 @@ async function loadAndPrepareContacts() {
     } catch (error) { console.error("Fehler beim Laden:", error); }
 }
 
+
 /**
  * Adds an array of raw contact objects to the global `loadedContacts`
  * array, normalizing fields (phone, color, avatar) and avoiding
  * duplicate entries by id.
- *
  * @param {Array<Object>} contactsFromDB - Raw contact objects (e.g. from Firebase/JSON).
  * @returns {void}
  */
@@ -64,10 +64,10 @@ function addContactsToLoaded(contactsFromDB) {
     });
 }
 
+
 /**
  * Groups all loaded contacts alphabetically by the first letter of
  * their name, sorting the contacts within each group.
- *
  * @returns {Object<string, Array<Object>>} A map of letter -> array of contacts.
  */
 function groupContactsByLetter() {
@@ -82,10 +82,10 @@ function groupContactsByLetter() {
     return groups;
 }
 
+
 /**
  * Renders the HTML markup for a single letter group (e.g. all contacts
  * starting with "A"), including the group header and its contact items.
- *
  * @param {[string, Array<Object>]} entry - A `[letter, contacts]` pair from `Object.entries`.
  * @returns {string} HTML markup for the letter group.
  */
@@ -94,10 +94,10 @@ function renderLetterGroup([letter, contactsInGroup]) {
     return renderLetterGroupTemplate(letter, itemsHtml);
 }
 
+
 /**
  * Renders the full contacts list into the `contactListContainer`,
  * grouped alphabetically by first letter.
- *
  * @returns {void}
  */
 function renderContacts() {
@@ -109,29 +109,29 @@ function renderContacts() {
     contactListContainer.innerHTML = html;
 }
 
+
 /**
  * Opens the add/edit contact dialog as a modal.
- *
  * @returns {void}
  */
 function openDialog() {
     dialog.showModal();
 }
 
+
 /**
  * Closes the add/edit contact dialog.
- *
  * @returns {void}
  */
 function closeDialog() {
     dialog.close();
 }
 
+
 /**
  * Displays the detail view for a given contact, marks the
  * corresponding list item as active, and switches to the detail
  * view on mobile viewports.
- *
  * @param {string|number} contactId - The id of the contact to display.
  * @returns {void}
  */
@@ -152,7 +152,6 @@ function showContactDetails(contactId) {
 /**
  * Assigns an id, avatar and color to a new contact, then saves it
  * either locally (guest mode) or to the remote database.
- *
  * @async
  * @param {Object} newContact - The new contact data (name, email, phone).
  * @returns {Promise<void>}
@@ -170,10 +169,10 @@ async function saveContactToDB(newContact) {
     }
 }
 
+
 /**
  * Persists a new contact to the remote Firebase database, reloads
  * the contact list, closes the dialog and re-renders the UI.
- *
  * @async
  * @param {Object} newContact - The contact to persist.
  * @returns {Promise<void>}
@@ -191,10 +190,10 @@ async function saveUserContact(newContact) {
     } catch (e) { console.error("Fehler beim Cloud-Speichern:", e); }
 }
 
+
 /**
  * Handles submission of the "Edit contact" form: reads updated values
  * and dispatches to the guest or remote update routine.
- *
  * @async
  * @param {SubmitEvent} event - The form submit event.
  * @param {string|number} id - The id of the contact being updated.
@@ -214,10 +213,10 @@ async function updateContact(event, id) {
     if (checkIsGuest()) updateGuestContact(updated); else await updateUserContact(updated);
 }
 
+
 /**
  * Persists an updated contact to the remote Firebase database, reloads
  * the contact list and refreshes the UI to reflect the change.
- *
  * @async
  * @param {Object} updated - The updated contact data.
  * @returns {Promise<void>}
@@ -234,10 +233,10 @@ async function updateUserContact(updated) {
     } catch (e) { console.error('Update error:', e); }
 }
 
+
 /**
  * Updates a contact in the local `loadedContacts` array for guest
  * users (no backend persistence).
- *
  * @param {Object} updated - The updated contact data.
  * @returns {void}
  */
@@ -252,7 +251,6 @@ function updateGuestContact(updated) {
  * Common cleanup after a contact update: closes the dialog,
  * re-renders the contact list, and re-opens the detail view
  * for the updated contact.
- *
  * @param {string|number} id - The id of the updated contact.
  * @returns {void}
  */
@@ -262,11 +260,11 @@ function finalizeUpdate(id) {
     showContactDetails(String(id));
 }
 
+
 /**
  * Determines whether the current session belongs to a guest user
  * by inspecting `sessionStorage`. Defaults to `true` (guest) if
  * the session data cannot be parsed.
- *
  * @returns {boolean} `true` if the current user is a guest, otherwise `false`.
  */
 function checkIsGuest() {
@@ -278,10 +276,10 @@ function checkIsGuest() {
     }
 }
 
+
 /**
  * Toggles between the contacts list and the contact detail view
  * on mobile/narrow viewports by show/hiding the split panels.
- *
  * @param {boolean} showDetails - If `true`, shows the detail panel and hides the list.
  * @returns {void}
  */
@@ -294,10 +292,10 @@ function toggleMobileContactView(showDetails) {
     }
 }
 
+
 /**
  * Resets the mobile view back to the contacts list and clears the
  * currently active contact selection.
- *
  * @returns {void}
  */
 function resetMobileContactView() {
@@ -308,10 +306,10 @@ function resetMobileContactView() {
     }
 }
 
+
 /**
  * Toggles the visibility of the mobile contact options menu and
  * registers an outside-click listener to close it when open.
- *
  * @param {MouseEvent} event - The triggering click event (propagation is stopped).
  * @returns {void}
  */
@@ -326,10 +324,10 @@ function toggleMobileOptions(event) {
     }
 }
 
+
 /**
  * Closes the mobile options menu when a click occurs outside of it,
  * and removes itself as a document click listener.
- *
  * @returns {void}
  */
 function closeMobileOptionsOutside() {
@@ -339,6 +337,7 @@ function closeMobileOptionsOutside() {
     }
     document.removeEventListener('click', closeMobileOptionsOutside);
 }
+
 
 /**
  * Resets the split-view layout to its default (desktop) state
@@ -355,9 +354,9 @@ window.addEventListener('resize', function () {
     }
 });
 
+
 /**
  * Displays a transient toast notification with the given message.
- *
  * @param {string} message - The text to display in the toast.
  * @returns {void}
  */
@@ -371,9 +370,9 @@ function showToastFeedback(message) {
     setTimeout(() => removeToastFeedback(toast), 3000);
 }
 
+
 /**
  * Hides and then removes a toast notification element from the DOM.
- *
  * @param {HTMLElement} toast - The toast element to remove.
  * @returns {void}
  */
